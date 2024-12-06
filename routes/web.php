@@ -3,9 +3,11 @@
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\AutoFillController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ValidIdController;
 use App\Http\Controllers\VehiclePremiumController;
@@ -25,6 +27,20 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::prefix('autofill')->group(function () {
+        Route::controller(AutoFillController::class)->group(function () {
+            Route::get('/policy_holder/{id_number}', 'policy_holder');
+        });
+    });
+
+    Route::prefix('tools')->group(function () {
+        Route::controller(ToolController::class)->group(function () {
+            Route::get('/raw_data', 'raw_data');
+            Route::get('/data_import', 'data_import');
+            Route::post('/process_import/{target}', 'process_import');
+        });
+    });
+
     Route::prefix('search')->group(function () {
         Route::controller(SearchController::class)->group(function () {
             Route::get('/', 'index');

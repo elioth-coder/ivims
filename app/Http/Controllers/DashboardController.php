@@ -36,6 +36,8 @@ class DashboardController extends Controller
         INNER JOIN policy_holders
         ON policy_details.policy_holder_id=policy_holders.id
         WHERE policy_details.user_id=:user_id
+        ORDER BY created_at DESC
+        LIMIT 15
         ";
 
         $query = $pdo->prepare($sql);

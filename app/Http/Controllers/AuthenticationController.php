@@ -138,9 +138,9 @@ class AuthenticationController extends Controller
                 'expiry_date'    => ['required'],
             ]);
 
-            $policy_detail_data['coc_no']    = mt_rand(1000000000000, 9999999999999);
-            $policy_detail_data['policy_no'] = mt_rand(1000000000000, 9999999999999);
-            $policy_detail_data['or_no']     = mt_rand(1000000000000, 9999999999999);
+            $policy_detail_data['coc_no']    = substr((floor(microtime(true) * 1000) . ''), 0, 13) . mt_rand(100,999);;
+            $policy_detail_data['policy_no'] = substr((floor(microtime(true) * 1000) . ''), 0, 13) . mt_rand(100,999);;
+            $policy_detail_data['or_no']     = substr((floor(microtime(true) * 1000) . ''), 0, 13) . mt_rand(100,999);;
             $user = Auth::user();
             $company = Company::where('id', $user->company_id)->first();
 

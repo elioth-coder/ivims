@@ -121,6 +121,25 @@ $queryString = "";
                     ]
                 },
                 {
+                    name: 'Tools',
+                    icon: 'tools',
+                    items: [
+                        {
+                            name: 'Data Import',
+                            url: '/tools/data_import',
+                        },
+                        {
+                            name: 'Raw Data',
+                            url: '/tools/raw_data',
+                        },
+                        {
+                            name: 'Backup & Restore',
+                            url: '/tools/data_backup',
+                        },
+                    ]
+                },
+
+                {
                     name: 'Search',
                     icon: 'search',
                     items: [

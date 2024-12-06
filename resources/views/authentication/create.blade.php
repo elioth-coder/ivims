@@ -70,6 +70,55 @@
     </div>
     <x-slot:scripts>
         <script>
+            window.onload = function() {
+                let $idNumber = document.querySelector('#id_number');
+
+                if($idNumber) {
+                    document.querySelector('#id_number').addEventListener('keydown', function(event) {
+                        if(event.key == 'Enter') {
+                            autofillPolicyHolder();
+                        }
+                    });
+                }
+            }
+
+            async function autofillPolicyHolder() {
+                let id_number = document.querySelector('#id_number').value;
+                let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                let response = await fetch(`/autofill/policy_holder/${id_number}`, {
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                });
+
+                let { status, message, policy_holder } = await response.json();
+                if(status == 'success') {
+                    Swal.fire({
+                        title: `Found a data for ID No. ${id_number}!`,
+                        icon: 'info',
+                        showDenyButton: true,
+                        confirmButtonText: 'Autofill form?',
+                        denyButtonText: "No, thanks!",
+                    }).then(result => {
+                        if(result.isConfirmed) {
+                            console.log(policy_holder);
+
+                            document.querySelector('#id_type').value = policy_holder.id_type ?? '';
+                            document.querySelector('#business').value = policy_holder.business ?? '';
+                            document.querySelector('#first_name').value = policy_holder.first_name ?? '';
+                            document.querySelector('#middle_name').value = (policy_holder.middle_name=='NULL') ? '' : policy_holder.middle_name;
+                            document.querySelector('#last_name').value = policy_holder.last_name ?? '';
+                            document.querySelector('#suffix').value = (policy_holder.suffix=='NULL') ? '' : policy_holder.suffix;
+                            document.querySelector('#gender').value = policy_holder.gender ?? '';
+                            document.querySelector('#birthday').value = policy_holder.birthday ?? '';
+                            document.querySelector('#contact_no').value = policy_holder.contact_no ?? '';
+                            document.querySelector('#email').value = policy_holder.email ?? '';
+                            document.querySelector('#address').value = policy_holder.address ?? '';
+                        }
+                    });
+                }
+            }
+
             document.addEventListener('alpine:init', () => {
                 $scrollable = document.querySelector('.scrollable');
 
@@ -87,17 +136,22 @@
                         this.step--;
                         $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
                     },
-                    submitPolicyHolder() {
-                        Swal.fire({
+                    async submitPolicyHolder() {
+                        this.step = 2;
+                        await Swal.fire({
                             title: "Processing..",
                             showConfirmButton: false,
                             timer: 1500,
-                        }).then(() => {
-                            document.querySelector('[name="mv_file_no"]').focus();
                         });
 
-                        this.step = 2;
-                        $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
+                        Swal.fire({
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
+                            document.querySelector('[name="mv_file_no"]').focus();
+                        });
                     },
                     submitVehicleDetails() {
                         Swal.fire({

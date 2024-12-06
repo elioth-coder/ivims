@@ -17,11 +17,18 @@
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     <x-breadcrumb />
-                    <div class="w-1/2">
-                        <div id="barchart" style="height: 250px; with: 100%;"></div>
+                    <div class="flex gap-4 my-4">
+                        <div class="w-2/3">
+                            <div id="barchart" style="height: 250px; with: 100%;"></div>
+                        </div>
+                        <div class="w-1/3 text-center border rounded-3xl p-5">
+                            <h3 class="text-4xl">Today's Uploads</h3>
+                            <br>
+                            <h1 class="text-9xl">{{ $todays_upload }}</h1>
+                        </div>
                     </div>
-                    <div class="flex flex-column my-5 space-x-5">
-                        <div class="w-full">
+                    <div class="flex gap-4">
+                        <div class="w-2/3">
                             <h3 id="announcement" class="pt-1 text-xl mb-2">Announcements</h3>
                             @forelse ($announcements as $announcement)
                                 <div id="alert-announcement-content-{{ $announcement->id }}" {{-- text-gray-800 text-red-800 text-yellow-800 text-green-800 text-blue-800 text-indigo-800 text-purple-800 text-pink-800 --}}
@@ -42,9 +49,9 @@
                                 <h1 class="text-center my-5 text-3xl">No announcements so far.</h1>
                             @endforelse
                         </div>
-                        <div class="min-w-[350px]">
+                        <div class="w-1/3">
                             <h3 id="recent" class="pt-1 text-xl mb-2">Recent Uploads</h3>
-                            <div class="relative overflow-x-auto">
+                            <div class="relative overflow-scroll">
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead
                                         class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -53,7 +60,7 @@
                                                 Policy Holder
                                             </th>
                                             <th scope="col" class="px-6 py-3 rounded-e-lg">
-                                                Vehicle Details
+                                                Vehicle
                                             </th>
                                         </tr>
                                     </thead>
@@ -64,7 +71,7 @@
                                                     class="text-nowrap text-ellipsis overflow-hidden px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
                                                     {{ $upload->first_name }} {{ $upload->last_name }}
                                                 </th>
-                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">{{ $upload->make }} {{ $upload->model }}</td>
+                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">{{ $upload->make }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
