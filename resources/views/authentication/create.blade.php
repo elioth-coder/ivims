@@ -30,12 +30,6 @@
                         ];
                     @endphp
                     <x-breadcrumb :$breadcrumbs />
-                    {{--
-                    <div class="flex justify-center my-5">
-                        <h1 class="text-center text-3xl font-bold">New Authenticated Policy</h1>
-                    </div>
-                    <hr class="my-3">
-                    --}}
                     <div class="flex items-center mt-3 py-3">
                         <x-authentication.stepper />
                     </div>
