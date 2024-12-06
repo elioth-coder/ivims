@@ -14,6 +14,7 @@ class AutoFillController extends Controller
             $sql =
             "SELECT * FROM `policy_holders`
             WHERE `id_number`=:id_number
+            ORDER BY created_at DESC
             LIMIT 1
             ";
             $pdo = DB::connection()->getPdo();
@@ -28,6 +29,42 @@ class AutoFillController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'policy_holder' => $policy_holder,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'No data found',
+                ], 500);
+            }
+        } catch(Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function vehicle_detail(Request $request, $mv_file_no)
+    {
+        try {
+            $sql =
+            "SELECT * FROM `vehicle_details`
+            WHERE `mv_file_no`=:mv_file_no
+            ORDER BY created_at DESC
+            LIMIT 1
+            ";
+            $pdo = DB::connection()->getPdo();
+            $query = $pdo->prepare($sql);
+            $query->execute([
+                'mv_file_no' => $mv_file_no,
+            ]);
+
+            $vehicle_detail = $query->fetchObject('stdClass');
+
+            if($vehicle_detail) {
+                return response()->json([
+                    'status' => 'success',
+                    'vehicle_detail' => $vehicle_detail,
                 ], 200);
             } else {
                 return response()->json([

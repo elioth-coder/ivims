@@ -65,15 +65,17 @@
     <x-slot:scripts>
         <script>
             window.onload = function() {
-                let $idNumber = document.querySelector('#id_number');
+                document.querySelector('#id_number').addEventListener('keydown', function(event) {
+                    if(event.key == 'Enter') {
+                        autofillPolicyHolder();
+                    }
+                });
 
-                if($idNumber) {
-                    document.querySelector('#id_number').addEventListener('keydown', function(event) {
-                        if(event.key == 'Enter') {
-                            autofillPolicyHolder();
-                        }
-                    });
-                }
+                document.querySelector('#mv_file_no').addEventListener('keydown', function(event) {
+                    if(event.key == 'Enter') {
+                        autofillVehicleDetail();
+                    }
+                });
             }
 
             async function autofillPolicyHolder() {
@@ -97,17 +99,50 @@
                         if(result.isConfirmed) {
                             console.log(policy_holder);
 
-                            document.querySelector('#id_type').value = policy_holder.id_type ?? '';
-                            document.querySelector('#business').value = policy_holder.business ?? '';
-                            document.querySelector('#first_name').value = policy_holder.first_name ?? '';
+                            document.querySelector('#id_type').value     = (policy_holder.id_type=='NULL')     ? '' : policy_holder.id_type;
+                            document.querySelector('#business').value    = (policy_holder.business=='NULL')    ? '' : policy_holder.business;
+                            document.querySelector('#first_name').value  = (policy_holder.first_name=='NULL')  ? '' : policy_holder.first_name;
                             document.querySelector('#middle_name').value = (policy_holder.middle_name=='NULL') ? '' : policy_holder.middle_name;
-                            document.querySelector('#last_name').value = policy_holder.last_name ?? '';
-                            document.querySelector('#suffix').value = (policy_holder.suffix=='NULL') ? '' : policy_holder.suffix;
-                            document.querySelector('#gender').value = policy_holder.gender ?? '';
-                            document.querySelector('#birthday').value = policy_holder.birthday ?? '';
-                            document.querySelector('#contact_no').value = policy_holder.contact_no ?? '';
-                            document.querySelector('#email').value = policy_holder.email ?? '';
-                            document.querySelector('#address').value = policy_holder.address ?? '';
+                            document.querySelector('#last_name').value   = (policy_holder.last_name=='NULL')   ? '' : policy_holder.last_name;
+                            document.querySelector('#suffix').value      = (policy_holder.suffix=='NULL')      ? '' : policy_holder.suffix;
+                            document.querySelector('#gender').value      = (policy_holder.gender=='NULL')      ? '' : policy_holder.gender;
+                            document.querySelector('#birthday').value    = (policy_holder.birthday=='NULL')    ? '' : policy_holder.birthday;
+                            document.querySelector('#contact_no').value  = (policy_holder.contact_no=='NULL')  ? '' : policy_holder.contact_no;
+                            document.querySelector('#email').value       = (policy_holder.email=='NULL')       ? '' : policy_holder.email;
+                            document.querySelector('#address').value     = (policy_holder.address=='NULL')     ? '' : policy_holder.address;
+                        }
+                    });
+                }
+            }
+
+            async function autofillVehicleDetail() {
+                let mv_file_no = document.querySelector('#mv_file_no').value;
+                let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                let response = await fetch(`/autofill/vehicle_detail/${mv_file_no}`, {
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                });
+
+                let { status, message, vehicle_detail } = await response.json();
+                if(status == 'success') {
+                    Swal.fire({
+                        title: `Found a data for MV File No. ${mv_file_no}!`,
+                        icon: 'info',
+                        showDenyButton: true,
+                        confirmButtonText: 'Autofill form?',
+                        denyButtonText: "No, thanks!",
+                    }).then(result => {
+                        if(result.isConfirmed) {
+                            document.querySelector('#plate_no').value       = (vehicle_detail.plate_no=='NULL')       ? '' : vehicle_detail.plate_no;
+                            document.querySelector('#serial_no').value      = (vehicle_detail.serial_no=='NULL')      ? '' : vehicle_detail.serial_no;
+                            document.querySelector('#motor_no').value       = (vehicle_detail.motor_no=='NULL')       ? '' : vehicle_detail.motor_no;
+                            document.querySelector('#make').value           = (vehicle_detail.make=='NULL')           ? '' : vehicle_detail.make;
+                            document.querySelector('#model').value          = (vehicle_detail.model=='NULL')          ? '' : vehicle_detail.model;
+                            document.querySelector('#color').value          = (vehicle_detail.color=='NULL')          ? '' : vehicle_detail.color;
+                            document.querySelector('#body_type').value      = (vehicle_detail.body_type=='NULL')      ? '' : vehicle_detail.body_type;
+                            document.querySelector('#authorized_cap').value = (vehicle_detail.authorized_cap=='NULL') ? '' : vehicle_detail.authorized_cap;
+                            document.querySelector('#unladen_weight').value = (vehicle_detail.unladen_weight=='NULL') ? '' : vehicle_detail.unladen_weight;
                         }
                     });
                 }
@@ -125,7 +160,7 @@
                 }
 
                 Alpine.data('authentication', () => ({
-                    step: 1,
+                    step: 2,
                     previous() {
                         this.step--;
                         $scrollable.scrollTo({ top: 0, behavior: 'smooth' });

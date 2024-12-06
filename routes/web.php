@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('autofill')->group(function () {
         Route::controller(AutoFillController::class)->group(function () {
             Route::get('/policy_holder/{id_number}', 'policy_holder');
+            Route::get('/vehicle_detail/{mv_file_no}', 'vehicle_detail');
         });
     });
 

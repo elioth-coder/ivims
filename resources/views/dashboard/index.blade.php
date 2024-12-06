@@ -22,9 +22,9 @@
                             <div id="barchart" style="height: 250px; with: 100%;"></div>
                         </div>
                         <div class="w-1/3 text-center border rounded-3xl p-5">
-                            <h3 class="text-4xl">Today's Uploads</h3>
+                            <h3 class="text-3xl">Uploads</h3>
                             <br>
-                            <h1 class="text-9xl">{{ $todays_upload }}</h1>
+                            <h1 class="text-7xl">{{ $todays_upload }}</h1>
                         </div>
                     </div>
                     <div class="flex gap-4">
