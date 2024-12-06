@@ -160,7 +160,7 @@
                 }
 
                 Alpine.data('authentication', () => ({
-                    step: 2,
+                    step: 1,
                     previous() {
                         this.step--;
                         $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
