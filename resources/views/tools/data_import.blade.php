@@ -71,22 +71,6 @@
         <script>
             let items = [];
 
-            function testConfirmAlert() {
-                Swal.fire({
-                    title: 'Test',
-                    icon: 'info',
-                    showDenyButton: true,
-                    confirmButtonText: 'Save',
-                    denyButtonText: "Don't save",
-                }).then(result => {
-                    if(result.isConfirmed) {
-                        alert('confirmed');
-                    } else {
-                        alert('denied');
-                    }
-                });
-            }
-
             async function startImport() {
                 let dataTarget = document.querySelector(`#data_target`).value;
                 let hasTarget  = dataTarget.length;

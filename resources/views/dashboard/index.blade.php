@@ -51,7 +51,7 @@
                         </div>
                         <div class="w-1/3">
                             <h3 id="recent" class="pt-1 text-xl mb-2">Recent Uploads</h3>
-                            <div class="relative overflow-scroll">
+                            <div class="relative overflow-hidden">
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead
                                         class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -60,7 +60,7 @@
                                                 Policy Holder
                                             </th>
                                             <th scope="col" class="px-6 py-3 rounded-e-lg">
-                                                Vehicle
+                                                Make
                                             </th>
                                         </tr>
                                     </thead>
@@ -69,7 +69,7 @@
                                             <tr>
                                                 <th scope="row"
                                                     class="text-nowrap text-ellipsis overflow-hidden px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                                    {{ $upload->first_name }} {{ $upload->last_name }}
+                                                    {{ substr($upload->first_name, 0, 1) }}. {{ $upload->last_name }}
                                                 </th>
                                                 <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">{{ $upload->make }}</td>
                                             </tr>

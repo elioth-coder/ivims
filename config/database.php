@@ -53,6 +53,10 @@ return [
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            // 'dump' => [
+            //     'dump_binary_path' => 'C:\xampp\mysql\bin',
+            // ],
+            // 'dump_command_path' => '',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,

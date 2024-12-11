@@ -134,7 +134,7 @@ $queryString = "";
                         },
                         {
                             name: 'Backup & Restore',
-                            url: '/tools/data_backup',
+                            url: '/tools/backup_restore',
                         },
                     ]
                 },

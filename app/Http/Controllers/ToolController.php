@@ -6,8 +6,12 @@ use App\Models\Company;
 use App\Models\PolicyDetail;
 use App\Models\PolicyHolder;
 use App\Models\VehicleDetail;
+use App\Jobs\BackupDatabaseJob;
+use App\Jobs\RestoreDatabaseJob;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ToolController extends Controller
 {
@@ -82,4 +86,125 @@ class ToolController extends Controller
             'items' => $items ?? [],
         ]);
     }
+
+    public function backup_restore()
+    {
+        $backup_folder = 'app' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'backups';
+        $file_path = storage_path($backup_folder);
+        $files = File::allFiles($file_path);
+
+        $files = collect($files)
+            ->map(function($file) {
+                return [
+                    'name' => $file->getFilename(),
+                    'size' => $file->getSize(),
+                    'modified' => date('Y-m-d H:i:s', $file->getMTime()),
+                ];
+            })
+            ->sortByDesc('modified');
+
+        return view('tools.backup_restore', compact('files'));
+    }
+
+    public function generate()
+    {
+        try {
+            BackupDatabaseJob::dispatch();
+            sleep(5);
+            return response()->json([
+                'status'  => 'success',
+                'message' => "Successfully created the backup file",
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function restore_from_file(Request $request)
+    {
+        try {
+            $backup_file = $request->file('file');
+
+            $backup_folder = 'app' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'backups';
+            $backup_folder = storage_path($backup_folder);
+            $restore_file_name = 'RESTORE_' . now()->format('Y_m_d_His') . '.sql';
+            $backup_file->move($backup_folder, $restore_file_name);
+            $file_path = $backup_folder . DIRECTORY_SEPARATOR . $restore_file_name;
+
+            RestoreDatabaseJob::dispatch($file_path);
+            sleep(5);
+            return response()->json([
+                'status'  => 'success',
+                'message' => "Successfully restored the database",
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Failed to restore the database.'
+            ], 500);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $backup_folder = 'app' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'backups';
+        $backup_folder = storage_path($backup_folder);
+        $file_name = $request->input('file_name');
+        $file_path = $backup_folder . DIRECTORY_SEPARATOR . $file_name;
+
+        if (File::exists($file_path)) {
+            File::delete($file_path);
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Successfully deleted the backup file',
+                'path'    => $file_path,
+            ], 200);
+        } else {
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'File not found',
+            ], 500);
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        try {
+            $file_name = $request->input('file_name');
+            $backup_folder = 'app' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'backups';
+            $file_path = storage_path($backup_folder . DIRECTORY_SEPARATOR . $file_name);
+
+            RestoreDatabaseJob::dispatch($file_path);
+            sleep(5);
+            return response()->json([
+                'status'  => 'success',
+                'message' => "Successfully restored the database",
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function download(Request $request, $file_name)
+    {
+        $backup_folder = 'app' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'backups';
+        $file_path = storage_path($backup_folder . DIRECTORY_SEPARATOR . $file_name);
+
+        if (!File::exists($file_path)) {
+            return response()->json([
+                'message' => 'File not found.'
+            ], 404);
+        }
+
+        return response()->download($file_path);
+    }
+
 }

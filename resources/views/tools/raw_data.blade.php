@@ -35,10 +35,6 @@
                         <div class="pb-6 mt-2 w-full">
                             <x-card class="">
                                 <x-card-header>Raw Data</x-card-header>
-                                <div class="block">
-                                    @php $generated = substr((floor(microtime(true) * 1000) . ''), 0, 13) . mt_rand(100,999); @endphp
-                                    <h1>{{ $generated }}</h1>
-                                </div>
                                 <form class="flex gap-2" action="/tools/raw_data" method="GET">
                                     @csrf
                                     @method('GET')
@@ -104,6 +100,9 @@
                                     @endif
                                     @if (request('data_target') == 'vehicle_details')
                                         <x-raw_data.vehicle_details :$items />
+                                    @endif
+                                    @if (request('data_target') == 'policy_details')
+                                        <x-raw_data.policy_details :$items />
                                     @endif
                                     @if (request('data_target') == 'policy_holders')
                                         <x-raw_data.policy_holders :$items />

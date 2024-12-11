@@ -82,7 +82,7 @@
                                                     {{ number_format($authentication->premium, 2) }}
                                                 </td>
 
-                                                <td class="group-hover:bg-violet-200 px-8 py-6 text-center">
+                                                <td style="min-width: 200px;" class="group-hover:bg-violet-200 px-8 py-6 text-center">
                                                     <a href="/authentication/{{ $authentication->id }}/print" target="_blank" title="Print"
                                                         class="text-xl mx-auto border border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded p-2 px-3 text-center inline-flex items-center">
                                                         <i class="bi bi-printer-fill"></i>

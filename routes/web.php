@@ -38,6 +38,12 @@ Route::middleware('auth')->group(function () {
         Route::controller(ToolController::class)->group(function () {
             Route::get('/raw_data', 'raw_data');
             Route::get('/data_import', 'data_import');
+            Route::get('/backup_restore', 'backup_restore');
+            Route::get('/backup_restore/download/{file_name}', 'download');
+            Route::post('/backup_restore/generate', 'generate');
+            Route::post('/backup_restore/delete', 'delete');
+            Route::post('/backup_restore/restore', 'restore');
+            Route::post('/backup_restore/restore_from_file', 'restore_from_file');
             Route::post('/process_import/{target}', 'process_import');
         });
     });
