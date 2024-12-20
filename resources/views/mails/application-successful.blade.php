@@ -21,7 +21,7 @@
             </p>
             <p>
                 We are pleased to inform you that your Compulsory Third-Party Liability (CTPL) insurance application
-                has been successfully processed and approved. Please find attached a digital copy of your insurance policy for your records.
+                has been successfully processed and approved. Please see attached digital copy of your insurance policy.
             </p>
             <p>
                 Your policy covers the essential protection required by law, and it is now active. For your convenience, the hard copy of the

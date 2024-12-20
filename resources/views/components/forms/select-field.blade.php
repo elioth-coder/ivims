@@ -1,4 +1,4 @@
-@props(['name','label','placeholder','required'=>false,'autofocus'=>''])
+@props(['name','label','placeholder','required'=>false,'autofocus'=>'','disabled'=>false])
 
 @php
     $errorClass = $errors->has($name) ? 'border-red-500' : '';
@@ -11,6 +11,7 @@
         :$name
         :$placeholder
         :class="$errorClass"
+        :$disabled
         :$required>
         {{ $slot }}
     </x-forms.select>

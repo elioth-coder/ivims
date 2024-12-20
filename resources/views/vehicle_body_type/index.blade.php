@@ -1,8 +1,6 @@
 <x-layout>
-    <x-slot:title>User</x-slot:title>
+    <x-slot:title>Vehicle Body Type</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
             html, body {
@@ -12,15 +10,19 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
-            <x-sidebar active="Users" activeSub="List of Users" />
+        <main class="max-w-screen-2xl mx-auto flex">
+            <x-sidebar active="Settings" activeSub="Vehicle Body Type" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
+                                'url' => '/setting',
+                                'title' => 'Setting',
+                            ],
+                            [
                                 'url' => '#',
-                                'title' => 'User',
+                                'title' => 'Vehicle Body Type',
                             ],
                         ];
                     @endphp
@@ -29,7 +31,7 @@
                     <div class="py-3 min-h-screen">
                         <div class="mx-auto max-w-full">
                             @if (session('message'))
-                                <x-alerts.success id="alert-user">
+                                <x-alerts.success id="alert-vehicle_body_type">
                                     {{ session('message') }}
                                 </x-alerts.success>
                             @endif
@@ -37,9 +39,9 @@
 
                         <div class="flex flex-col">
                             <div class="w-full pb-5">
-                                <a href="/user/create"
+                                <a href="/setting/vehicle_body_type/create"
                                     class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
-                                    New User
+                                    New Vehicle Body Type
                                     <svg class="w-4 h-4 ms-2" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                         viewBox="0 0 24 24">
@@ -49,31 +51,29 @@
                                 </a>
                             </div>
                             <div class="relative overflow-x-auto w-full">
-                                <table id="users-table" class="bg-white w-full text-sm text-left rtl:text-right">
+                                <table id="vehicle_body_types-table" class="bg-white w-full text-sm text-left rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-4">Full Name</th>
-                                            <th class="px-6 py-4">Company</th>
-                                            <th class="px-6 py-4">Role</th>
+                                            <th class="px-6 py-4">ID</th>
+                                            <th class="px-6 py-4">Type</th>
                                             <th class="px-6 py-4 text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $user)
+                                        @foreach ($vehicle_body_types as $vehicle_body_type)
                                             <tr class="group cursor-pointer">
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->first_name }} {{ $user->last_name }} {{ $user->suffix }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->company->name }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->role }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $vehicle_body_type->id }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $vehicle_body_type->type }}</td>
                                                 <td class="group-hover:bg-violet-200 px-8 py-6">
                                                     <x-forms.form class="hidden" method="POST" verb="DELETE"
-                                                        action="/user/{{ $user->id }}"
-                                                        id="delete-user-{{ $user->id }}-form">
+                                                        action="/setting/vehicle_body_type/{{ $vehicle_body_type->id }}"
+                                                        id="delete-vehicle_body_type-{{ $vehicle_body_type->id }}-form">
                                                         <button type="submit">
                                                             Delete
                                                         </button>
                                                     </x-forms.form>
 
-                                                    <a href="/user/{{ $user->id }}/edit" title="Edit"
+                                                    <a href="/setting/vehicle_body_type/{{ $vehicle_body_type->id }}/edit" title="Edit"
                                                         class="text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
                                                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -82,7 +82,7 @@
                                                                 d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                                         </svg>
                                                     </a>
-                                                    <button onclick="confirmDelete({{ $user->id }})" title="Delete"
+                                                    <button onclick="confirmDelete({{ $vehicle_body_type->id }})" title="Delete"
                                                         type="button"
                                                         class="text-red-600 mx-auto border border-red-600 hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
                                                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +109,7 @@
         <script>
             const confirmDelete = async (id) => {
                 let result = await Swal.fire({
-                    title: "Delete this user?",
+                    title: "Delete this vehicle body type?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -118,18 +118,18 @@
                 });
 
                 if (result.isConfirmed) {
-                    document.querySelector(`#delete-user-${id}-form button`).click();
+                    document.querySelector(`#delete-vehicle_body_type-${id}-form button`).click();
                 }
             }
 
             (function() {
                 setTimeout(() => {
-                    if (document.getElementById("users-table") && typeof DataTable !==
+                    if (document.getElementById("vehicle_body_types-table") && typeof DataTable !==
                         'undefined') {
-                        const dataTable = new DataTable("#users-table", {
+                        const dataTable = new DataTable("#vehicle_body_types-table", {
                             fixedHeight: true,
                             searchable: true,
-                            perPage: 50,
+                            perPage: 5,
                         });
                     }
                 }, 1000);

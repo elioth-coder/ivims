@@ -15,11 +15,13 @@ class SearchController extends Controller
 
         $sql =
        "SELECT COUNT(*) AS `count` FROM policy_holders
-        WHERE first_name LIKE :query_1
-        OR middle_name LIKE :query_2
-        OR last_name LIKE :query_3
-        OR suffix LIKE :query_4
-        OR address LIKE :query_5
+        WHERE (
+            first_name LIKE :query_1
+            OR middle_name LIKE :query_2
+            OR last_name LIKE :query_3
+            OR suffix LIKE :query_4
+            OR address LIKE :query_5
+        ) AND `id` IN (SELECT `policy_holder_id` FROM `policy_details`)
         ";
 
         $query = $pdo->prepare($sql);
@@ -35,13 +37,15 @@ class SearchController extends Controller
 
         $sql =
        "SELECT COUNT(*) AS `count` FROM vehicle_details
-        WHERE mv_file_no LIKE :query_1
-        OR plate_no LIKE :query_2
-        OR serial_no LIKE :query_3
-        OR motor_no LIKE :query_4
-        OR make LIKE :query_5
-        OR model LIKE :query_6
-        OR color LIKE :query_7
+        WHERE (
+            mv_file_no LIKE :query_1
+            OR plate_no LIKE :query_2
+            OR serial_no LIKE :query_3
+            OR motor_no LIKE :query_4
+            OR make LIKE :query_5
+            OR model LIKE :query_6
+            OR color LIKE :query_7
+        ) AND `id` IN (SELECT `vehicle_detail_id` FROM `policy_details`)
         ";
 
         $query = $pdo->prepare($sql);

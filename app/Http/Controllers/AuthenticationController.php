@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ApplicationSuccessfulMail;
+use App\Models\Branch;
 use App\Models\Company;
 use App\Models\PolicyDetail;
 use App\Models\PolicyHolder;
 use App\Models\ValidId;
+use App\Models\VehicleBodyType;
 use App\Models\VehicleDetail;
 use App\Models\VehiclePremium;
 use Illuminate\Support\Facades\Mail;
@@ -26,19 +28,20 @@ class AuthenticationController extends Controller
             "SELECT
             policy_details.*,
             vehicle_details.color, vehicle_details.make, vehicle_details.model,
-            policy_holders.first_name, policy_holders.last_name, policy_holders.suffix
+            users.first_name, users.last_name,
+            companies.code, companies.name
         FROM policy_details
         INNER JOIN vehicle_details
         ON policy_details.vehicle_detail_id=vehicle_details.id
-        INNER JOIN policy_holders
-        ON policy_details.policy_holder_id=policy_holders.id
-        WHERE policy_details.user_id=:user_id
+        INNER JOIN users
+        ON policy_details.user_id=users.id
+        INNER JOIN companies
+        ON policy_details.company_id=companies.id
+        ORDER BY policy_details.created_at DESC
         ";
 
         $query = $pdo->prepare($sql);
-        $query->execute([
-            'user_id' => Auth::user()->id,
-        ]);
+        $query->execute();
         $authentications = $query->fetchAll(PDO::FETCH_CLASS, 'stdClass');
 
         return view('authentication.index', [
@@ -48,12 +51,18 @@ class AuthenticationController extends Controller
 
     public function create()
     {
-        $premiums  = VehiclePremium::all();
-        $valid_ids = ValidId::all();
+        $premiums   = VehiclePremium::all();
+        $body_types = VehicleBodyType::all();
+        $companies  = Company::all();
+        $branches   = Branch::all();
+        $valid_ids  = ValidId::all();
 
         return view('authentication.create', [
-            'premiums'  => $premiums,
-            'valid_ids' => $valid_ids
+            'companies'  => $companies,
+            'branches'   => $branches,
+            'premiums'   => $premiums,
+            'body_types' => $body_types,
+            'valid_ids'  => $valid_ids
         ]);
     }
 
@@ -61,7 +70,7 @@ class AuthenticationController extends Controller
     {
         $pdo = DB::connection()->getPdo();
         $sql =
-            "SELECT
+        "SELECT
             policy_details.*,
             vehicle_details.mv_file_no, vehicle_details.plate_no, vehicle_details.serial_no, vehicle_details.color, vehicle_details.make, vehicle_details.model,
             policy_holders.business, policy_holders.address, policy_holders.first_name, policy_holders.last_name, policy_holders.suffix
@@ -102,6 +111,14 @@ class AuthenticationController extends Controller
     public function store(Request $request)
     {
         try {
+            if(Auth::user()->company_id==NULL) {
+                throw new Exception("Can't process authentication if you have no affiliated company.");
+            }
+
+            if(Auth::user()->branch_id==NULL) {
+                throw new Exception("Can't process authentication if you have no affiliated branch.");
+            }
+
             $policy_holder_data = $request->validate([
                 'id_number'   => ['required'],
                 'id_type'     => ['required'],
@@ -145,6 +162,7 @@ class AuthenticationController extends Controller
             $company = Company::where('id', $user->company_id)->first();
 
             $policy_detail_data['company_id'] = $user->company_id;
+            $policy_detail_data['branch_id']  = $user->branch_id;
             $policy_detail_data['user_id']    = $user->id;
 
             $vehicle_premium = VehiclePremium::where('code', $policy_detail_data['premium_code'])->first();
@@ -156,7 +174,7 @@ class AuthenticationController extends Controller
             $policy = $this->store_authentication($policy_holder_data, $vehicle_detail_data, $policy_detail_data);
 
             $authentication = $this->getAuthentication($policy->id);
-            $pdf = FacadePdf::loadView('authentication.pdf', ['authentication' => $authentication]);
+            $pdf = FacadePdf::loadView('insurance_policy.pdf', ['authentication' => $authentication]);
             $pdfContent = $pdf->output();
 
             Mail::to($policy_holder_data['email'])->send(

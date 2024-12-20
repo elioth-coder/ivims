@@ -1,6 +1,30 @@
 <x-card x-data="policy('{{ date('Y-m-d') }}')" class="max-w-xl">
     <x-card-header>Policy Details</x-card-header>
     <form id="form-policy-details" x-on:submit.prevent="submitPolicyDetails" method="POST" class="space-y-4 md:space-y-6">
+        @php
+            $company_id = Auth::user()->company_id;
+            $branch_id  = Auth::user()->branch_id;
+        @endphp
+        <x-forms.select-field class="w-full"
+            label="Company"
+            disabled="disabled"
+            name=""
+            placeholder="--" required>
+            @foreach ($companies as $company)
+                <option {{ ($company->id==$company_id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
+            @endforeach
+        </x-forms.select-field>
+
+        <x-forms.select-field class="w-full"
+            label="Branch"
+            disabled="disabled"
+            name=""
+            placeholder="--" required>
+            @foreach ($branches as $branch)
+                <option {{ ($branch->id==$branch_id) ? 'selected' : '' }} value="{{ $branch->id }}">{{ $branch->name }}</option>
+            @endforeach
+        </x-forms.select-field>
+
         <div class="flex space-x-2">
             <div class="w-full">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="date_issued">

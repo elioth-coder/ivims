@@ -7,7 +7,8 @@
     'disabled' => false,
     'value' => '',
     'maxlength' => 255,
-    'step' => 'any'
+    'step' => 'any',
+    'list' => '',
 ])
 
 @php
@@ -26,6 +27,7 @@
         :$value
         :$maxlength
         :$step
+        :$list
     />
     @error($name)
         <x-forms.error>{{ $message }}</x-forms.error>

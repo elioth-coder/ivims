@@ -17,16 +17,18 @@ class PolicyHolder extends Model
     protected function casts(): array
     {
         return [
-            'id_type'     => UpperCase::class,
-            'id_number'   => UpperCase::class,
-            'business'    => UpperCase::class,
-            'first_name'  => UpperCase::class,
-            'middle_name' => UpperCase::class,
-            'last_name'   => UpperCase::class,
-            'suffix'      => UpperCase::class,
-            'gender'      => UpperCase::class,
-            'address'     => UpperCase::class,
-            'email'       => LowerCase::class,
+            'id_type'      => UpperCase::class,
+            'id_number'    => UpperCase::class,
+            'business'     => UpperCase::class,
+            'first_name'   => UpperCase::class,
+            'middle_name'  => UpperCase::class,
+            'last_name'    => UpperCase::class,
+            'suffix'       => UpperCase::class,
+            'gender'       => UpperCase::class,
+            'province'     => UpperCase::class,
+            'municipality' => UpperCase::class,
+            'address'      => UpperCase::class,
+            'email'        => LowerCase::class,
         ];
     }
 }

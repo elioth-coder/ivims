@@ -1,9 +1,6 @@
 <x-layout>
     <x-slot:title>Authentication</x-slot:title>
     <x-slot:head>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
             html,
             body {
@@ -13,7 +10,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar active="Authenticated" activeSub="New Authentication" />
             <div class="scrollable w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section x-data="authentication" class="px-8">
@@ -30,9 +27,6 @@
                         ];
                     @endphp
                     <x-breadcrumb :$breadcrumbs />
-                    <div class="flex items-center mt-3 py-3">
-                        <x-authentication.stepper />
-                    </div>
                     <br>
                     <div class="flex space-x-3 min-h-screen">
                         <div class="w-3/5 pb-6">
@@ -40,18 +34,20 @@
                                 <x-authentication.form-policy-holder :$valid_ids />
                             </section>
                             <section x-show="step==2">
-                                <x-authentication.form-vehicle-details />
+                                <x-authentication.form-vehicle-details :$body_types />
                             </section>
                             <section x-show="step==3">
-                                <x-authentication.form-policy-details :$premiums />
+                                <x-authentication.form-policy-details :$premiums :$companies :$branches />
                             </section>
                         </div>
-                        <div class="w-2/5 pb-6 pt-2">
+                        <div class="w-2/5 pb-6">
+                            <x-authentication.stepper />
+                            <br>
                             <section class="bg-violet-500 text-white p-8 rounded-lg">
                                 <h2 class="mb-2 text-lg font-semibold dark:text-white">IMPORTANT NOTES:</h2>
                                 <ul class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400">
                                     <li>
-                                        Kindly fill-up all of the required fields.
+                                        Kindly fill-out all of the required fields.
                                     </li>
                                 </ul>
                             </section>
@@ -76,6 +72,65 @@
                         autofillVehicleDetail();
                     }
                 });
+
+                document.querySelector('#province').addEventListener('blur', function(event) {
+                    let province = event.target.value;
+                    populateMunicipalities(province);
+                })
+
+                populateProvinces();
+            }
+
+            async function populateProvinces() {
+                let provinces = await getProvinces();
+                let $dataListProvince = document.querySelector('#provinces');
+
+                let options =
+                    provinces
+                        .map(province => {
+                            return `<option value="${province.name}"></option>`;
+                        })
+                        .join("\n");
+                $dataListProvince.innerHTML = options;
+            }
+
+            async function populateMunicipalities(province_name) {
+                let provinces = await getProvinces();
+                let matches   = provinces.filter((p) => {
+                    return p.name == province_name;
+                });
+                let province;
+
+                if(matches.length) {
+                    province = matches[0];
+                }
+
+                if(!province) return;
+
+                let municipalities = await getMunicipalities(province.code);
+                let $dataListMunicipality = document.querySelector('#municipalities');
+
+                let options = municipalities
+                    .map(municipality => {
+                        return `<option value="${municipality.name}"></option>`;
+                    })
+                    .join("\n");
+
+                $dataListMunicipality.innerHTML = options;
+            }
+
+            async function getProvinces() {
+                let response = await fetch('https://psgc.gitlab.io/api/provinces/');
+                let items    = await response.json();
+
+                return items;
+            }
+
+            async function getMunicipalities(province_code) {
+                let response = await fetch(`https://psgc.gitlab.io/api/provinces/${province_code}/cities-municipalities`);
+                let items    = await response.json();
+
+                return items;
             }
 
             async function autofillPolicyHolder() {
@@ -208,6 +263,7 @@
 
                         Swal.fire({
                             title: "Processing authentication..",
+                            allowOutsideClick: false,
                             showConfirmButton: false,
                         });
 

@@ -15,6 +15,29 @@ use Illuminate\Support\Facades\File;
 
 class ToolController extends Controller
 {
+    public function update_municipality(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $policy_holder = PolicyHolder::findOrFail($data['id']);
+            $policy_holder->update([
+                'province'     => $data['province'],
+                'municipality' => $data['municipality'],
+            ]);
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Data updated successfully!',
+                'policy_holder' => $policy_holder,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error: ' . $e->getMessage(),
+                'status'  => 'error',
+            ], 200);
+        }
+    }
+
     public function process_import(Request $request, $target)
     {
         try {
@@ -57,6 +80,11 @@ class ToolController extends Controller
     public function data_import()
     {
         return view('tools.data_import');
+    }
+
+    public function data_faker()
+    {
+        return view('tools.data_faker');
     }
 
     public function raw_data(Request $request)

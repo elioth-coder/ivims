@@ -2,113 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ActivateAccountMail;
+use App\Models\Branch;
 use App\Models\Company;
+use App\Models\Token;
 use App\Models\User;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
-    public function index()
+    public function check_email()
     {
-        $users = User::whereNotIn('role', ['admin'])->get();
-
-        $users = $users->map(function (Object $user) {
-            $user->company = Company::findOrFail($user->company_id);
-
-            return $user;
-        });
-
-        return view('user.index', [
-            'users' => $users,
-        ]);
-    }
-
-    public function create()
-    {
-        $companies = Company::all();
-
-        return view('user.create', [
-            'companies' => $companies,
-        ]);
-    }
-
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        $user->company = Company::findOrFail($user->company_id);
-        $companies = Company::all();
-
-        return view('user.edit', [
-            'user'      => $user,
-            'companies' => $companies,
-        ]);
-    }
-    public function store(Request $request)
-    {
-        $userAttributes = $request->validate([
-            'first_name' => ['required'],
-            'last_name'  => ['required'],
-            'gender'     => ['required'],
-            'birthday'   => ['required'],
-            'contact_no' => ['required'],
-            'company_id' => ['required', 'exists:companies,id'],
-            'email'      => ['required', 'email', 'unique:users,email'],
-            'password'   => ['required', 'confirmed', Password::min(8)],
-            'role'       => ['required'],
-        ]);
-
-        $userAttributes['name'] = $userAttributes['first_name'] . " " . $userAttributes['last_name'];
-
-        $user = User::create($userAttributes);
-
-        return redirect('/user/create')->with([
-            'message' => "Successfully added a user"
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $rules = [
-            'first_name' => ['required'],
-            'last_name'  => ['required'],
-            'gender'     => ['required'],
-            'birthday'   => ['required'],
-            'contact_no' => ['required'],
-            'company_id' => ['required', 'exists:companies,id'],
-            'email'      => ['required', 'email', 'unique:users,email'],
-            'password'   => ['required', 'confirmed', Password::min(8)],
-            'role'       => ['required'],
-        ];
-
-        if($user->email==$request->input('email')) {
-            unset($rules['email']);
-        }
-        if(!$request->input('password')) {
-            unset($rules['password']);
+        if(!session('confirm')) {
+            return redirect('/');
         }
 
-        $userAttributes = $request->validate($rules);
-        $user->update($userAttributes);
-
-        return redirect("/user")->with([
-            'message' => "Successfully updated the user"
-        ]);
+        return view('check_email');
     }
 
-    public function destroy($id)
+    public function register()
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect("/user")
-            ->with([
-                'message' => 'Successfully deleted the user',
-            ]);
+        return view('register');
     }
 
     public function login_view()
@@ -118,32 +40,111 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $attributes = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        try {
+            $attributes = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]);
 
-        if (!Auth::attempt($attributes)) {
-            throw ValidationException::withMessages([
-                'credential' => 'Incorrect username or password',
+            if (!Auth::attempt($attributes)) {
+                throw ValidationException::withMessages([
+                    'credential' => 'Incorrect username or password',
+                ]);
+            }
+
+            $request->session()->regenerate();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Successfully logged in',
+            ]);
+        } catch(Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ]);
         }
-
-        if(Auth::user()->status=='inactive') {
-            Auth::logout();
-            throw ValidationException::withMessages([
-                'credential' => 'Cannot login, your account is locked by admin',
-            ]);
-        }
-
-        $request->session()->regenerate();
-        return redirect('/');
     }
 
     public function logout()
     {
         Auth::logout();
 
-        return redirect('/');
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
+    public function email_registration(Request $request)
+    {
+        $userAttributes = $request->validate([
+            'email'        => ['required', 'email'],
+            'password'     => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $user = User::where('email', $userAttributes['email'])->first();
+
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => 'The email you entered does not exist in our database',
+            ]);
+        }
+
+        $password = Hash::make($userAttributes['password']);
+        $generated_token = Str::uuid();
+        Token::create([
+            'token' => $generated_token,
+            'data'  => json_encode([
+                'name'        => $user->first_name. " " .$user->last_name,
+                'email'       => $userAttributes['email'],
+                'password'    => $password,
+                'role'        => $user->role,
+            ], JSON_UNESCAPED_UNICODE),
+            'expiration' => Carbon::now()->addDays(3),
+        ]);
+
+        Mail::to($userAttributes['email'])->send(new ActivateAccountMail([
+            'name'            => $user->first_name . " " . $user->last_name,
+            'app_domain'      => env('APP_DOMAIN'),
+            'app_url'         => env('APP_URL'),
+            'activation_link' => env('APP_URL') . '/email_activation/' . $generated_token,
+        ]));
+
+        return redirect('/check_email')->with([
+            'confirm' => true,
+        ]);
+    }
+
+    public function email_activation($token_value)
+    {
+        try {
+            $token = Token::where('token', $token_value)->first();
+
+            if(!$token) {
+                throw ValidationException::withMessages([
+                    'token' => 'Error: The token you provided is invalid or missing.',
+                ]);
+            }
+            if(Carbon::today()->gte(Carbon::parse($token->expiration))) {
+                throw ValidationException::withMessages([
+                    'token' => 'Error: The provided token is incorrect or has expired.',
+                ]);
+            }
+
+            $data = json_decode($token->data);
+            $user = User::where('email', $data->email)->first();
+
+            $user->update([
+                'password' => $data->password,
+            ]);
+
+            $token->delete();
+
+            return view('activation_status');
+        } catch(Exception $e) {
+            return view('activation_status', [
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

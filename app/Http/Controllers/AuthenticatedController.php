@@ -30,4 +30,44 @@ class AuthenticatedController extends Controller
             'policy' => $policy,
         ]);
     }
+
+    public function vehicle($id)
+    {
+        $related_policy = PolicyDetail::where('vehicle_detail_id', $id)->orderBy('created_at', 'DESC')->first();
+        $policy  = PolicyDetail::findOrFail($related_policy->id);
+        $premium = VehiclePremium::where('code', $policy->premium_code)->first();
+        $policy->type    = $premium->type;
+        $policy_holder   = PolicyHolder::findOrFail($policy->policy_holder_id);
+        $policy->holder  = $policy_holder;
+        $vehicle_details = VehicleDetail::findOrFail($policy->vehicle_detail_id);
+        $policy->vehicle = $vehicle_details;
+        $insurance_company = Company::findOrFail($policy->company_id);
+        $policy->company = $insurance_company;
+        $user = User::findOrFail($policy->user_id);
+        $policy->processed_by = $user;
+
+        return view('authenticated.vehicle', [
+            'policy' => $policy,
+        ]);
+    }
+
+    public function holder($id)
+    {
+        $related_policy = PolicyDetail::where('policy_holder_id', $id)->orderBy('created_at', 'DESC')->first();
+        $policy  = PolicyDetail::findOrFail($related_policy->id);
+        $premium = VehiclePremium::where('code', $policy->premium_code)->first();
+        $policy->type    = $premium->type;
+        $policy_holder   = PolicyHolder::findOrFail($policy->policy_holder_id);
+        $policy->holder  = $policy_holder;
+        $vehicle_details = VehicleDetail::findOrFail($policy->vehicle_detail_id);
+        $policy->vehicle = $vehicle_details;
+        $insurance_company = Company::findOrFail($policy->company_id);
+        $policy->company = $insurance_company;
+        $user = User::findOrFail($policy->user_id);
+        $policy->processed_by = $user;
+
+        return view('authenticated.holder', [
+            'policy' => $policy,
+        ]);
+    }
 }

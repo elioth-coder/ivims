@@ -23,13 +23,10 @@
         </li>
     </ul>
     <div class="py-2">
-        <form method="POST" action="/logout" class="w-full">
-            @csrf
-            @method('DELETE')
-            <button
-                class="w-full block text-left px-4 py-2 text-sm text-gray-700 hover:bg-violet-200 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-                Log Out
-            </button>
-        </form>
+        <button
+            onclick="confirmLogout()"
+            class="w-full block text-left px-4 py-2 text-sm text-gray-700 hover:bg-violet-200 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+            Log Out
+        </button>
     </div>
 </div>

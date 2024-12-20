@@ -1,3 +1,7 @@
+@props([
+    'body_types'=>[]
+])
+
 <x-card class="max-w-xl">
     <x-card-header>Vehicle Details</x-card-header>
     <form id="form-vehicle-details" x-on:submit.prevent="submitVehicleDetails" method="POST" class="space-y-4 md:space-y-6">
@@ -74,26 +78,13 @@
                     <option value="{{ $color }}">{{ strtoupper($color) }}</option>
                 @endforeach
             </x-forms.select-field>
-            @php
-            $body_types = [
-                'SEDAN',
-                'HATCHBACK',
-                'COUPE',
-                'CONVERTIBLES',
-                'WAGON',
-                'SUV',
-                'CROSSOVER',
-                'MPV',
-                'PICK-UP TRUCK',
-            ];
-            @endphp
             <x-forms.select-field class="w-full"
                 name="body_type"
                 label="Body Type"
                 placeholder="--"
                 required>
                 @foreach($body_types as $body_type)
-                    <option value="{{ $body_type }}">{{ strtoupper($body_type) }}</option>
+                    <option value="{{ $body_type->type }}">{{ strtoupper($body_type->type) }}</option>
                 @endforeach
             </x-forms.select-field>
         </div>

@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>User</x-slot:title>
+    <x-slot:title>Agent</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
@@ -10,19 +10,19 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
-            <x-sidebar active="Users" activeSub="New User"  />
+        <main class="max-w-screen-2xl mx-auto flex">
+            <x-sidebar active="Agents" activeSub="List of Agents" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/user',
-                                'title' => 'User',
+                                'url' => '/agent',
+                                'title' => 'Agent',
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Create',
+                                'title' => 'Edit',
                             ],
                         ];
                     @endphp
@@ -32,96 +32,125 @@
                         <div class="w-3/5 pb-6 pt-2">
                             <div class="max-w-xl">
                                 @if (session('message'))
-                                    <x-alerts.success id="alert-announcements">
+                                    <x-alerts.success id="alert-users">
                                         {{ session('message') }}
                                     </x-alerts.success>
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>New User</x-card-header>
-                                <x-forms.form method="POST" action="/user">
+                                <x-card-header>Edit Agent</x-card-header>
+                                <x-forms.form method="POST" action="/agent/{{ $user->id }}" verb="PATCH">
                                     <div class="flex space-x-2">
+                                        @php
+                                        if($errors->has('first_name')) {
+                                            $first_name = old('first_name');
+                                        } else {
+                                            $first_name = (old('first_name')) ? old('first_name') : $user->first_name;
+                                        }
+                                        @endphp
                                         <x-forms.input-field class="w-full"
                                             name="first_name"
                                             type="text"
                                             label="First name"
                                             placeholder="--"
+                                            value="{{ $first_name }}"
                                             required
                                         />
+                                        @php
+                                        if($errors->has('last_name')) {
+                                            $last_name = old('last_name');
+                                        } else {
+                                            $last_name = (old('last_name')) ? old('last_name') : $user->last_name;
+                                        }
+                                        @endphp
                                         <x-forms.input-field class="w-full"
                                             name="last_name"
                                             type="text"
                                             label="Last name"
                                             placeholder="--"
+                                            value="{{ $last_name }}"
+                                            required
                                         />
                                     </div>
 
                                     <div class="flex space-x-2">
+                                        @php
+                                        if($errors->has('gender')) {
+                                            $gender = old('gender');
+                                        } else {
+                                            $gender = (old('gender')) ? old('gender') : $user->gender;
+                                        }
+                                        @endphp
                                         <x-forms.select-field class="w-full"
                                             name="gender"
                                             label="Gender"
                                             placeholder="--"
                                             required>
-                                            <option value="MALE">MALE</option>
-                                            <option value="FEMALE">FEMALE</option>
+                                            <option {{ ($gender=='MALE') ? 'selected' : '' }} value="MALE">MALE</option>
+                                            <option {{ ($gender=='FEMALE') ? 'selected' : '' }} value="FEMALE">FEMALE</option>
                                         </x-forms.select-field>
+                                        @php
+                                        if($errors->has('birthday')) {
+                                            $birthday = old('birthday');
+                                        } else {
+                                            $birthday = (old('birthday')) ? old('birthday') : $user->birthday;
+                                        }
+                                        @endphp
                                         <x-forms.input-field class="w-full"
                                             name="birthday"
                                             type="date"
                                             label="Birthday"
                                             placeholder="--"
+                                            value="{{ $birthday }}"
                                             required
                                         />
                                     </div>
-
+                                    @php
+                                    if($errors->has('contact_no')) {
+                                        $contact_no = old('contact_no');
+                                    } else {
+                                        $contact_no = (old('contact_no')) ? old('contact_no') : $user->contact_no;
+                                    }
+                                    @endphp
                                     <x-forms.input-field class="w-full"
                                         name="contact_no"
                                         type="text"
                                         label="Contact No."
                                         placeholder="--"
+                                        value="{{ $contact_no }}"
                                         required
                                     />
+                                    @php
+                                    if($errors->has('company_id')) {
+                                        $company_id = old('company_id');
+                                    } else {
+                                        $company_id = (old('company_id')) ? old('company_id') : $user->company->id;
+                                    }
+                                    @endphp
                                     <x-forms.select-field class="w-full"
                                         name="company_id"
                                         label="Company"
                                         placeholder="--"
                                         required>
                                         @foreach($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                            <option {{ ($company_id==$company->id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
                                         @endforeach
                                     </x-forms.select-field>
+                                    @php
+                                    if($errors->has('email')) {
+                                        $email = old('email');
+                                    } else {
+                                        $email = (old('email')) ? old('email') : $user->email;
+                                    }
+                                    @endphp
                                     <x-forms.input-field class="w-full"
                                         name="email"
                                         type="email"
                                         label="Email"
                                         placeholder="--"
+                                        value="{{ $email }}"
                                         required
                                     />
-                                    <div class="flex space-x-2">
-                                        <x-forms.input-field
-                                            class="w-full"
-                                            name="password"
-                                            type="password"
-                                            label="Password"
-                                            placeholder="••••••••"
-                                            required
-                                        />
-                                        <x-forms.input-field
-                                            class="w-full"
-                                            name="password_confirmation"
-                                            type="password"
-                                            label="Confirm password"
-                                            placeholder="••••••••"
-                                            required
-                                        />
-                                    </div>
-                                    <div class="flex space-x-2">
-                                        <x-forms.select-field class="w-full" name="role" label="Role" placeholder="--">
-                                            <option value="agent">Agent</option>
-                                            <option value="subagent">Subagent</option>
-                                        </x-forms.select-field>
-                                        <div class="w-full"></div>
-                                    </div>
 
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
@@ -141,7 +170,7 @@
                                 <h2 class="mb-2 text-lg font-semibold dark:text-white">IMPORTANT NOTES:</h2>
                                 <ul class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400">
                                     <li>
-                                        Kindly fill-up all of the required fields.
+                                        Kindly fill-out all of the required fields.
                                     </li>
                                 </ul>
                             </section>

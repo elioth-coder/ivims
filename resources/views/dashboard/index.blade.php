@@ -12,23 +12,48 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex max-w-screen-2xl">
             <x-sidebar />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     <x-breadcrumb />
-                    <div class="flex gap-4 my-4">
-                        <div class="w-2/3">
-                            <div id="barchart" style="height: 250px; with: 100%;"></div>
-                        </div>
-                        <div class="w-1/3 text-center border rounded-3xl p-5">
-                            <h3 class="text-3xl">Uploads</h3>
+                    <div class="flex gap-4 my-5">
+                        <div class="w-1/2">
+                            <div class="flex gap-4">
+                                <section class="border rounded p-5 w-1/2">
+                                    <h3 class="text-xl">Total Uploads</h3>
+                                    <h1 class="text-3xl text-center font-extrabold">{{ $total_uploads }}</h1>
+                                </section>
+                                <section class="border rounded p-5 w-1/2">
+                                    <h3 class="text-xl">Today's Uploads</h3>
+                                    <h1 class="text-3xl text-center font-extrabold">{{ $todays_uploads }}</h1>
+                                </section>
+                            </div>
                             <br>
-                            <h1 class="text-7xl">{{ $todays_upload }}</h1>
+                            <div id="barchart-per-company"
+                                onclick="window.location.href='/dashboard/upload_count_per_company';"
+                                style="height: 250px; with: 100%;">
+                            </div>
+                        </div>
+                        <div class="w-1/2">
+                            <section class="p-5 border rounded">
+                                <h3 id="todays_date" class="text-xl">Date: {{ date('l') }}</h3>
+                                <h1 class="text-center text-3xl font-extrabold">{{ date('F d, Y') }}</h1>
+                            </section>
+                            <br>
+                            <div id="linechart"
+                                onclick="window.location.href='/dashboard/upload_count_per_month';"
+                                style="height: 250px; with: 100%;">
+                            </div>
                         </div>
                     </div>
+                    <div id="barchart-per-province"
+                        onclick="window.location.href='/dashboard/upload_count_per_province';"
+                        style="height: 250px; with: 100%;">
+                    </div>
+                    <br>
                     <div class="flex gap-4">
-                        <div class="w-2/3">
+                        <div class="w-1/2">
                             <h3 id="announcement" class="pt-1 text-xl mb-2">Announcements</h3>
                             @forelse ($announcements as $announcement)
                                 <div id="alert-announcement-content-{{ $announcement->id }}" {{-- text-gray-800 text-red-800 text-yellow-800 text-green-800 text-blue-800 text-indigo-800 text-purple-800 text-pink-800 --}}
@@ -37,7 +62,8 @@
                                     role="alert">
                                     <div class="flex flex-col">
                                         <h3 class="text-2xl font-semibold">{{ $announcement->title }}</h3>
-                                        <p class="text-xs">{{ date('M d, Y h:i:a', strtotime($announcement->created_at)) }}</p>
+                                        <p class="text-xs">
+                                            {{ date('M d, Y h:i:a', strtotime($announcement->created_at)) }}</p>
                                     </div>
                                     {{-- bg-gray-200 bg-red-200 bg-yellow-200 bg-green-200 bg-blue-200 bg-indigo-200 bg-purple-200 bg-pink-200 --}}
                                     <hr class="h-px my-2 bg-{{ $announcement->color }}-200 border-0">
@@ -49,29 +75,37 @@
                                 <h1 class="text-center my-5 text-3xl">No announcements so far.</h1>
                             @endforelse
                         </div>
-                        <div class="w-1/3">
+                        <div class="w-1/2">
                             <h3 id="recent" class="pt-1 text-xl mb-2">Recent Uploads</h3>
                             <div class="relative overflow-hidden">
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <table class="w-full text-sm text-left rtl:text-right">
                                     <thead
-                                        class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                                        class="text-xs uppercase bg-gray-100">
                                         <tr>
                                             <th scope="col" class="px-6 py-3 rounded-s-lg">
-                                                Policy Holder
+                                                Agent
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Vehicle
                                             </th>
                                             <th scope="col" class="px-6 py-3 rounded-e-lg">
-                                                Make
+                                                Company
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($recent_uploads as $upload)
                                             <tr>
-                                                <th scope="row"
-                                                    class="text-nowrap text-ellipsis overflow-hidden px-6 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1 whitespace-nowrap">
                                                     {{ substr($upload->first_name, 0, 1) }}. {{ $upload->last_name }}
-                                                </th>
-                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">{{ $upload->make }}</td>
+                                                </td>
+                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">
+                                                    {{ $upload->make }}
+                                                    {{ $upload->model }}
+                                                </td>
+                                                <td class="text-nowrap text-ellipsis overflow-hidden px-6 py-1">
+                                                    {{ $upload->code }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -87,8 +121,22 @@
     </div>
     <x-slot:scripts>
         <script>
-            const uploads = {!! json_encode($uploads) !!};
-            const dataPoints = uploads.map(upload => ({ label: upload.code, y: upload.count }));
+            const uploads_per_company  = {!! json_encode($uploads_per_company) !!};
+            const dataPointsPerCompany = uploads_per_company.map(upload => ({
+                label: upload.code,
+                y: upload.count
+            }));
+            const uploads_per_month  = {!! json_encode($uploads_per_month) !!};
+            const dataPointsPerMonth = uploads_per_month.map(upload => ({
+                label: upload.month,
+                y: upload.count
+            }));
+            const uploads_per_province  = {!! json_encode($uploads_per_province) !!};
+            const dataPointsPerProvince = uploads_per_province.map(upload => ({
+                label: upload.province,
+                y: upload.count
+            }));
+
             window.onload = function() {
                 CanvasJS.addColorSet("bootstrap5",
                     [
@@ -97,14 +145,9 @@
                         '#dc3545',
                         '#ffc107',
                         '#0dcaf0',
-                        '#cfe2ff',
-                        '#d1e7dd',
-                        '#f8d7da',
-                        '#fff3cd',
-                        '#cff4fc',
                     ]);
 
-                var barchart = new CanvasJS.Chart("barchart", {
+                var barchartPerCompany = new CanvasJS.Chart("barchart-per-company", {
                     animationEnabled: true,
                     colorSet: 'bootstrap5',
                     title: {
@@ -118,12 +161,41 @@
                         showInLegend: true,
                         legendMarkerColor: "grey",
                         legendText: "Insurance Companies",
-                        dataPoints: dataPoints,
+                        dataPoints: dataPointsPerCompany,
                     }]
                 });
-                barchart.render();
-            }
+                barchartPerCompany.render();
 
+                var linechart = new CanvasJS.Chart("linechart", {
+                    title: {
+                        text: `Upload Count per Month (${(new Date()).getFullYear()})`
+                    },
+                    data: [{
+                        type: "line",
+                        dataPoints: dataPointsPerMonth,
+                    }]
+                });
+                linechart.render();
+
+                var barchartPerProvince = new CanvasJS.Chart("barchart-per-province", {
+                    animationEnabled: true,
+                    colorSet: 'bootstrap5',
+                    title: {
+                        text: "Upload Count per Province"
+                    },
+                    axisY: {
+                        title: "Upload Count"
+                    },
+                    data: [{
+                        type: "column",
+                        showInLegend: true,
+                        legendMarkerColor: "grey",
+                        legendText: "Provinces",
+                        dataPoints: dataPointsPerProvince,
+                    }]
+                });
+                barchartPerProvince.render();
+            }
         </script>
     </x-slot:scripts>
 </x-layout>

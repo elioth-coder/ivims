@@ -1,9 +1,6 @@
 <x-layout>
     <x-slot:title>Data Import</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
         <style>
         html, body {
@@ -13,7 +10,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar active="Tools" activeSub="Data Import"  />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">

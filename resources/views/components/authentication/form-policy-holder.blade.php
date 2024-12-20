@@ -98,6 +98,26 @@
                 required
             />
         </div>
+        <div class="flex space-x-2">
+            <x-forms.input-field class="w-full"
+                name="province"
+                type="text"
+                label="Province"
+                list="provinces"
+                placeholder="--"
+                required
+            />
+            <datalist id="provinces"></datalist>
+            <x-forms.input-field class="w-full"
+                name="municipality"
+                type="text"
+                label="Municipality"
+                list="municipalities"
+                placeholder="--"
+                required
+            />
+            <datalist id="municipalities"></datalist>
+        </div>
         <x-forms.input-field class="w-full"
             name="address"
             type="text"

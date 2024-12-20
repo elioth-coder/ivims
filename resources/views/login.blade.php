@@ -1,8 +1,19 @@
 <x-layout>
     <x-slot:title>Login</x-slot:title>
-    <x-navbar />
+    <nav class="sticky top-0 left-0 right-0 bg-violet-800 border-b border-violet-600">
+        <div class="max-w-5xl mx-auto flex justify-between">
+            <x-logo-brand class="text-white p-3" />
+            <div class="flex items-center p-3">
+                <a href="/"
+                    class="text-white bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                    <i class="bi bi-arrow-left"></i>
+                    Back
+                </a>
+            </div>
+        </div>
+    </nav>
     <div class="w-full">
-        <main class="mx-auto flex bg-gray-100">
+        <main class="max-w-screen-2xl mx-auto flex bg-gray-100">
             <div class="w-full pt-2 overflow-hidden h-screen" style="height: calc(100vh - 90px)">
                 <section class="px-8">
                     @auth
@@ -29,7 +40,7 @@
                                             <span>{{ $message }}</span>
                                         </x-alert>
                                     @enderror
-                                    <x-forms.form action="/login" method="POST">
+                                    <x-forms.form id="login-form" action="/login" method="POST">
                                         <x-forms.input-field name="email" type="email" label="Email" placeholder="name@company.com"
                                             required />
                                         <x-forms.input-field name="password" type="password" label="Password" placeholder="••••••••"
@@ -59,4 +70,53 @@
             </div>
         </main>
     </div>
+    <x-slot:scripts>
+        <script>
+            window.onload = function() {
+                document.getElementById('login-form').addEventListener('submit', async function(event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(event.target);
+
+                    Swal.fire({
+                        title: "Logging in...",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 2000,
+                    });
+
+                    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    let response = await fetch('/login', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                    });
+                    let {
+                        status, message
+                    } = await response.json();
+
+                    if (status == 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            timer: 1000,
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: message,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                    }
+                });
+            }
+        </script>
+    </x-slot>
 </x-layout>

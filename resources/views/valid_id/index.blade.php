@@ -1,8 +1,6 @@
 <x-layout>
     <x-slot:title>Valid ID</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
             html, body {
@@ -12,7 +10,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar active="Settings" activeSub="Valid ID" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
@@ -131,7 +129,7 @@
                         const dataTable = new DataTable("#valid_ids-table", {
                             fixedHeight: true,
                             searchable: true,
-                            perPage: 50,
+                            perPage: 5,
                         });
                     }
                 }, 1000);

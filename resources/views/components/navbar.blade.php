@@ -1,5 +1,5 @@
 <nav class="bg-violet-700 border-b border-violet-600 z-10 flex text-white h-[70px]">
-    <div class="flex w-full items-center">
+    <div class="flex mx-auto max-w-screen-2xl w-full items-center">
         <div class="min-w-[350px] h-full px-3 flex items-center">
             @auth
                 <span class="hidden w-9 h-9"></span>

@@ -1,8 +1,6 @@
 <x-layout>
     <x-slot:title>Search</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
             html,
@@ -13,7 +11,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar active="Search" activeSub="Policy Holders" :$count />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
@@ -77,7 +75,7 @@
                                                     <td class="group-hover:bg-violet-200 px-8 py-6">
                                                         {{ $policy_holder->address }}</td>
                                                     <td class="group-hover:bg-violet-200 px-8 py-6">
-                                                        <a href="/authentication/policy_holder/{{ $policy_holder->id }}" class="text-xl mx-auto border border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded p-2 px-3 text-center inline-flex items-center">
+                                                        <a href="/authentication/holder/{{ $policy_holder->id }}" class="text-xl mx-auto border border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded p-2 px-3 text-center inline-flex items-center">
                                                             <i class="bi bi-eye-fill"></i>
                                                         </a>
                                                     </td>
@@ -100,7 +98,7 @@
                 new DataTable("#policy-holders-table", {
                     fixedHeight: true,
                     searchable: true,
-                    perPage: 50,
+                    perPage: 5,
                 });
             };
         </script>

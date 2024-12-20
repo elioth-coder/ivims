@@ -1,7 +1,6 @@
 <x-layout>
     <x-slot:title>Announcement</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
             html, body {
                 overflow: hidden;
@@ -10,7 +9,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="mx-auto flex">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar activeSub="Announcement" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
@@ -97,7 +96,7 @@
                                 <h2 class="mb-2 text-lg font-semibold dark:text-white">IMPORTANT NOTES:</h2>
                                 <ul class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400">
                                     <li>
-                                        Kindly fill-up all of the required fields.
+                                        Kindly fill-out all of the required fields.
                                     </li>
                                 </ul>
                             </section>

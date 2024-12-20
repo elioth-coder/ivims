@@ -22,5 +22,4 @@ class VehicleDetail extends Model
             'body_type' => UpperCase::class,
         ];
     }
-
 }

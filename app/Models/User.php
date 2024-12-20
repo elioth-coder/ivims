@@ -46,8 +46,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-
+            'password'    => 'hashed',
+            'role'        => UpperCase::class,
             'name'        => UpperCase::class,
             'first_name'  => UpperCase::class,
             'middle_name' => UpperCase::class,

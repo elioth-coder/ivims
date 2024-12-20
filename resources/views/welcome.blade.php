@@ -23,8 +23,13 @@
         <x-logo-brand class="text-white p-3" />
         <div class="flex items-center p-3">
             <a href="/login"
+                class="text-white me-2 bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                Login
+                <i class="bi bi-box-arrow-in-right"></i>
+            </a>
+            <a href="/register"
                 class="text-white bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                Login &rarr;
+                Sign Up
             </a>
         </div>
     </nav>

@@ -1,6 +1,6 @@
 @php
     $defaults = [
-        'class' => 'w-full bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700',
+        'class' => 'w-full bg-white rounded-lg shadow border',
 ];
 @endphp
 
