@@ -18,7 +18,7 @@
                         $breadcrumbs = [
                             [
                                 'url' => '/setting',
-                                'title' => 'Setting',
+                                'title' => 'Settings',
                             ],
                             [
                                 'url' => '/setting/vehicle_body_type',

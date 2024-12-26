@@ -19,23 +19,26 @@
 </head>
 
 <body class="font-hanken-grotesk bg-violet-700 text-white relative min-h-screen">
-    <nav class="flex justify-between sticky top-0 left-0 right-0 bg-violet-800 border-b border-violet-600">
-        <x-logo-brand class="text-white p-3" />
-        <div class="flex items-center p-3">
-            <a href="/login"
-                class="text-white me-2 bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                Login
-                <i class="bi bi-box-arrow-in-right"></i>
-            </a>
-            <a href="/register"
-                class="text-white bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                Sign Up
-            </a>
+    <nav class="flex sticky top-0 left-0 right-0 bg-violet-800 border-b border-violet-600">
+        <div class="mx-auto w-full max-w-screen-lg flex justify-between">
+            <x-logo-brand class="text-white p-3" />
+            <div class="flex items-center p-3">
+                <a href="/login"
+                    class="text-white me-2 bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                    Login
+                    <i class="bi bi-box-arrow-in-right"></i>
+                </a>
+                <a href="/register"
+                    class="text-white bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                    Sign Up
+                </a>
+            </div>
         </div>
+
     </nav>
 
-    <div class="w-screen flex flex-col justify-center items-center space-y-12">
-        <div class="text-center max-w-4xl mx-auto space-y-5 p-3">
+    <div class="w-full max-w-screen-lg mx-auto flex flex-col justify-center items-center space-y-12">
+        <div class="text-center mx-auto space-y-5 p-3">
             <a target="_blank" title="Insurance Commission Official Website" href="https://www.insurance.gov.ph/"
                 class="block sm:hidden">
                 <img style="height: 160px; width: 160px;" class="mx-auto" src="{{ asset('images/ic-logo.png') }}"
@@ -79,7 +82,7 @@
         </div>
     </div>
 
-    <footer class="bg-violet-800 border-t border-violet-600 text-white py-5 absolute sm:relative bottom-0 left-0 right-0">
+    <footer class="bg-violet-800 border-t border-violet-600 text-white py-5 relative bottom-0 left-0 right-0">
         <p class="text-center font-thin">Copyright &copy; 2024 IVIM System | v1.0.0</p>
     </footer>
 </body>

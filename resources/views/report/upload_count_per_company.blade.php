@@ -13,18 +13,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar activeSub="Upload Count - Company" />
+            <x-sidebar activeSub="Charts & Reports" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '#',
-                                'title' => 'Upload Count',
+                                'url' => '/dashboard/report',
+                                'title' => 'Charts & Reports',
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Company',
+                                'title' => 'Upload Count per Company',
                             ],
                         ];
                     @endphp
@@ -49,13 +49,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $total_uploads = 0;
+                                        @endphp
                                         @foreach($uploads_per_company as $upload)
+                                            @php $total_uploads += $upload->count; @endphp
                                             <tr class="bg-white border-b hover:bg-gray-50">
                                                 <td class="px-6 py-4">{{ $upload->code }}</td>
                                                 <td class="px-6 py-4">{{ $upload->name }}</td>
                                                 <td class="px-6 py-4 text-center">{{ $upload->count }}</td>
                                             </tr>
                                         @endforeach
+                                        <tr class="bg-white border-b hover:bg-gray-50">
+                                            <td colspan="2" class="px-6 py-4 font-bold text-2xl">Total</td>
+                                            <td class="px-6 py-4 text-center font-bold text-2xl">{{ $total_uploads }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

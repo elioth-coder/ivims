@@ -56,21 +56,25 @@ $queryString = "";
                     icon: 'bar-chart-line-fill',
                     items: [
                         {
-                            name: 'Home',
+                            name: 'Dashboard',
                             url: '/dashboard',
                         },
                         {
-                            name: 'Announcement',
+                            name: 'Charts & Reports',
+                            url: '/dashboard/report',
+                        },
+                        {
+                            name: 'Announcements',
                             url: '/dashboard/announcement',
                         },
                     ]
                 },
                 {
-                    name: 'Authenticated',
+                    name: 'Authentication',
                     icon: 'file-earmark-medical-fill',
                     items: [
                         {
-                            name: 'List of Authenticated',
+                            name: 'Authentications',
                             url: '/authentication',
                         },
                         {
@@ -79,7 +83,6 @@ $queryString = "";
                         },
                     ]
                 },
-
                 {
                     name: 'Branches',
                     icon: 'building-fill',

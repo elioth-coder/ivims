@@ -130,6 +130,8 @@ class AuthenticationController extends Controller
                 'gender'      => ['required'],
                 'birthday'    => ['required'],
                 'contact_no'  => ['required'],
+                'province'    => ['required'],
+                'municipality'=> ['required'],
                 'address'     => ['required'],
                 'email'       => ['required', 'email'],
             ]);
@@ -174,7 +176,7 @@ class AuthenticationController extends Controller
             $policy = $this->store_authentication($policy_holder_data, $vehicle_detail_data, $policy_detail_data);
 
             $authentication = $this->getAuthentication($policy->id);
-            $pdf = FacadePdf::loadView('insurance_policy.pdf', ['authentication' => $authentication]);
+            $pdf = FacadePdf::loadView('authentication.pdf', ['authentication' => $authentication]);
             $pdfContent = $pdf->output();
 
             Mail::to($policy_holder_data['email'])->send(

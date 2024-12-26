@@ -11,14 +11,14 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar activeSub="Announcement" />
+            <x-sidebar activeSub="Announcements" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '/dashboard/announcement',
-                                'title' => 'Announcement',
+                                'title' => 'Announcements',
                             ],
                             [
                                 'url' => '#',

@@ -83,9 +83,6 @@ class AgentController extends Controller
         if($user->email==$request->input('email')) {
             unset($rules['email']);
         }
-        if(!$request->input('password')) {
-            unset($rules['password']);
-        }
 
         $userAttributes = $request->validate($rules);
         $userAttributes['role'] = 'AGENT';

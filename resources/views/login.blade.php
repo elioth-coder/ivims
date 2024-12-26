@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Login</x-slot:title>
     <nav class="sticky top-0 left-0 right-0 bg-violet-800 border-b border-violet-600">
-        <div class="max-w-5xl mx-auto flex justify-between">
+        <div class="max-w-screen-lg mx-auto flex justify-between">
             <x-logo-brand class="text-white p-3" />
             <div class="flex items-center p-3">
                 <a href="/"
@@ -13,7 +13,7 @@
         </div>
     </nav>
     <div class="w-full">
-        <main class="max-w-screen-2xl mx-auto flex bg-gray-100">
+        <main class="max-w-screen-lg mx-auto flex">
             <div class="w-full pt-2 overflow-hidden h-screen" style="height: calc(100vh - 90px)">
                 <section class="px-8">
                     @auth

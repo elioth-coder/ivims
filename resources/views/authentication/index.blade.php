@@ -11,14 +11,14 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Authenticated" activeSub="List of Authenticated" />
+            <x-sidebar active="Authentication" activeSub="Authentications" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '#',
-                                'title' => 'Authenticated',
+                                'title' => 'Authentications',
                             ],
                         ];
                     @endphp
@@ -95,18 +95,13 @@
     </div>
     <x-slot:scripts>
         <script>
-            (function() {
-                setTimeout(() => {
-                    if (document.getElementById("authentications-table") && typeof DataTable !==
-                        'undefined') {
-                        const dataTable = new DataTable("#authentications-table", {
-                            fixedHeight: true,
-                            searchable: true,
-                            perPage: 5,
-                        });
-                    }
-                }, 1000);
-            })();
+            window.onload = function() {
+                new DataTable("#authentications-table", {
+                    fixedHeight: true,
+                    searchable: true,
+                    perPage: 5,
+                });
+            };
         </script>
     </x-slot:scripts>
 </x-layout>

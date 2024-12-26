@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Company</x-slot:title>
+    <x-slot:title>Companies</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
@@ -18,7 +18,7 @@
                         $breadcrumbs = [
                             [
                                 'url' => '/company',
-                                'title' => 'Company',
+                                'title' => 'Companies',
                             ],
                             [
                                 'url' => '#',

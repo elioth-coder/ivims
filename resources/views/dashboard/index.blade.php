@@ -12,7 +12,7 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="max-w-screen-2xl mx-auto flex max-w-screen-2xl">
+        <main class="max-w-screen-2xl mx-auto flex">
             <x-sidebar />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
@@ -30,8 +30,8 @@
                                 </section>
                             </div>
                             <br>
-                            <div id="barchart-per-company"
-                                onclick="window.location.href='/dashboard/upload_count_per_company';"
+                            <div id="barchart-per-company" class="cursor-pointer"
+                                onclick="window.location.href='/dashboard/report/upload_count_per_company';"
                                 style="height: 250px; with: 100%;">
                             </div>
                         </div>
@@ -41,14 +41,14 @@
                                 <h1 class="text-center text-3xl font-extrabold">{{ date('F d, Y') }}</h1>
                             </section>
                             <br>
-                            <div id="linechart"
-                                onclick="window.location.href='/dashboard/upload_count_per_month';"
+                            <div id="linechart" class="cursor-pointer"
+                                onclick="window.location.href='/dashboard/report/upload_count_per_month';"
                                 style="height: 250px; with: 100%;">
                             </div>
                         </div>
                     </div>
-                    <div id="barchart-per-province"
-                        onclick="window.location.href='/dashboard/upload_count_per_province';"
+                    <div id="barchart-per-province" class="cursor-pointer"
+                        onclick="window.location.href='/dashboard/report/upload_count_per_province';"
                         style="height: 250px; with: 100%;">
                     </div>
                     <br>

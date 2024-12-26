@@ -1,4 +1,4 @@
-@props(['active'=>'Dashboard', 'activeSub'=>'Home', 'count'=>[]])
+@props(['active'=>'Dashboard', 'activeSub'=>'Dashboard', 'count'=>[]])
 
 <div id="sidebar" x-data="menu('{{ $active }}','{{ $activeSub }}')" class="border-r flex min-w-[350px] box-border bg-white"
     style="height: calc(100vh - 56px)">
@@ -56,33 +56,25 @@ $queryString = "";
                     icon: 'bar-chart-line-fill',
                     items: [
                         {
-                            name: 'Home',
+                            name: 'Dashboard',
                             url: '/dashboard',
                         },
                         {
-                            name: 'Announcement',
+                            name: 'Charts & Reports',
+                            url: '/dashboard/report',
+                        },
+                        {
+                            name: 'Announcements',
                             url: '/dashboard/announcement',
-                        },
-                        {
-                            name: 'Upload Count - Company',
-                            url: '/dashboard/upload_count_per_company',
-                        },
-                        {
-                            name: 'Upload Count - Monthly',
-                            url: '/dashboard/upload_count_per_month',
-                        },
-                        {
-                            name: 'Upload Count - Province',
-                            url: '/dashboard/upload_count_per_province',
                         },
                     ]
                 },
                 {
-                    name: 'Authenticated',
+                    name: 'Authentication',
                     icon: 'file-earmark-medical-fill',
                     items: [
                         {
-                            name: 'List of Authenticated',
+                            name: 'Authentications',
                             url: '/authentication',
                         },
                         {
@@ -96,7 +88,7 @@ $queryString = "";
                     icon: 'buildings-fill',
                     items: [
                         {
-                            name: 'List of Companies',
+                            name: 'Companies',
                             url: '/company',
                         },
                         {
@@ -110,7 +102,7 @@ $queryString = "";
                     icon: 'people-fill',
                     items: [
                         {
-                            name: 'List of Agents',
+                            name: 'Agents',
                             url: '/agent',
                         },
                         {
@@ -124,7 +116,7 @@ $queryString = "";
                     icon: 'gear-fill',
                     items: [
                         {
-                            name: 'General',
+                            name: 'Settings',
                             url: '/setting',
                         },
                         {

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ActivateAccountMail;
-use App\Models\Branch;
-use App\Models\Company;
+use App\Models\PolicyHolder;
 use App\Models\Token;
 use App\Models\User;
 use Carbon\Carbon;
@@ -85,9 +84,30 @@ class UserController extends Controller
         $user = User::where('email', $userAttributes['email'])->first();
 
         if (!$user) {
-            throw ValidationException::withMessages([
-                'email' => 'The email you entered does not exist in our database',
-            ]);
+            $policy_holder = PolicyHolder::where('email', $userAttributes['email'])->first();
+
+            if(!$policy_holder) {
+                throw ValidationException::withMessages([
+                    'email' => 'The email you entered does not exist in our database',
+                ]);
+            } else {
+                $user = User::create([
+                    'name'       => $policy_holder->first_name . " " . $policy_holder->last_name,
+                    'first_name' => $policy_holder->first_name,
+                    'last_name'  => $policy_holder->last_name,
+                    'gender'     => $policy_holder->gender,
+                    'birthday'   => $policy_holder->birthday,
+                    'contact_no' => $policy_holder->contact_no,
+                    'email'      => $policy_holder->email,
+                    'role'       => 'POLICY_HOLDER',
+                ]);
+            }
+        } else {
+            if($user->password != NULL){
+                throw ValidationException::withMessages([
+                    'email' => 'Account already exists',
+                ]);
+            }
         }
 
         $password = Hash::make($userAttributes['password']);

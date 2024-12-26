@@ -16,7 +16,7 @@
 
         <div class="message">
             <p>Dear
-                {{ $data['gender']=='male' ? 'Mr.' : 'Ms.' }}
+                {{ strtoupper($data['gender'])=='MALE' ? 'Mr.' : 'Ms.' }}
                 {{ strtoupper($data['customer']) }},
             </p>
             <p>
@@ -30,7 +30,7 @@
             </p>
 
             <p>
-                Thank you for choosing {{ strtoupper($data['company']) }}as your trusted provider. Should you have any questions or need further assistance, please feel free to reach out.
+                Thank you for choosing {{ strtoupper($data['company']) }} as your trusted provider. Should you have any questions or need further assistance, please feel free to reach out.
             </p>
 
             <p>

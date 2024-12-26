@@ -1,7 +1,9 @@
-@props(['active'=>'Dashboard', 'activeSub'=>'Home', 'count'=>[]])
+@props(['active'=>'Dashboard', 'activeSub'=>'Dashboard', 'count'=>[]])
 
-@if(strtolower(Auth::user()->role)=='admin')
+@if(strtoupper(Auth::user()->role)=='ADMIN')
     <x-sidebar-admin :$active :$activeSub />
-@else
+@elseif(strtoupper(Auth::user()->role)=='AGENT')
+    <x-sidebar-agent :$active :$activeSub />
+@elseif(strtoupper(Auth::user()->role)=='SUBAGENT')
     <x-sidebar-agent :$active :$activeSub />
 @endif
