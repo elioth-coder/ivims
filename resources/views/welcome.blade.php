@@ -75,9 +75,9 @@
         </div>
         <div class="w-full text-center">
             <a href="/qr_verifier"
-                class="mb-5 px-6 py-3.5 text-base text-black font-bold inline-flex items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg text-center">
-                <i class="bi bi-qr-code-scan me-2 text-2xl"></i>
-                QR Verifier Tool
+                class="bg-violet-800 my-5 px-6 py-3.5 text-base text-white hover:text-violet-700 font-bold inline-flex items-center hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-full text-center">
+                Use QR Verifier
+                <i class="bi bi-qr-code-scan m-2 text-2xl"></i>
             </a>
         </div>
     </div>

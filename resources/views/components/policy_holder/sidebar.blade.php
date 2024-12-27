@@ -14,8 +14,8 @@ $links = [
         'title' => 'CTPL Insurance',
     ],
     [
-        'url'   => '/u/customer_support',
-        'title' => 'Customer Support',
+        'url'   => '/u/chat_support',
+        'title' => 'Chat Support',
     ],
 ]
 

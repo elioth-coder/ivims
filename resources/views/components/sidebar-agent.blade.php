@@ -112,7 +112,32 @@ $queryString = "";
                         },
                     ]
                 },
-
+                {
+                    name: 'Chat Support',
+                    icon: 'headset',
+                    items: [
+                        {
+                            name: 'Tickets',
+                            url: '/ticket',
+                        },
+                        {
+                            name: 'Open',
+                            url: '/ticket/open',
+                        },
+                        {
+                            name: 'In Progress',
+                            url: '/ticket/in_progress',
+                        },
+                        {
+                            name: 'Resolved',
+                            url: '/ticket/resolved',
+                        },
+                        {
+                            name: 'Closed',
+                            url: '/ticket/closed',
+                        },
+                    ]
+                },
                 {
                     name: 'Search',
                     icon: 'search',

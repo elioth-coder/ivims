@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Customer Support</x-slot:title>
+    <x-slot:title>Chat Support</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
     </x-slot:head>
@@ -9,14 +9,14 @@
             <div class="w-full min-h-screen">
                 <div class="grid grid-cols-4 gap-4">
                     <div class="py-4">
-                        <x-policy_holder.sidebar active="Customer Support" />
+                        <x-policy_holder.sidebar active="Chat Support" />
                     </div>
                     <div class="col-span-3 py-4">
                         @php
                         $breadcrumbs = [
                             [
-                                'url' => '/u/customer_support',
-                                'title' => 'Customer Support',
+                                'url' => '/u/chat_support',
+                                'title' => 'Chat Support',
                             ],
                             [
                                 'url' => '#',
@@ -43,7 +43,7 @@
                                 @endphp
                                 <x-card class="max-w-xl">
                                     <x-card-header>Create a Ticket</x-card-header>
-                                    <x-forms.form method="POST" action="/u/customer_support">
+                                    <x-forms.form method="POST" action="/u/chat_support">
                                         <x-forms.select-field class="w-full"
                                             name="coc_no"
                                             label="COC Number"
@@ -74,7 +74,7 @@
                                             <span class="inline-block w-32">
                                                 <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                             </span>
-                                            <a href="/u/customer_support"
+                                            <a href="/u/chat_support"
                                                 class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                                 Back
                                             </a>

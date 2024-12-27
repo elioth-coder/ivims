@@ -17,7 +17,7 @@ class CustomerSupportController extends Controller
     {
         $tickets = Ticket::where('user_id', Auth::user()->id)->get();
 
-        return view('customer_support.index', [
+        return view('chat_support.index', [
             'tickets' => $tickets,
         ]);
     }
@@ -41,7 +41,7 @@ class CustomerSupportController extends Controller
         ]);
         $policy_details = $query->fetchAll(PDO::FETCH_CLASS, 'stdClass');
 
-        return view('customer_support.create', [
+        return view('chat_support.create', [
             'policy_details' => $policy_details,
         ]);
     }
@@ -67,7 +67,7 @@ class CustomerSupportController extends Controller
         $ticketAttributes['status']  = 'CREATED';
         Ticket::create($ticketAttributes);
 
-        return redirect('/u/customer_support/create')->with([
+        return redirect('/u/chat_support/create')->with([
             'message' => "Successfully created a ticket"
         ]);
     }
@@ -77,7 +77,7 @@ class CustomerSupportController extends Controller
         $ticket = Ticket::findOrFail($id);
         $ticket->delete();
 
-        return redirect("/u/customer_support")
+        return redirect("/u/chat_support")
             ->with([
                 'message' => 'Successfully deleted the ticket',
             ]);
@@ -86,11 +86,22 @@ class CustomerSupportController extends Controller
     public function ticket($id)
     {
         $ticket = Ticket::findOrFail($id);
-        $chats  = TicketChat::where('ticket_id', $id)
-            ->orderBy('created_at', 'DESC')
-            ->get();
 
-        return view('customer_support.ticket', [
+        $pdo = DB::connection()->getPdo();
+        $sql =
+        "SELECT ticket_chats.*, users.first_name, users.last_name FROM ticket_chats
+        INNER JOIN users
+        ON ticket_chats.user_id=users.id
+        WHERE ticket_chats.ticket_id=:ticket_id
+        ORDER BY ticket_chats.created_at DESC";
+
+        $query = $pdo->prepare($sql);
+        $query->execute([
+            'ticket_id' => $ticket->id,
+        ]);
+        $chats = $query->fetchAll(PDO::FETCH_CLASS, 'stdClass');
+
+        return view('chat_support.ticket', [
             'ticket' => $ticket,
             'chats'  => $chats,
         ]);

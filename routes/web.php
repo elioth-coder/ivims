@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('u/customer_support')->group(function () {
+    Route::prefix('u/chat_support')->group(function () {
         Route::controller(CustomerSupportController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store');
@@ -64,6 +64,18 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware([IsPolicyHolder::class])->group(function () {
+        Route::prefix('ticket')->group(function () {
+            Route::controller(TicketController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::get('/create', 'create');
+                Route::get('/{id}', 'ticket');
+                Route::post('/', 'store');
+                Route::delete('/{id}', 'destroy');
+                Route::post('/chat', 'chat');
+                Route::post('/status_update', 'status_update');
+            });
+        });
+
         Route::prefix('autofill')->group(function () {
             Route::controller(AutoFillController::class)->group(function () {
                 Route::get('/policy_holder/{id_number}', 'policy_holder');

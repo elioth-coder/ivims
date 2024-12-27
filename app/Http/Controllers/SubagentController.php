@@ -2,19 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ActivateAccountMail;
 use App\Models\Branch;
-use App\Models\Token;
 use App\Models\User;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 
 class SubagentController extends Controller
 {

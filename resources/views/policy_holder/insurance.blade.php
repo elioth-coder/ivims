@@ -49,7 +49,7 @@
                                             {{ date('M. d, Y', strtotime($authentication->expiry_date)) }} <br>
                                             {{ $authentication->validity }} Years Validity<br>
 
-                                            <a href="/u/customer_support/create?coc_no={{ $authentication->coc_no }}" class="mt-2 inline-block text-blue-700 hover:text-blue-500 hover:underline">Create a ticket</a>
+                                            <a href="/u/chat_support/create?coc_no={{ $authentication->coc_no }}" class="mt-2 inline-block text-blue-700 hover:text-blue-500 hover:underline">Create a ticket</a>
                                         </td>
                                         <td class="px-6 py-4 border-b uppercase">
                                             {{ $authentication->agent_name }} <br>

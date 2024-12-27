@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Customer Support</x-slot:title>
+    <x-slot:title>Chat Support</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
@@ -15,20 +15,20 @@
             <div class="w-full min-h-screen">
                 <div class="grid grid-cols-4 gap-4">
                     <div class="py-4">
-                        <x-policy_holder.sidebar active="Customer Support" />
+                        <x-policy_holder.sidebar active="Chat Support" />
                     </div>
                     <div class="col-span-3 py-4">
                         @php
                         $breadcrumbs = [
                             [
                                 'url' => '#',
-                                'title' => 'Customer Support',
+                                'title' => 'Chat Support',
                             ],
                         ];
                         @endphp
                         <x-policy_holder.breadcrumb :$breadcrumbs />
                         <div class="w-full py-5">
-                            <a href="/u/customer_support/create"
+                            <a href="/u/chat_support/create"
                                 class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
                                 New Ticket
                                 <svg class="w-4 h-4 ms-2" aria-hidden="true"
@@ -60,11 +60,23 @@
                                     <tr class="cursor-pointer align-top">
                                         <td class="px-6 py-4 border-b">{{ $ticket->coc_no }}</td>
                                         <td class="px-6 py-4 border-b">{{ $ticket->title }}</td>
-                                        <td class="px-6 py-4 border-b">{{ $ticket->status }}</td>
+                                        <td class="px-6 py-4 border-b">
+                                            @php
+                                                $color = '';
+                                                if($ticket->status=='CREATED')     $color = 'bg-blue-600';
+                                                if($ticket->status=='OPEN')        $color = 'bg-orange-600';
+                                                if($ticket->status=='IN PROGRESS') $color = 'bg-yellow-600';
+                                                if($ticket->status=='RESOLVED')    $color = 'bg-green-600';
+                                                if($ticket->status=='CLOSED')      $color = 'bg-violet-600';
+                                            @endphp
+                                            <span class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg {{ $color }}">
+                                                {{ $ticket->status }}
+                                            </span>
+                                        </td>
                                         <td class="px-6 border-b text-center" style="min-width: 160px;">
                                             @if($ticket->status == 'CREATED')
                                                 <x-forms.form class="hidden" method="POST" verb="DELETE"
-                                                    action="/u/customer_support/{{ $ticket->id }}"
+                                                    action="/u/chat_support/{{ $ticket->id }}"
                                                     id="delete-ticket-{{ $ticket->id }}-form">
                                                     <button type="submit">
                                                         Delete
@@ -72,7 +84,7 @@
                                                 </x-forms.form>
                                             @endif
 
-                                            <a href="/u/customer_support/ticket/{{ $ticket->id }}" title="View" type="button"
+                                            <a href="/u/chat_support/ticket/{{ $ticket->id }}" title="View" type="button"
                                                 class="focus:outline-none text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-4 py-2.5 m-1">
                                                 <i class="bi bi-eye"></i>
                                             </a>

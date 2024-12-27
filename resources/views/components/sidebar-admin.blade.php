@@ -112,13 +112,39 @@ $queryString = "";
                     ]
                 },
                 {
+                    name: 'Chat Support',
+                    icon: 'headset',
+                    items: [
+                        {
+                            name: 'Tickets',
+                            url: '/ticket',
+                        },
+                        {
+                            name: 'Open',
+                            url: '/ticket/open',
+                        },
+                        {
+                            name: 'In Progress',
+                            url: '/ticket/in_progress',
+                        },
+                        {
+                            name: 'Resolved',
+                            url: '/ticket/resolved',
+                        },
+                        {
+                            name: 'Closed',
+                            url: '/ticket/closed',
+                        },
+                    ]
+                },
+                {
                     name: 'Settings',
                     icon: 'gear-fill',
                     items: [
-                        {
-                            name: 'Settings',
-                            url: '/setting',
-                        },
+                        // {
+                        //     name: 'Settings',
+                        //     url: '/setting',
+                        // },
                         {
                             name: 'Vehicle Premium',
                             url: '/setting/vehicle_premium',
@@ -142,10 +168,10 @@ $queryString = "";
                             name: 'Data Import',
                             url: '/tools/data_import',
                         },
-                        {
-                            name: 'Data Faker',
-                            url: '/tools/data_faker',
-                        },
+                        // {
+                        //     name: 'Data Faker',
+                        //     url: '/tools/data_faker',
+                        // },
                         {
                             name: 'Raw Data',
                             url: '/tools/raw_data',
@@ -176,10 +202,10 @@ $queryString = "";
                             url: '/search/authenticated_policies{{ $queryString }}',
                             count: {{ $count['authenticated_policies'] ?? 0 }},
                         },
-                        {
-                            name: 'Advance Search',
-                            url: '/search',
-                        },
+                        // {
+                        //     name: 'Advance Search',
+                        //     url: '/search',
+                        // },
                     ]
                 },
             ],
