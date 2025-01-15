@@ -28,7 +28,7 @@
                                 x-bind:class="(activeSub == subItem.name) ? activeClass: ''">
                                 <span class="" x-text="subItem.name"></span>
                                 <template x-if="subItem.count">
-                                    <span class="rounded-full bg-red-700 text-white px-3 absolute end-0 me-2" x-text="subItem.count"></span>
+                                    <span class="text-xs rounded-full bg-red-700 text-white px-1 absolute end-0 me-2" x-text="subItem.count"></span>
                                 </template>
                             </a>
                         </li>
@@ -51,6 +51,30 @@ $queryString = "";
             activeSub,
             activeClass: 'text-white bg-violet-500 hover:text-white hover:bg-violet-500',
             items: [
+                @if(str_starts_with(request()->path(), 'search'))
+                    {
+                        name: 'Search',
+                        icon: 'search',
+                        items: [
+                            {
+                                name: 'Insured Vehicles',
+                                url: '/search/insured_vehicles{{ $queryString }}',
+                                count: {{ $count['insured_vehicles'] ?? 0 }},
+                            },
+                            {
+                                name: 'Policy Holders',
+                                url: '/search/policy_holders{{ $queryString }}',
+                                count: {{ $count['policy_holders'] ?? 0 }},
+                            },
+                            {
+                                name: 'Authenticated Policies',
+                                url: '/search/authenticated_policies{{ $queryString }}',
+                                count: {{ $count['authenticated_policies'] ?? 0 }},
+                            },
+                        ]
+                    },
+                @endif
+
                 {
                     name: 'Dashboard',
                     icon: 'bar-chart-line-fill',
@@ -120,20 +144,28 @@ $queryString = "";
                             url: '/ticket',
                         },
                         {
+                            name: 'Created',
+                            url: '/ticket/created/status',
+                            count: {{ $count['CREATED'] ?? 0 }},
+                        },
+                        {
                             name: 'Open',
-                            url: '/ticket/open',
+                            url: '/ticket/open/status',
+                            count: {{ $count['OPEN'] ?? 0 }},
                         },
                         {
                             name: 'In Progress',
-                            url: '/ticket/in_progress',
+                            url: '/ticket/in_progress/status',
+                            count: {{ $count['IN PROGRESS'] ?? 0 }},
                         },
                         {
                             name: 'Resolved',
-                            url: '/ticket/resolved',
+                            url: '/ticket/resolved/status',
+                            count: {{ $count['RESOLVED'] ?? 0 }},
                         },
                         {
                             name: 'Closed',
-                            url: '/ticket/closed',
+                            url: '/ticket/closed/status',
                         },
                     ]
                 },
@@ -141,20 +173,16 @@ $queryString = "";
                     name: 'Settings',
                     icon: 'gear-fill',
                     items: [
-                        // {
-                        //     name: 'Settings',
-                        //     url: '/setting',
-                        // },
                         {
-                            name: 'Vehicle Premium',
-                            url: '/setting/vehicle_premium',
+                            name: 'CTPL Rates',
+                            url: '/setting/ctpl_rate',
                         },
                         {
-                            name: 'Vehicle Body Type',
-                            url: '/setting/vehicle_body_type',
+                            name: 'Vehicle Types',
+                            url: '/setting/vehicle_type',
                         },
                         {
-                            name: 'Valid ID',
+                            name: 'Valid IDs',
                             url: '/setting/valid_id',
                         },
 
@@ -168,10 +196,6 @@ $queryString = "";
                             name: 'Data Import',
                             url: '/tools/data_import',
                         },
-                        // {
-                        //     name: 'Data Faker',
-                        //     url: '/tools/data_faker',
-                        // },
                         {
                             name: 'Raw Data',
                             url: '/tools/raw_data',
@@ -180,32 +204,6 @@ $queryString = "";
                             name: 'Backup & Restore',
                             url: '/tools/backup_restore',
                         },
-                    ]
-                },
-
-                {
-                    name: 'Search',
-                    icon: 'search',
-                    items: [
-                        {
-                            name: 'Insured Vehicles',
-                            url: '/search/insured_vehicles{{ $queryString }}',
-                            count: {{ $count['insured_vehicles'] ?? 0 }},
-                        },
-                        {
-                            name: 'Policy Holders',
-                            url: '/search/policy_holders{{ $queryString }}',
-                            count: {{ $count['policy_holders'] ?? 0 }},
-                        },
-                        {
-                            name: 'Authenticated Policies',
-                            url: '/search/authenticated_policies{{ $queryString }}',
-                            count: {{ $count['authenticated_policies'] ?? 0 }},
-                        },
-                        // {
-                        //     name: 'Advance Search',
-                        //     url: '/search',
-                        // },
                     ]
                 },
             ],

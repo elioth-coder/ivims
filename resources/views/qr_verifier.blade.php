@@ -22,7 +22,7 @@
 <body class="font-hanken-grotesk relative min-h-screen">
     <nav class="flex justify-between sticky top-0 left-0 right-0 bg-violet-800 border-b border-violet-600">
         <x-logo-brand class="text-white p-3" />
-        <div class="flex items-center p-3">
+        <div class="hidden sm:flex items-center p-3">
             <a href="/login"
                 class="text-white bg-purple-700 hover:bg-gray-100 hover:text-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
                 Login &rarr;

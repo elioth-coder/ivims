@@ -77,6 +77,7 @@ class DashboardController extends Controller
         $recent_uploads  = $this->getRecentUploads();
         $total_uploads   = $this->getTotalUploads();
         $todays_uploads  = $this->getTodaysUploads();
+        $top_companies   = $this->getTop15Companies();
 
         return view('dashboard.index', [
             'uploads_per_province' => $uploads_per_province ?? [],
@@ -86,6 +87,7 @@ class DashboardController extends Controller
             'announcements'        => $announcements ?? [],
             'total_uploads'        => $total_uploads ?? 0,
             'todays_uploads'       => $todays_uploads ?? 0,
+            'top_companies'        => $top_companies ?? [],
         ]);
     }
 

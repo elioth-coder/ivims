@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Vehicle Premium</x-slot:title>
+    <x-slot:title>CTPL Rates</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
@@ -11,7 +11,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Settings" activeSub="Vehicle Premium"  />
+            <x-sidebar active="Settings" activeSub="CTPL Rates"  />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -21,8 +21,8 @@
                                 'title' => 'Settings',
                             ],
                             [
-                                'url' => '/setting/vehicle_premium',
-                                'title' => 'Vehicle Premium',
+                                'url' => '/setting/ctpl_rate',
+                                'title' => 'CTPL Rates',
                             ],
                             [
                                 'url' => '#',
@@ -42,8 +42,8 @@
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>Edit Vehicle Premium</x-card-header>
-                                <x-forms.form method="POST" action="/setting/vehicle_premium/{{ $vehicle_premium->id }}" verb="PATCH">
+                                <x-card-header>Edit CTPL Rate</x-card-header>
+                                <x-forms.form method="POST" action="/setting/ctpl_rate/{{ $vehicle_premium->id }}" verb="PATCH">
                                     <div class="flex space-x-2">
                                         @php
                                         if($errors->has('code')) {
@@ -116,7 +116,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/setting/vehicle_premium"
+                                        <a href="/setting/ctpl_rate"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

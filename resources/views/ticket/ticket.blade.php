@@ -28,7 +28,7 @@
                         ];
                     @endphp
                     <x-breadcrumb :$breadcrumbs />
-                    <x-chat.box :$ticket :$chats />
+                    <x-chat.box :$ticket :$created_by :$chats />
                 </section>
             </div>
         </main>

@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\File;
 
 class ToolController extends Controller
 {
+    public function index()
+    {
+        return view('tools.index');
+    }
+
     public function update_municipality(Request $request)
     {
         try {
@@ -92,22 +97,22 @@ class ToolController extends Controller
         if($request->input('data_target') == 'companies') {
             $items =
             Company::paginate($request->input('data_limit'))
-                ->withQueryString();;
+                ->withQueryString();
         }
         if($request->input('data_target') == 'vehicle_details') {
             $items =
             VehicleDetail::paginate($request->input('data_limit'))
-                ->withQueryString();;
+                ->withQueryString();
         }
         if($request->input('data_target') == 'policy_holders') {
             $items =
             PolicyHolder::paginate($request->input('data_limit'))
-                ->withQueryString();;
+                ->withQueryString();
         }
         if($request->input('data_target') == 'policy_details') {
             $items =
             PolicyDetail::paginate($request->input('data_limit'))
-                ->withQueryString();;
+                ->withQueryString();
         }
 
         return view('tools.raw_data', [

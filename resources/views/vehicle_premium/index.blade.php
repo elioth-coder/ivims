@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Vehicle Premium</x-slot:title>
+    <x-slot:title>CTPL Rates</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
@@ -11,7 +11,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Settings" activeSub="Vehicle Premium" />
+            <x-sidebar active="Settings" activeSub="CTPL Rates" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -22,7 +22,7 @@
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Vehicle Premium',
+                                'title' => 'CTPL Rates',
                             ],
                         ];
                     @endphp
@@ -31,7 +31,7 @@
                     <div class="py-3 min-h-screen">
                         <div class="mx-auto max-w-full">
                             @if (session('message'))
-                                <x-alerts.success id="alert-vehicle_premium">
+                                <x-alerts.success id="alert-ctpl_rate">
                                     {{ session('message') }}
                                 </x-alerts.success>
                             @endif
@@ -39,9 +39,9 @@
 
                         <div class="flex flex-col">
                             <div class="w-full pb-5">
-                                <a href="/setting/vehicle_premium/create"
+                                <a href="/setting/ctpl_rate/create"
                                     class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
-                                    New Vehicle Premium
+                                    New CTPL Rate
                                     <svg class="w-4 h-4 ms-2" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                         viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
                                 </a>
                             </div>
                             <div class="relative overflow-x-auto w-full">
-                                <table id="vehicle_premiums-table" class="bg-white w-full text-sm text-left rtl:text-right">
+                                <table id="ctpl_rates-table" class="bg-white w-full text-sm text-left rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
                                             <th class="px-6 py-4">Code</th>
@@ -70,14 +70,14 @@
                                                 <td class="group-hover:bg-violet-200 px-8 py-6">{{ $vehicle_premium->three_years }}</td>
                                                 <td class="group-hover:bg-violet-200 px-8 py-6">
                                                     <x-forms.form class="hidden" method="POST" verb="DELETE"
-                                                        action="/setting/vehicle_premium/{{ $vehicle_premium->id }}"
-                                                        id="delete-vehicle_premium-{{ $vehicle_premium->id }}-form">
+                                                        action="/setting/ctpl_rate/{{ $vehicle_premium->id }}"
+                                                        id="delete-ctpl_rate-{{ $vehicle_premium->id }}-form">
                                                         <button type="submit">
                                                             Delete
                                                         </button>
                                                     </x-forms.form>
 
-                                                    <a href="/setting/vehicle_premium/{{ $vehicle_premium->id }}/edit" title="Edit"
+                                                    <a href="/setting/ctpl_rate/{{ $vehicle_premium->id }}/edit" title="Edit"
                                                         class="text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
                                                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@
         <script>
             const confirmDelete = async (id) => {
                 let result = await Swal.fire({
-                    title: "Delete this vehicle premium?",
+                    title: "Delete this ctpl rate?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -122,15 +122,15 @@
                 });
 
                 if (result.isConfirmed) {
-                    document.querySelector(`#delete-vehicle_premium-${id}-form button`).click();
+                    document.querySelector(`#delete-ctpl_rate-${id}-form button`).click();
                 }
             }
 
             (function() {
                 setTimeout(() => {
-                    if (document.getElementById("vehicle_premiums-table") && typeof DataTable !==
+                    if (document.getElementById("ctpl_rates-table") && typeof DataTable !==
                         'undefined') {
-                        const dataTable = new DataTable("#vehicle_premiums-table", {
+                        const dataTable = new DataTable("#ctpl_rates-table", {
                             fixedHeight: true,
                             searchable: true,
                             perPage: 5,

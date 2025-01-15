@@ -151,6 +151,11 @@ class SearchController extends Controller
         ]);
         $insured_vehicles = $query->fetchAll(PDO::FETCH_CLASS, 'stdClass');
 
+        // dd([
+        //     'count'            => $this->getResultsCount($request->query('query')),
+        //     'insured_vehicles' => $insured_vehicles,
+        // ]);
+
         return view('search.insured_vehicles', [
             'count'            => $this->getResultsCount($request->query('query')),
             'insured_vehicles' => $insured_vehicles,

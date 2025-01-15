@@ -57,9 +57,9 @@ export default {
         }
     },
     safelist: [
-		{ pattern: /bg-.+-.+/ },
-		{ pattern: /text-.+-.+/ },
-		{ pattern: /border-.+-.+/ },
+		// { pattern: /bg-.+-.+/ },
+		// { pattern: /text-.+-.+/ },
+		// { pattern: /border-.+-.+/ },
     ],
     plugins: [
         require('flowbite/plugin')({

@@ -12,7 +12,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Chat Support" activeSub="Tickets" :$count />
+            <x-sidebar active="Chat Support" activeSub="{{ $status }}" :$count />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -94,7 +94,7 @@
                                     <tbody>
                                         @foreach ($tickets as $ticket)
                                             <tr class="cursor-pointer align-top">
-                                                <td class="px-6 py-4 border-b font-bold">{{ $ticket->coc_no }}</td>
+                                                <td class="px-6 py-4 border-b">{{ $ticket->coc_no }}</td>
                                                 <td class="px-6 py-4 border-b">{{ $ticket->title }}</td>
                                                 <td class="px-6 py-4 border-b">
                                                     @php
@@ -137,7 +137,7 @@
                                                         <i class="bi bi-eye"></i>
                                                     </a>
 
-                                                    @if ($ticket->status == 'CREATED' && $ticket->user_id == Auth::user()->id)
+                                                    @if ($ticket->status == 'CREATED')
                                                         <button title="Delete" type="button"
                                                             class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5 m-1"
                                                             onclick="confirmDelete('{{ $ticket->id }}');">

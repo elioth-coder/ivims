@@ -17,7 +17,7 @@ class IsPolicyHolder
     public function handle(Request $request, Closure $next): Response
     {
         if (strtoupper(Auth::user()->role) == 'POLICY_HOLDER') {
-            return redirect('/u');
+            return redirect('/customer');
         }
 
         return $next($request);

@@ -10,9 +10,9 @@
     </x-slot:head>
     <x-navbar />
     <div class="w-full">
-        <main class="max-w-screen-2xl mx-auto flex">
+        <main class="flex mx-auto max-w-screen-2xl">
             <x-sidebar active="Authentication" activeSub="Authentications" />
-            <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
+            <div class="w-full h-screen pt-2 overflow-hidden overflow-y-scroll" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
@@ -24,8 +24,8 @@
                     @endphp
                     <x-breadcrumb :$breadcrumbs />
 
-                    <div class="py-3 min-h-screen">
-                        <div class="mx-auto max-w-full">
+                    <div class="min-h-screen py-3">
+                        <div class="max-w-full mx-auto">
                             @if (session('message'))
                                 <x-alerts.success id="alert-authentication">
                                     {{ session('message') }}
@@ -36,7 +36,7 @@
                         <div class="flex flex-col">
                             <div class="w-full pb-5">
                                 <a href="/authentication/create"
-                                    class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
+                                    class="inline-flex items-center p-3 mx-auto text-sm font-medium text-center border rounded-lg ps-5 text-violet-600 border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300">
                                     New Authentication
                                     <svg class="w-4 h-4 ms-2" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -46,10 +46,12 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div class="relative overflow-x-auto w-full">
-                                <table id="authentications-table" class="bg-white w-full text-sm text-left rtl:text-right">
+                            <div class="relative w-full overflow-x-auto">
+                                <table id="authentications-table" class="w-full text-sm text-left bg-white rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
+                                            <th class="px-6 py-4">Date Issued</th>
+                                            <th class="px-6 py-4">COC Number</th>
                                             <th class="px-6 py-4">Agent</th>
                                             <th class="px-6 py-4">Vehicle</th>
                                             <th class="px-6 py-4">Company</th>
@@ -58,26 +60,32 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($authentications as $authentication)
-                                            <tr class="group cursor-pointer">
-                                                <td class="group-hover:bg-violet-200 px-8 py-6 uppercase">
+                                            <tr class="cursor-pointer group">
+                                                <td class="px-8 py-6 group-hover:bg-violet-200">
+                                                    {{ $authentication->date_issued }}
+                                                </td>
+                                                <td class="px-8 py-6 group-hover:bg-violet-200">
+                                                    {{ $authentication->coc_no }}
+                                                </td>
+                                                <td class="px-8 py-6 uppercase group-hover:bg-violet-200">
                                                     {{ $authentication->first_name }}
                                                     {{ $authentication->last_name }}
                                                 </td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">
+                                                <td class="px-8 py-6 group-hover:bg-violet-200">
                                                     {{ $authentication->make }}
                                                     {{ $authentication->model }}
                                                     ({{ strtoupper($authentication->color) }})
                                                 </td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">
-                                                    {{ $authentication->code }}
+                                                <td class="px-8 py-6 group-hover:bg-violet-200">
+                                                    {{ $authentication->company_code }}
                                                 </td>
-                                                <td style="min-width: 200px;" class="group-hover:bg-violet-200 px-8 py-6">
+                                                <td style="min-width: 200px;" class="px-8 py-6 group-hover:bg-violet-200">
                                                     <a href="/authentication/{{ $authentication->id }}/print" target="_blank" title="Print"
-                                                        class="text-xl mx-auto border border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded p-2 px-3 text-center inline-flex items-center">
+                                                        class="inline-flex items-center p-2 px-3 mx-auto text-xl font-medium text-center border rounded border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300">
                                                         <i class="bi bi-printer-fill"></i>
                                                     </a>
                                                     <a href="/authentication/policy/{{ $authentication->id }}" target="_blank" title="Print"
-                                                        class="text-xl mx-auto border border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded p-2 px-3 text-center inline-flex items-center">
+                                                        class="inline-flex items-center p-2 px-3 mx-auto text-xl font-medium text-center border rounded border-violet-600 hover:bg-violet-600 text-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300">
                                                         <i class="bi bi-eye-fill"></i>
                                                     </a>
                                                 </td>

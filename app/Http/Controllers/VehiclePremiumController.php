@@ -40,8 +40,8 @@ class VehiclePremiumController extends Controller
 
         $vehicle_premium = VehiclePremium::create($vehiclePremiumAttributes);
 
-        return redirect('/setting/vehicle_premium/create')->with([
-            'message' => "Successfully added a vehicle premium"
+        return redirect('/setting/ctpl_rate/create')->with([
+            'message' => "Successfully added new ctpl rate"
         ]);
     }
 
@@ -67,8 +67,8 @@ class VehiclePremiumController extends Controller
 
         $vehicle_premium->update($vehiclePremiumAttributes);
 
-        return redirect("/setting/vehicle_premium")->with([
-            'message' => "Successfully updated the vehicle premium"
+        return redirect("/setting/ctpl_rate")->with([
+            'message' => "Successfully updated the ctpl rate"
         ]);
     }
 
@@ -77,9 +77,9 @@ class VehiclePremiumController extends Controller
         $vehicle_premium = VehiclePremium::findOrFail($id);
         $vehicle_premium->delete();
 
-        return redirect("/setting/vehicle_premium")
+        return redirect("/setting/ctpl_rate")
             ->with([
-                'message' => 'Successfully deleted the vehicle premium',
+                'message' => 'Successfully deleted the ctpl rate',
             ]);
     }
 }

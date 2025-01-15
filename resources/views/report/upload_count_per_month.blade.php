@@ -13,7 +13,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar activeSub="Upload Count - Monthly" />
+            <x-sidebar activeSub="Charts & Reports" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -52,7 +52,7 @@
                                         @foreach($uploads_per_month as $upload)
                                             @php $total_uploads += $upload->count; @endphp
                                             <tr class="bg-white border-b hover:bg-gray-50">
-                                                <td class="px-6 py-4">{{ $upload->month }}</td>
+                                                <td class="px-6 py-4">{{ $upload->year }} - {{ substr($upload->month, 0, 3) }}</td>
                                                 <td class="px-6 py-4 text-center">{{ $upload->count }}</td>
                                             </tr>
                                         @endforeach
@@ -74,7 +74,7 @@
         <script>
             const uploads_per_month  = {!! json_encode($uploads_per_month) !!};
             const dataPointsPerMonth = uploads_per_month.map(upload => ({
-                label: upload.month,
+                label: `${upload.year}-${upload.month.substring(0,3)}`,
                 y: upload.count
             }));
             window.onload = function() {
@@ -89,7 +89,7 @@
 
                     var linechart = new CanvasJS.Chart("linechart", {
                     title: {
-                        text: `Upload Count per Month (${(new Date()).getFullYear()})`
+                        text: `Upload Count last 12 Months`
                     },
                     data: [{
                         type: "line",

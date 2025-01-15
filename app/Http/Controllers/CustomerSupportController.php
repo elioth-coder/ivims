@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\TicketChat;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,7 @@ class CustomerSupportController extends Controller
     public function ticket($id)
     {
         $ticket = Ticket::findOrFail($id);
+        $created_by = User::findOrFail($ticket->user_id);
 
         $pdo = DB::connection()->getPdo();
         $sql =
@@ -104,6 +106,7 @@ class CustomerSupportController extends Controller
         return view('chat_support.ticket', [
             'ticket' => $ticket,
             'chats'  => $chats,
+            'created_by' => $created_by,
         ]);
     }
 
@@ -113,7 +116,15 @@ class CustomerSupportController extends Controller
             $chatAttributes = $request->validate([
                 'message'   => ['required'],
                 'ticket_id' => ['required', 'exists:tickets,id'],
+                'file'      => ['nullable','file', 'mimes:jpg,png,pdf,docx','max:2048'],
             ]);
+
+            if ($request->file('file')) {
+                $fileName = time() . '-' . $request->file('file')->getClientOriginalName();
+                $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
+
+                $chatAttributes['file'] = $fileName;
+            }
 
             $chatAttributes['user_id'] = Auth::user()->id;
             TicketChat::create($chatAttributes);

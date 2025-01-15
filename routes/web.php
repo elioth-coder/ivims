@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\AutoFillController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerSupportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PolicyHolderController;
@@ -20,9 +21,14 @@ use App\Http\Controllers\ValidIdController;
 use App\Http\Controllers\VehicleBodyTypeController;
 use App\Http\Controllers\VehiclePremiumController;
 use App\Http\Middleware\IsPolicyHolder;
+use App\Models\VehiclePremium;
 use Illuminate\Support\Facades\Route;
 
 Route::delete('/logout', [UserController::class, 'logout'])->middleware('auth');
+Route::get('/verify_qr/{coc_no}', [AuthenticationController::class, 'verify_qr']);
+Route::get('/qr_verifier', function () {
+    return view('qr_verifier');
+});
 
 Route::middleware('guest')->group(function () {
     Route::controller(UserController::class)->group(function () {
@@ -35,15 +41,27 @@ Route::middleware('guest')->group(function () {
     });
 
     Route::get('/', function () {
-        return view('welcome');
+        $ctpl_rates = VehiclePremium::all();
+
+        return view('welcome', [
+            'ctpl_rates' => $ctpl_rates,
+        ]);
     });
-    Route::get('/qr_verifier', function () {
-        return view('qr_verifier');
-    });
-    Route::get('/verify_qr/{coc_no}', [AuthenticationController::class, 'verify_qr']);
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::prefix('customer')->group(function () {
+        Route::controller(CustomerController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::get('/insurances', 'insurances');
+            Route::get('/create_ticket', 'create_ticket');
+            Route::post('/store_ticket', 'store_ticket');
+            Route::get('/tickets', 'tickets');
+            Route::get('/ticket_chat/{id}', 'ticket_chat');
+            Route::post('/store_chat', 'store_chat');
+        });
+    });
 
     Route::prefix('u')->group(function () {
         Route::controller(PolicyHolderController::class)->group(function () {
@@ -69,6 +87,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', 'index');
                 Route::get('/create', 'create');
                 Route::get('/{id}', 'ticket');
+                Route::get('/{status}/status', 'status');
                 Route::post('/', 'store');
                 Route::delete('/{id}', 'destroy');
                 Route::post('/chat', 'chat');
@@ -85,6 +104,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('tools')->group(function () {
             Route::controller(ToolController::class)->group(function () {
+                Route::get('/', 'index');
                 Route::get('/raw_data', 'raw_data');
                 Route::get('/data_import', 'data_import');
                 Route::get('/data_faker', 'data_faker');
@@ -110,7 +130,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('dashboard')->group(function () {
             Route::controller(DashboardController::class)->group(function () {
-                Route::get('/', 'index');
+                Route::get('/', 'index')->name('dashboard');
             });
 
             Route::prefix('report')->group(function () {
@@ -135,7 +155,11 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('setting')->group(function () {
-            Route::prefix('vehicle_premium')->group(function () {
+            Route::get('/', function () {
+                return view('setting.index');
+            });
+
+            Route::prefix('ctpl_rate')->group(function () {
                 Route::controller(VehiclePremiumController::class)->group(function () {
                     Route::get('/', 'index');
                     Route::get('/create', 'create');
@@ -146,7 +170,7 @@ Route::middleware('auth')->group(function () {
                 });
             });
 
-            Route::prefix('vehicle_body_type')->group(function () {
+            Route::prefix('vehicle_type')->group(function () {
                 Route::controller(VehicleBodyTypeController::class)->group(function () {
                     Route::get('/', 'index');
                     Route::get('/create', 'create');

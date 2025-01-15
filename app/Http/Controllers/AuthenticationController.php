@@ -29,7 +29,7 @@ class AuthenticationController extends Controller
             policy_details.*,
             vehicle_details.color, vehicle_details.make, vehicle_details.model,
             users.first_name, users.last_name,
-            companies.code, companies.name
+            companies.code AS company_code, companies.name AS company_name
         FROM policy_details
         INNER JOIN vehicle_details
         ON policy_details.vehicle_detail_id=vehicle_details.id

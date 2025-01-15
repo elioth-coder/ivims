@@ -1,35 +1,51 @@
-@props(['ticket','chats'=>[]])
+@php
+use Illuminate\Support\Facades\Storage;
 
-<div style="height: calc(100vh - 160px); padding-top: 50px; {{ ($ticket->status!='CLOSED') ? 'padding-bottom: 70px;' : ''}}"
+@endphp
+@props(['ticket','created_by','chats'=>[]])
+
+<div style="height: calc(100vh - 160px); {{ ($ticket->status!='CLOSED') ? 'padding-bottom: 70px;' : ''}}"
     class="relative mt-2 border rounded-lg w-full">
-    <section
-        class="absolute top-0 left-0 right-0 p-3 bg-white border-b rounded-t-lg font-bold h-[50px]">
-        {{ $ticket->title }} &nbsp;
-        @php
-            $color = '';
-            if ($ticket->status == 'CREATED') {
-                $color = 'bg-blue-600';
-            }
-            if ($ticket->status == 'OPEN') {
-                $color = 'bg-orange-600';
-            }
-            if ($ticket->status == 'IN PROGRESS') {
-                $color = 'bg-yellow-600';
-            }
-            if ($ticket->status == 'RESOLVED') {
-                $color = 'bg-green-600';
-            }
-            if ($ticket->status == 'CLOSED') {
-                $color = 'bg-violet-600';
-            }
-        @endphp
-        <span
-            class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg {{ $color }}">
-            {{ $ticket->status }}
-        </span>
+    <section class="hidden absolute top-0 left-0 right-0 p-3 bg-white border-b rounded-t-lg font-bold h-[80px]">
+        <div class="font-normal items-center hidden">
+            <img class="w-9 h-9 me-1 rounded-full hidden sm:inline-block" src="{{ asset('images/profile.png') }}" alt="user photo">
+            {{ $created_by->name }}
+            <span class="bg-slate-200 px-2 rounded-xl mx-3">
+                <b class="font-bold">COC #:</b>
+                <a class="text-violet-900 hover:text-violet-800 hover:underline"
+                    href="/search/authenticated_policies?query={{ $ticket->coc_no }}">
+                    {{ $ticket->coc_no }}
+                </a>
+            </span>
+        </div>
+        <div class="text-lg sm:flex items-center hidden">
+            <h3 class="">{{ $ticket->title }}</h3> &nbsp;
+            @php
+                $color = '';
+                if ($ticket->status == 'CREATED') {
+                    $color = 'bg-blue-600';
+                }
+                if ($ticket->status == 'OPEN') {
+                    $color = 'bg-orange-600';
+                }
+                if ($ticket->status == 'IN PROGRESS') {
+                    $color = 'bg-yellow-600';
+                }
+                if ($ticket->status == 'RESOLVED') {
+                    $color = 'bg-green-600';
+                }
+                if ($ticket->status == 'CLOSED') {
+                    $color = 'bg-violet-600';
+                }
+            @endphp
+            <span
+                class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg {{ $color }}">
+                {{ $ticket->status }}
+            </span>
+        </div>
 
-        <div class="absolute right-0 top-0 w-32 h-12 flex items-center justify-center">
-            @if ($ticket->status != 'CLOSED')
+        <div class="border-l absolute right-0 top-0 w-32 h-full flex items-center justify-center">
+            @if ($ticket->status != 'CLOSED' && Auth::user()->role != 'POLICY_HOLDER')
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown-status"
                     class="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
                     type="button">
@@ -101,8 +117,17 @@
         @endphp
         @foreach ($chats as $chat)
             @if ($chat->user_id == Auth::user()->id)
+                @if($chat->file)
+                    <section class="w-full p-1 flex flex-row-reverse">
+                        <div class="text-violet-700 shadow bg-gray-200 mx-2 p-3 rounded-xl max-w-[80%] flex items-center gap-2">
+                            <i class="bi bi-file-earmark text-2xl"></i>
+                            <a class="sm:hidden hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}">{{ $chat->file }}</a>
+                            <a class="hidden sm:inline hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}" target="_blank">{{ $chat->file }}</a>
+                        </div>
+                    </section>
+                @endif
                 <section class="w-full p-1 flex flex-row-reverse">
-                    <div class="bg-violet-500 mx-2 p-3 rounded-xl text-white max-w-[80%]">
+                    <div class="bg-violet-500 mx-2 p-3 shadow rounded-xl text-white max-w-[80%]">
                         {{ $chat->message }}
                     </div>
                 </section>
@@ -122,9 +147,16 @@
                                 {{ strtolower($chat->first_name) }}
                                 {{ strtolower($chat->last_name) }}
                             </p>
-                            <div class="bg-white p-3 rounded-xl">
+                            <div class="bg-white p-3 rounded-xl shadow w-fit">
                                 {{ $chat->message }}
                             </div>
+                            @if($chat->file)
+                                <div class="text-violet-700 shadow bg-gray-200 p-3 rounded-xl max-w-[80%] flex items-center gap-2">
+                                    <i class="bi bi-file-earmark text-2xl"></i>
+                                    <a class="sm:hidden hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}">{{ $chat->file }}</a>
+                                    <a class="hidden sm:inline hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}" target="_blank">{{ $chat->file }}</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </section>

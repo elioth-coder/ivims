@@ -28,7 +28,7 @@
                                 x-bind:class="(activeSub == subItem.name) ? activeClass: ''">
                                 <span class="" x-text="subItem.name"></span>
                                 <template x-if="subItem.count">
-                                    <span class="rounded-full bg-red-700 text-white px-3 absolute end-0 me-2" x-text="subItem.count"></span>
+                                    <span class="text-xs rounded-full bg-red-700 text-white px-1 absolute end-0 me-2" x-text="subItem.count"></span>
                                 </template>
                             </a>
                         </li>
@@ -121,20 +121,28 @@ $queryString = "";
                             url: '/ticket',
                         },
                         {
+                            name: 'Created',
+                            url: '/ticket/created/status',
+                            count: {{ $count['CREATED'] ?? 0 }},
+                        },
+                        {
                             name: 'Open',
-                            url: '/ticket/open',
+                            url: '/ticket/open/status',
+                            count: {{ $count['OPEN'] ?? 0 }},
                         },
                         {
                             name: 'In Progress',
-                            url: '/ticket/in_progress',
+                            url: '/ticket/in_progress/status',
+                            count: {{ $count['IN PROGRESS'] ?? 0 }},
                         },
                         {
                             name: 'Resolved',
-                            url: '/ticket/resolved',
+                            url: '/ticket/resolved/status',
+                            count: {{ $count['RESOLVED'] ?? 0 }},
                         },
                         {
                             name: 'Closed',
-                            url: '/ticket/closed',
+                            url: '/ticket/closed/status',
                         },
                     ]
                 },

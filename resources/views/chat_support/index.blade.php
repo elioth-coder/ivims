@@ -13,10 +13,6 @@
     <div class="w-full pt-[70px]">
         <main class="max-w-screen-lg mx-auto flex">
             <div class="w-full min-h-screen">
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="py-4">
-                        <x-policy_holder.sidebar active="Chat Support" />
-                    </div>
                     <div class="col-span-3 py-4">
                         @php
                         $breadcrumbs = [
@@ -108,7 +104,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
 
                 <x-copyright />
             </div>

@@ -31,7 +31,7 @@
                             ];
                         @endphp
                         <x-policy_holder.breadcrumb :$breadcrumbs />
-                        <x-chat.box :$ticket :$chats />
+                        <x-chat.box :$ticket :$created_by :$chats />
                     </div>
                 </div>
                 <x-copyright />
