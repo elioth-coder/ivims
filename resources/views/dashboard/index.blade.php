@@ -79,7 +79,7 @@
                         </div>
                         <div class="w-1/2">
                             <h3 id="recent" class="pt-1 text-2xl font-bold mb-2">Top 15 Companies</h3>
-                            <div class="relative overflow-hidden border rounded-lg">
+                            <div class="relative overflow-x-scroll border rounded-lg">
                                 <table class="w-full text-sm text-left rtl:te rounded-lgxt-right">
                                     <thead
                                         class="text-xs uppercase bg-gray-100">
