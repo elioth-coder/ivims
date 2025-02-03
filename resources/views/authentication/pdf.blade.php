@@ -151,7 +151,7 @@
         <div class="coc_no">{{ $authentication->coc_no }}</div>
         <div class="or_no">{{ $authentication->or_no }}</div>
         <div class="assured_name uppercase">{{ $authentication->first_name }} {{ $authentication->last_name }} {{ $authentication->suffix }}</div>
-        <div class="assured_address uppercase">{{ $authentication->address }}</div>
+        <div class="assured_address uppercase">{{ $authentication->municipality }}, {{ $authentication->province }}</div>
         <div class="business">{{ $authentication->business }}</div>
         <div class="date_issued">{{ $authentication->date_issued }}</div>
         <div class="inception_date">{{ $authentication->inception_date }}</div>

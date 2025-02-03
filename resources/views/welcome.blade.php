@@ -121,12 +121,12 @@
             <h2 class="text-3xl sm:text-4xl font-bold text-white">Our Partner Agencies</h2>
         </div>
         <div class="flex flex-col sm:flex-row gap-8 justify-between w-full px-20 pb-8 sm:pb-20">
-            <a target="_blank" title="LTO Official Website" href="https://lto.gov.ph" class="block">
-                <img style="height: 150px;" src="{{ asset('images/lto-logo.png') }}" alt="">
-            </a>
             <a target="_blank" title="Insurance Commission Official Website" href="https://www.insurance.gov.ph/"
                 class="block">
                 <img style="height: 150px;" class="w-full" src="{{ asset('images/ic-logo.png') }}" alt="">
+            </a>
+            <a target="_blank" title="LTO Official Website" href="https://lto.gov.ph" class="block">
+                <img style="height: 150px;" src="{{ asset('images/lto-logo.png') }}" alt="">
             </a>
             <a target="_blank" title="HPG Official Website" href="https://hpg.pnp.gov.ph/" class="block">
                 <img style="height: 150px;" class="w-full" src="{{ asset('images/hpg-logo.png') }}" alt="">

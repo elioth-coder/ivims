@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 <div style="height: calc(100vh - 160px); {{ ($ticket->status!='CLOSED') ? 'padding-bottom: 70px;' : ''}}"
     class="relative mt-2 border rounded-lg w-full">
-    <section class="hidden absolute top-0 left-0 right-0 p-3 bg-white border-b rounded-t-lg font-bold h-[80px]">
+    <section class="hidden sm:flex absolute top-0 left-0 right-0 p-3 bg-white border-b rounded-t-lg font-bold h-[80px]">
         <div class="font-normal items-center hidden">
             <img class="w-9 h-9 me-1 rounded-full hidden sm:inline-block" src="{{ asset('images/profile.png') }}" alt="user photo">
             {{ $created_by->name }}
@@ -153,8 +153,10 @@ use Illuminate\Support\Facades\Storage;
                             @if($chat->file)
                                 <div class="text-violet-700 shadow bg-gray-200 p-3 rounded-xl max-w-[80%] flex items-center gap-2">
                                     <i class="bi bi-file-earmark text-2xl"></i>
-                                    <a class="sm:hidden hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}">{{ $chat->file }}</a>
+                                    <a class="sm:hidden hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}" target="_blank">{{ $chat->file }}</a>
                                     <a class="hidden sm:inline hover:underline hover:text-violet-500" href="{{ Storage::url('uploads/' . $chat->file); }}" target="_blank">{{ $chat->file }}</a>
+                                    {{-- <a class="sm:hidden hover:underline hover:text-violet-500" href="/download/{{ $chat->file }}" target="_blank">{{ $chat->file }}</a>
+                                    <a class="hidden sm:inline hover:underline hover:text-violet-500" href="/download/{{ $chat->file }}" target="_blank">{{ $chat->file }}</a> --}}
                                 </div>
                             @endif
                         </div>

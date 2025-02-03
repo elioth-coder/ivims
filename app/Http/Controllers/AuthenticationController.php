@@ -73,7 +73,7 @@ class AuthenticationController extends Controller
         "SELECT
             policy_details.*,
             vehicle_details.mv_file_no, vehicle_details.plate_no, vehicle_details.serial_no, vehicle_details.color, vehicle_details.make, vehicle_details.model,
-            policy_holders.business, policy_holders.address, policy_holders.first_name, policy_holders.last_name, policy_holders.suffix
+            policy_holders.business, policy_holders.address, policy_holders.first_name, policy_holders.last_name, policy_holders.suffix, policy_holders.province, policy_holders.municipality
         FROM policy_details
         INNER JOIN vehicle_details
         ON policy_details.vehicle_detail_id=vehicle_details.id

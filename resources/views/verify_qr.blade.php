@@ -76,6 +76,14 @@
                     <p class="text-xl font-bold">{{ $authentication->policy_no }}</p>
                 </div>
                 <div colspan="2" class="p-2 border my-2 mx-auto w-full max-w-md">
+                    <p class="">Inception Date</p>
+                    <p class="text-xl font-bold">{{ ($authentication->inception_date) ? date('M. d, Y', strtotime($authentication->expiry_date)) : '--' }} 12:00 NN</p>
+                </div>
+                <div colspan="2" class="p-2 border my-2 mx-auto w-full max-w-md">
+                    <p class="">Expiry Date</p>
+                    <p class="text-xl font-bold">{{ ($authentication->expiry_date) ? date('M. d, Y', strtotime($authentication->expiry_date)) : '--' }} 12:00 NN</p>
+                </div>
+                <div colspan="2" class="p-2 border my-2 mx-auto w-full max-w-md">
                     <p class="">Plate Number</p>
                     <p class="text-xl font-bold">{{ $authentication->plate_no ?? '--' }}</p>
                 </div>
@@ -90,10 +98,6 @@
                 <div colspan="2" class="p-2 border my-2 mx-auto w-full max-w-md">
                     <p class="">Motor Number</p>
                     <p class="text-xl font-bold">{{ $authentication->motor_no ?? '--' }}</p>
-                </div>
-                <div colspan="2" class="p-2 border my-2 mx-auto w-full max-w-md">
-                    <p class="">Expiration Date</p>
-                    <p class="text-xl font-bold">{{ ($authentication->expiry_date) ? date('M. d, Y', strtotime($authentication->expiry_date)) : '--' }}</p>
                 </div>
             </main>
         @else

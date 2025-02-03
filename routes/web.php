@@ -23,6 +23,16 @@ use App\Http\Controllers\VehiclePremiumController;
 use App\Http\Middleware\IsPolicyHolder;
 use App\Models\VehiclePremium;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('/download/{filename}', function ($filename) {
+    $path = Storage::url('uploads/' . $filename);
+    if (file_exists($path)) {
+        return response()->download($path);
+    } else {
+        abort(404); // File not found
+    }
+});
 
 Route::delete('/logout', [UserController::class, 'logout'])->middleware('auth');
 Route::get('/verify_qr/{coc_no}', [AuthenticationController::class, 'verify_qr']);
