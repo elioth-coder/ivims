@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Companies</x-slot:title>
+    <x-slot:title>Licenses - Agents</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
@@ -11,18 +11,22 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Companies" activeSub="New Company"  />
+            <x-sidebar active="Agents" activeSub="Agents"/>
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/company',
-                                'title' => 'Companies',
+                                'url' => '/license',
+                                'title' => 'Licenses',
+                            ],
+                            [
+                                'url' => '/agent',
+                                'title' => 'Agents',
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Create',
+                                'title' => 'Renew',
                             ],
                         ];
                     @endphp
@@ -32,63 +36,44 @@
                         <div class="w-3/5 pb-6 pt-2">
                             <div class="max-w-xl">
                                 @if (session('message'))
-                                    <x-alerts.success id="alert-announcements">
+                                    <x-alerts.success id="alert-agents">
                                         {{ session('message') }}
                                     </x-alerts.success>
                                 @endif
                             </div>
-                            <x-card class="max-w-xl" x-data="license">
-                                <x-card-header>New Company</x-card-header>
-                                <x-forms.form method="POST" action="/company">
+                            <x-card class="max-w-xl">
+                                <x-card-header>Renew Agent License</x-card-header>
+                                <x-forms.form method="POST" action="/license/agent/{{ $agent->id }}/renewal" verb="POST" x-data="license">
                                     <div class="flex space-x-2">
                                         <x-forms.input-field class="w-full"
-                                            name="code"
+                                            name="name"
                                             type="text"
-                                            label="Code"
+                                            label="Agent Name"
                                             placeholder="--"
+                                            value="{{ $agent->name }}"
                                             required
+                                            disabled
                                         />
-                                        <x-forms.input-field class="w-full"
-                                            name="origin"
-                                            type="text"
-                                            label="Host/IP Address"
-                                            placeholder="--"
-                                        />
+                                        <div class="w-full"></div>
                                     </div>
-
                                     <x-forms.input-field class="w-full"
-                                        name="name"
+                                        name="company"
                                         type="text"
-                                        label="Name"
+                                        label="Company"
                                         placeholder="--"
+                                        value="{{ $agent->company->name }}"
                                         required
+                                        disabled
                                     />
-
-                                    <div class="flex space-x-2">
-                                        <x-forms.input-field class="w-full"
-                                            name="phone"
-                                            type="text"
-                                            label="Phone"
-                                            placeholder="--"
-                                            required
-                                        />
-                                        <x-forms.input-field class="w-full"
-                                            name="email"
-                                            type="email"
-                                            label="Email"
-                                            placeholder="--"
-                                            required
-                                        />
-                                    </div>
-
-                                    <x-forms.textarea-field
-                                        name="address"
-                                        label="Address"
+                                    <x-forms.input-field class="w-full"
+                                        name="branch"
+                                        type="text"
+                                        label="Branch"
                                         placeholder="--"
-                                        rows="5"
+                                        value="{{ ($agent->branch) ? $agent->branch->name : '--' }}"
                                         required
+                                        disabled
                                     />
-
                                     <div class="flex space-x-2">
                                         <x-forms.input-field class="w-full"
                                             name="start_date"
@@ -126,7 +111,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/agent"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>
@@ -151,23 +136,23 @@
         </main>
     </div>
 
-<x-slot:scripts>
-<script>
-    document.addEventListener('alpine:init', () => {
-        function setExpiryDate() {
-            let license_duration = document.querySelector('#license_duration').value;
-            let start_date = document.querySelector('#start_date').value;
-            let expiry_date = DateFns.add(start_date, { years: license_duration });
+    <x-slot:scripts>
+        <script>
+            document.addEventListener('alpine:init', () => {
+                function setExpiryDate() {
+                    let license_duration = document.querySelector('#license_duration').value;
+                    let start_date = document.querySelector('#start_date').value;
+                    let expiry_date = DateFns.add(start_date, { years: license_duration });
 
-            document.querySelector('#expiry_date').value = expiry_date;
-        }
+                    document.querySelector('#expiry_date').value = expiry_date;
+                }
 
-        Alpine.data('license', () => ({
-            onChangeDuration () {
-                setExpiryDate();
-            }
-        }));
-    });
-</script>
-</x-slot:scripts>
+                Alpine.data('license', () => ({
+                    onChangeDuration () {
+                        setExpiryDate();
+                    }
+                }));
+            });
+        </script>
+    </x-slot:scripts>
 </x-layout>

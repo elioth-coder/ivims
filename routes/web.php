@@ -10,6 +10,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerSupportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\PolicyHolderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SearchController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\ValidIdController;
 use App\Http\Controllers\VehicleBodyTypeController;
 use App\Http\Controllers\VehiclePremiumController;
 use App\Http\Middleware\IsPolicyHolder;
+use App\Models\Company;
 use App\Models\VehiclePremium;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -52,10 +55,20 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/', function () {
         $ctpl_rates = VehiclePremium::all();
+        $companies  = Company::latest()->limit(10)->get();
 
         return view('welcome', [
             'ctpl_rates' => $ctpl_rates,
+            'companies'  => $companies,
         ]);
+    });
+
+    Route::prefix('insurance_companies')->group(function () {
+        Route::controller(InsuranceCompanyController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::get('/branches', 'branches');
+            Route::get('/agents', 'agents');
+        });
     });
 });
 
@@ -109,6 +122,28 @@ Route::middleware('auth')->group(function () {
             Route::controller(AutoFillController::class)->group(function () {
                 Route::get('/policy_holder/{id_number}', 'policy_holder');
                 Route::get('/vehicle_detail/{mv_file_no}', 'vehicle_detail');
+            });
+        });
+
+        Route::prefix('license')->group(function () {
+            Route::controller(LicenseController::class)->group(function () {
+                Route::get('/company', 'company');
+                Route::get('/company/{id}/renew', 'company_renew');
+                Route::post('/company/{id}/renewal', 'company_renewal');
+                Route::get('/company/{id}/revoke', 'company_revoke');
+                Route::post('/company/{id}/revokal', 'company_revokal');
+
+                Route::get('/branch', 'branch');
+                Route::get('/branch/{id}/renew', 'branch_renew');
+                Route::post('/branch/{id}/renewal', 'branch_renewal');
+                Route::get('/branch/{id}/revoke', 'branch_revoke');
+                Route::post('/branch/{id}/revokal', 'branch_revokal');
+
+                Route::get('/agent', 'agent');
+                Route::get('/agent/{id}/renew', 'agent_renew');
+                Route::post('/agent/{id}/renewal', 'agent_renewal');
+                Route::get('/agent/{id}/revoke', 'agent_revoke');
+                Route::post('/agent/{id}/revokal', 'agent_revokal');
             });
         });
 
@@ -220,6 +255,8 @@ Route::middleware('auth')->group(function () {
                 Route::get('/create', 'create');
                 Route::post('/', 'store');
                 Route::get('/{id}/edit', 'edit');
+                Route::get('/{id}/renew', 'renew');
+                Route::post('/{id}/renewal', 'renewal');
                 Route::patch('/{id}', 'update');
                 Route::delete('/{id}', 'destroy');
             });
@@ -231,6 +268,8 @@ Route::middleware('auth')->group(function () {
                 Route::get('/create', 'create');
                 Route::post('/', 'store');
                 Route::get('/{id}/edit', 'edit');
+                Route::get('/{id}/renew', 'renew');
+                Route::post('/{id}/renewal', 'renewal');
                 Route::patch('/{id}', 'update');
                 Route::delete('/{id}', 'destroy');
             });

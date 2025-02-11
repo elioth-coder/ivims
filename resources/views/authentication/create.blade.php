@@ -206,14 +206,6 @@
             document.addEventListener('alpine:init', () => {
                 $scrollable = document.querySelector('.scrollable');
 
-                function setExpiryDate() {
-                    let validity = document.querySelector('#validity').value;
-                    let inception_date = document.querySelector('#inception_date').value;
-                    let expiry_date = DateFns.add(inception_date, { years: validity });
-
-                    document.querySelector('#expiry_date').value = expiry_date;
-                }
-
                 Alpine.data('authentication', () => ({
                     step: 1,
                     previous() {
@@ -294,6 +286,14 @@
                         }
                     }
                 }));
+
+                function setExpiryDate() {
+                    let validity = document.querySelector('#validity').value;
+                    let inception_date = document.querySelector('#inception_date').value;
+                    let expiry_date = DateFns.add(inception_date, { years: validity });
+
+                    document.querySelector('#expiry_date').value = expiry_date;
+                }
 
                 Alpine.data('policy', (date_issued='0000-00-00') => ({
                     date_issued,

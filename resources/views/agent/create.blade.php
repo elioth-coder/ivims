@@ -1,7 +1,6 @@
 <x-layout>
     <x-slot:title>Agent</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
             html,
             body {
@@ -19,7 +18,7 @@
                         $breadcrumbs = [
                             [
                                 'url' => '/agent',
-                                'title' => 'Agent',
+                                'title' => 'Agents',
                             ],
                             [
                                 'url' => '#',
@@ -38,7 +37,7 @@
                                     </x-alerts.success>
                                 @endif
                             </div>
-                            <x-card class="max-w-xl">
+                            <x-card class="max-w-xl" x-data="license">
                                 <x-card-header>New Agent</x-card-header>
                                 <x-forms.form method="POST" action="/agent">
                                     <div class="flex space-x-2">
@@ -61,15 +60,82 @@
 
                                     <x-forms.input-field class="w-full" name="contact_no" type="text"
                                         label="Contact No." placeholder="--" required />
-                                    <x-forms.select-field class="w-full" name="company_id" label="Company"
-                                        placeholder="--" required>
-                                        @foreach ($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </x-forms.select-field>
 
                                     <x-forms.input-field class="w-full" name="email" type="email" label="Email"
                                         placeholder="--" required />
+
+                                    <div class="w-full">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            for="license_duration">
+                                            Company
+                                        </label>
+                                        <select x-on:change="onChangeCompany" id="company_id"
+                                            name="company_id"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                            required="required">
+                                            <option value="">--</option>
+                                            @foreach ($companies as $company)
+                                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
+                                    <div class="flex space-x-2">
+                                        <div class="w-full">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                for="branch_id">
+                                                Branch
+                                            </label>
+                                            <select id="branch_id"
+                                                name="branch_id"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                                required="required">
+                                                <option value="">--</option>
+                                                <template x-for="branch in branches">
+                                                    <option x-bind:value="branch.id" x-text="branch.name"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+
+                                        <x-forms.select-field class="w-full" name="role" label="Role"
+                                            placeholder="--" required>
+                                            <option value="AGENT">AGENT</option>
+                                            <option value="SUBAGENT">SUBAGENT</option>
+                                        </x-forms.select-field>
+                                    </div>
+
+                                    <div class="flex space-x-2">
+                                        <x-forms.input-field
+                                            class="w-full"
+                                            name="start_date"
+                                            type="date"
+                                            label="Start Date"
+                                            placeholder="--"
+                                            value="{{ date('Y-m-d') }}"
+                                            required
+                                        />
+                                        <x-forms.input-field class="w-full" name="expiry_date" type="date"
+                                            label="Expiry Date" placeholder="--" required />
+                                    </div>
+
+                                    <div class="w-full">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            for="license_duration">
+                                            License Duration
+                                        </label>
+                                        <select x-on:change="onChangeDuration" id="license_duration"
+                                            name="license_duration"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                            required="required">
+                                            <option value="">--</option>
+                                            <option value="1">1 YEAR LICENSE</option>
+                                            <option value="2">2 YEARS LICENSE</option>
+                                            <option value="3">3 YEARS LICENSE</option>
+                                            <option value="4">4 YEARS LICENSE</option>
+                                            <option value="5">5 YEARS LICENSE</option>
+                                        </select>
+                                    </div>
 
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
@@ -100,4 +166,30 @@
             </div>
         </main>
     </div>
+
+    <x-slot:scripts>
+        <script>
+            const branches = @json($branches);
+
+            document.addEventListener('alpine:init', () => {
+                function setExpiryDate() {
+                    let license_duration = document.querySelector('#license_duration').value;
+                    let start_date = document.querySelector('#start_date').value;
+                    let expiry_date = DateFns.add(start_date, { years: license_duration });
+
+                    document.querySelector('#expiry_date').value = expiry_date;
+                }
+
+                Alpine.data('license', () => ({
+                    branches: [],
+                    onChangeCompany(e) {
+                        this.branches = branches.filter(b => b.company_id == e.target.value);
+                    },
+                    onChangeDuration (e) {
+                        setExpiryDate();
+                    }
+                }));
+            });
+        </script>
+    </x-slot:scripts>
 </x-layout>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Company;
+use App\Models\License;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,10 +12,14 @@ class AgentController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', 'AGENT')->get();
+        $users = User::latest()->whereIn('role', ['AGENT','SUBAGENT'])->get();
 
         $users = $users->map(function (Object $user) {
             $user->company = Company::findOrFail($user->company_id);
+
+            if($user->branch_id) {
+                $user->branch = Branch::findOrFail($user->branch_id);
+            }
 
             return $user;
         });
@@ -26,9 +32,11 @@ class AgentController extends Controller
     public function create()
     {
         $companies = Company::all();
+        $branches  = Branch::all();
 
         return view('agent.create', [
             'companies' => $companies,
+            'branches'  => $branches,
         ]);
     }
 
@@ -53,9 +61,14 @@ class AgentController extends Controller
             'birthday'   => ['required'],
             'contact_no' => ['required'],
             'company_id' => ['required', 'exists:companies,id'],
+            'branch_id'  => ['required', 'exists:branches,id'],
             'email'      => ['required', 'email', 'unique:users,email'],
+            'license_duration' => ['required'],
+            'start_date'  => ['required', 'date'],
+            'expiry_date' => ['required', 'date'],
         ]);
 
+        $userAttributes['status'] = 'new';
         $userAttributes['name'] = $userAttributes['first_name'] . " " . $userAttributes['last_name'];
         $userAttributes['role'] = 'AGENT';
 

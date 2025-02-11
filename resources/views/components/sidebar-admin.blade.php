@@ -93,20 +93,27 @@ $queryString = "";
                         },
                     ]
                 },
+
                 {
-                    name: 'Authentication',
-                    icon: 'file-earmark-medical-fill',
+                    name: 'Licenses',
+                    icon: 'file-text-fill',
                     items: [
                         {
-                            name: 'Authentications',
-                            url: '/authentication',
+                            name: '* Companies',
+                            url: '/license/company',
                         },
                         {
-                            name: 'New Authentication',
-                            url: '/authentication/create',
+                            name: '* Branches',
+                            url: '/license/branch',
                         },
+                        {
+                            name: '* Agents',
+                            url: '/license/agent',
+                        },
+
                     ]
                 },
+
                 {
                     name: 'Companies',
                     icon: 'buildings-fill',
@@ -121,6 +128,22 @@ $queryString = "";
                         },
                     ]
                 },
+
+                {
+                    name: 'Branches',
+                    icon: 'building-fill',
+                    items: [
+                        {
+                            name: 'Branches',
+                            url: '/branch',
+                        },
+                        {
+                            name: 'New Branch',
+                            url: '/branch/create',
+                        },
+                    ]
+                },
+
                 {
                     name: 'Agents',
                     icon: 'people-fill',
@@ -135,40 +158,7 @@ $queryString = "";
                         },
                     ]
                 },
-                {
-                    name: 'Chat Support',
-                    icon: 'headset',
-                    items: [
-                        {
-                            name: 'Tickets',
-                            url: '/ticket',
-                        },
-                        {
-                            name: 'Created',
-                            url: '/ticket/created/status',
-                            count: {{ $count['CREATED'] ?? 0 }},
-                        },
-                        {
-                            name: 'Open',
-                            url: '/ticket/open/status',
-                            count: {{ $count['OPEN'] ?? 0 }},
-                        },
-                        {
-                            name: 'In Progress',
-                            url: '/ticket/in_progress/status',
-                            count: {{ $count['IN PROGRESS'] ?? 0 }},
-                        },
-                        {
-                            name: 'Resolved',
-                            url: '/ticket/resolved/status',
-                            count: {{ $count['RESOLVED'] ?? 0 }},
-                        },
-                        {
-                            name: 'Closed',
-                            url: '/ticket/closed/status',
-                        },
-                    ]
-                },
+
                 {
                     name: 'Settings',
                     icon: 'gear-fill',
@@ -188,6 +178,7 @@ $queryString = "";
 
                     ]
                 },
+
                 {
                     name: 'Tools',
                     icon: 'tools',

@@ -50,19 +50,38 @@
                                 <table id="branches-table" class="bg-white w-full text-sm text-left rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-4">Code</th>
-                                            <th class="px-6 py-4">Branch Name</th>
-                                            <th class="px-6 py-4">Email</th>
+                                            <th class="px-6 py-4">Branch</th>
+                                            <th class="px-6 py-4">Company</th>
+                                            <th class="px-6 py-4">Valid Until</th>
+                                            <th class="px-6 py-4">Status</th>
                                             <th class="px-6 py-4 text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($branches as $branch)
                                             <tr class="group cursor-pointer">
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->code }}</td>
                                                 <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->name }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->email }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->company->name }}</td>
+                                                <td class="min-w-[120px] group-hover:bg-violet-200 px-8 py-6">{{ $branch->expiry_date }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6 font-bold">
+                                                    @php
+                                                        $today  = strtotime(date('Y-m-d'));
+                                                        $expiry = strtotime($branch->expiry_date);
+
+                                                        $expired = ($today >= $expiry);
+                                                    @endphp
+
+                                                    @if($expired)
+                                                        @if($branch->status=='revoked')
+                                                            <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-yellow-600">REVOKED</span>
+                                                        @else
+                                                            <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-red-600">EXPIRED</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-green-600">ACTIVE</span>
+                                                    @endif
+                                                </td>
+                                                <td class="min-w-[150px] group-hover:bg-violet-200 px-8 py-6">
                                                     <x-forms.form class="hidden" method="POST" verb="DELETE"
                                                         action="/branch/{{ $branch->id }}"
                                                         id="delete-branch-{{ $branch->id }}-form">
@@ -73,22 +92,12 @@
 
                                                     <a href="/branch/{{ $branch->id }}/edit" title="Edit"
                                                         class="text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                                        </svg>
+                                                        <i class="bi bi-pencil-square w-5 h-5 inline-block"></i>
                                                     </a>
                                                     <button onclick="confirmDelete({{ $branch->id }})" title="Delete"
                                                         type="button"
                                                         class="text-red-600 mx-auto border border-red-600 hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                                        </svg>
+                                                        <i class="bi bi-trash w-5 h-5 inline-block"></i>
                                                     </button>
                                                 </td>
                                             </tr>

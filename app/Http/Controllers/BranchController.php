@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Company;
+use App\Models\License;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,8 +12,7 @@ class BranchController extends Controller
 {
     public function index()
     {
-        $company_id = Auth::user()->company_id;
-        $branches = Branch::where('company_id', $company_id)->get();
+        $branches = Branch::latest()->get();
 
         if($branches->count() > 0) {
             $branches = $branches->map(function($branch) {
@@ -29,7 +29,11 @@ class BranchController extends Controller
 
     public function create()
     {
-        return view('branch.create');
+        $companies = Company::all();
+
+        return view('branch.create', [
+            'companies' => $companies,
+        ]);
     }
 
     public function edit($id)
@@ -50,14 +54,18 @@ class BranchController extends Controller
             'email'      => ['required', 'email'],
             'phone'      => ['required'],
             'address'    => ['required'],
+            'license_duration' => ['required'],
+            'start_date'  => ['required', 'date'],
+            'expiry_date' => ['required', 'date'],
         ]);
 
+        $branchAttributes['status'] = 'new';
         $branchAttributes['company_id'] = Auth::user()->company_id;
 
         $branch = Branch::create($branchAttributes);
 
         return redirect('/branch/create')->with([
-            'message' => "Successfully added a branch"
+            'message' => "Successfully added the branch"
         ]);
     }
 

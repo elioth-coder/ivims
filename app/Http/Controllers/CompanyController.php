@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\License;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
     public function index()
     {
-        $companies = Company::all();
+        $companies = Company::latest()->get();
 
         return view('company.index', [
             'companies' => $companies,
@@ -29,6 +30,7 @@ class CompanyController extends Controller
             'company' => $company
         ]);
     }
+
     public function store(Request $request)
     {
         $companyAttributes = $request->validate([
@@ -38,12 +40,16 @@ class CompanyController extends Controller
             'email'   => ['required', 'email'],
             'phone'   => ['required'],
             'address' => ['required'],
+            'license_duration' => ['required'],
+            'start_date'  => ['required', 'date'],
+            'expiry_date' => ['required', 'date'],
         ]);
+        $companyAttributes['status'] = 'new';
 
         $company = Company::create($companyAttributes);
 
         return redirect('/company/create')->with([
-            'message' => "Successfully added a company"
+            'message' => "Successfully added the company"
         ]);
     }
 

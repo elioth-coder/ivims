@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Agents</x-slot:title>
+    <x-slot:title>Licenses - Branches</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
@@ -11,14 +11,17 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Agents" activeSub="Agents" />
+            <x-sidebar active="Licenses" activeSub="* Branches" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
+                                'url' => '/license',
+                                'title' => 'Licenses',
+                            ],                            [
                                 'url' => '#',
-                                'title' => 'Agents',
+                                'title' => 'Branches',
                             ],
                         ];
                     @endphp
@@ -27,17 +30,17 @@
                     <div class="py-3 min-h-screen">
                         <div class="mx-auto max-w-full">
                             @if (session('message'))
-                                <x-alerts.success id="alert-user">
+                                <x-alerts.success id="alert-branch">
                                     {{ session('message') }}
                                 </x-alerts.success>
                             @endif
                         </div>
 
                         <div class="flex flex-col">
-                            <div class="w-full pb-5">
-                                <a href="/agent/create"
-                                    class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
-                                    New Agent
+                            <div class="w-full pb-5 flex gap-3 items-center justify-start">
+                                <a href="/branch/create"
+                                    class="min-w-fit ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
+                                    New Branch
                                     <svg class="w-4 h-4 ms-2" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                         viewBox="0 0 24 24">
@@ -45,12 +48,12 @@
                                             d="M5 12h14m-7 7V5" />
                                     </svg>
                                 </a>
+                                <h3 class="block bg-violet-600 text-center w-full text-3xl font-bold p-2 text-white">Branches with License</h3>
                             </div>
                             <div class="relative overflow-x-auto w-full">
-                                <table id="agents-table" class="bg-white w-full text-sm text-left rtl:text-right">
+                                <table id="branches-table" class="bg-white w-full text-sm text-left rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-4">Agent</th>
                                             <th class="px-6 py-4">Branch</th>
                                             <th class="px-6 py-4">Company</th>
                                             <th class="px-6 py-4">Valid Until</th>
@@ -59,22 +62,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $user)
+                                        @foreach ($branches as $branch)
                                             <tr class="group cursor-pointer">
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->first_name }} {{ $user->last_name }} {{ $user->suffix }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ ($user->branch) ? $user->branch->name : '--' }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->company->name }}</td>
-                                                <td class="min-w-[120px] group-hover:bg-violet-200 px-8 py-6">{{ $user->expiry_date ?? '--' }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->name }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $branch->company->name }}</td>
+                                                <td class="min-w-[120px] group-hover:bg-violet-200 px-8 py-6">{{ $branch->expiry_date ?? '--' }}</td>
                                                 <td class="group-hover:bg-violet-200 px-8 py-6 font-bold">
                                                     @php
                                                         $today  = strtotime(date('Y-m-d'));
-                                                        $expiry = strtotime($user->expiry_date);
+                                                        $expiry = strtotime($branch->expiry_date);
 
                                                         $expired = ($today >= $expiry);
                                                     @endphp
 
                                                     @if($expired)
-                                                        @if($user->status=='revoked')
+                                                        @if($branch->status=='revoked')
                                                             <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-yellow-600">REVOKED</span>
                                                         @else
                                                             <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-red-600">EXPIRED</span>
@@ -84,23 +86,29 @@
                                                     @endif
                                                 </td>
                                                 <td class="min-w-[150px] group-hover:bg-violet-200 px-8 py-6">
-                                                    <x-forms.form class="hidden" method="POST" verb="DELETE"
-                                                        action="/agent/{{ $user->id }}"
-                                                        id="delete-agent-{{ $user->id }}-form">
-                                                        <button type="submit">
-                                                            Delete
+                                                    @if($expired)
+                                                        <a href="/license/branch/{{ $branch->id }}/renew" title="Renew License"
+                                                            class="text-green-600 mx-auto border border-green-600 hover:bg-green-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
+                                                            <i class="bi bi-plus-square w-5 h-5 inline-block"></i>
+                                                        </a>
+                                                        <button title="Revoke License"
+                                                            type="button"
+                                                            disabled
+                                                            class="bg-gray-200 cursor-not-allowed text-gray-600 mx-auto border border-gray-600 hover:bg-gray-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
+                                                            <i class="bi bi-file-x w-5 h-5 inline-block"></i>
                                                         </button>
-                                                    </x-forms.form>
-
-                                                    <a href="/agent/{{ $user->id }}/edit" title="Edit"
-                                                        class="text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                        <i class="bi bi-pencil-square w-5 h-5 inline-block"></i>
-                                                    </a>
-                                                    <button onclick="confirmDelete({{ $user->id }})" title="Delete"
-                                                        type="button"
-                                                        class="text-red-600 mx-auto border border-red-600 hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                        <i class="bi bi-trash w-5 h-5 inline-block"></i>
-                                                    </button>
+                                                    @else
+                                                        <button title="Renew License"
+                                                            type="button"
+                                                            disabled
+                                                            class="bg-gray-200 cursor-not-allowed text-gray-600 mx-auto border border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
+                                                            <i class="bi bi-plus-square w-5 h-5 inline-block"></i>
+                                                        </button>
+                                                        <a href="/license/branch/{{ $branch->id }}/revoke" title="Revoke License"
+                                                            class="text-yellow-600 mx-auto border border-yellow-600 hover:bg-yellow-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
+                                                            <i class="bi bi-file-x w-5 h-5 inline-block"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -116,26 +124,11 @@
     </div>
     <x-slot:scripts>
         <script>
-            const confirmDelete = async (id) => {
-                let result = await Swal.fire({
-                    title: "Delete this agent?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Continue"
-                });
-
-                if (result.isConfirmed) {
-                    document.querySelector(`#delete-agent-${id}-form button`).click();
-                }
-            }
-
             (function() {
                 setTimeout(() => {
-                    if (document.getElementById("agents-table") && typeof DataTable !==
+                    if (document.getElementById("branches-table") && typeof DataTable !==
                         'undefined') {
-                        const dataTable = new DataTable("#agents-table", {
+                        const dataTable = new DataTable("#branches-table", {
                             fixedHeight: true,
                             searchable: true,
                             perPage: 5,

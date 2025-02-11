@@ -1,7 +1,6 @@
 <x-layout>
-    <x-slot:title>Companies</x-slot:title>
+    <x-slot:title>Licenses - Company Revoke</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
             html, body {
                 overflow: hidden;
@@ -11,18 +10,22 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Companies" activeSub="Companies"/>
+            <x-sidebar active="Licenses" activeSub="* Companies"/>
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/company',
+                                'url' => '/license',
+                                'title' => 'Licenses',
+                            ],
+                            [
+                                'url' => '/license/company',
                                 'title' => 'Companies',
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Edit',
+                                'title' => 'Revoke',
                             ],
                         ];
                     @endphp
@@ -38,8 +41,8 @@
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>Edit Company</x-card-header>
-                                <x-forms.form method="POST" action="/company/{{ $company->id }}" verb="PATCH">
+                                <x-card-header>Revoke Company License</x-card-header>
+                                <x-forms.form method="POST" action="/license/company/{{ $company->id }}/revokal" verb="POST">
                                     <div class="flex space-x-2">
                                         @php
                                         if($errors->has('code')) {
@@ -55,6 +58,7 @@
                                             placeholder="--"
                                             value="{{ $code }}"
                                             required
+                                            disabled
                                         />
                                         @php
                                         if($errors->has('origin')) {
@@ -69,6 +73,7 @@
                                             label="Origin"
                                             placeholder="--"
                                             value="{{ $origin }}"
+                                            disabled
                                         />
                                     </div>
                                     @php
@@ -85,61 +90,23 @@
                                         placeholder="--"
                                         value="{{ $name }}"
                                         required
+                                        disabled
                                     />
 
-                                    <div class="flex space-x-2">
-                                        @php
-                                        if($errors->has('phone')) {
-                                            $phone = old('phone');
-                                        } else {
-                                            $phone = (old('phone')) ? old('phone') : $company->phone;
-                                        }
-                                        @endphp
-                                        <x-forms.input-field class="w-full"
-                                            name="phone"
-                                            type="text"
-                                            label="Phone"
-                                            placeholder="--"
-                                            value="{{ $phone }}"
-                                            required
-                                        />
-                                        @php
-                                        if($errors->has('email')) {
-                                            $email = old('email');
-                                        } else {
-                                            $email = (old('email')) ? old('email') : $company->email;
-                                        }
-                                        @endphp
-                                        <x-forms.input-field class="w-full"
-                                            name="email"
-                                            type="email"
-                                            label="Email"
-                                            placeholder="--"
-                                            value="{{ $email }}"
-                                            required
-                                        />
-                                    </div>
-                                    @php
-                                    if($errors->has('address')) {
-                                        $address = old('address');
-                                    } else {
-                                        $address = (old('address')) ? old('address') : $company->address;
-                                    }
-                                    @endphp
                                     <x-forms.textarea-field
-                                        name="address"
-                                        label="Address"
+                                        name="remarks"
+                                        label="Reason for revoking license"
                                         placeholder="--"
                                         rows="5"
-                                        value="{{ $address }}"
                                         required
                                     />
+
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/company"
+                                        <a href="/license/company"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

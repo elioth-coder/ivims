@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to {{ env('APP_NAME') }}</title>
+    <title>Insurance Companies - Branches</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -63,91 +63,50 @@
     </nav>
 
     <div class="flex flex-col items-center px-5 sm:px-20 sm:py-10 w-full max-w-screen-xl mx-auto space-y-6 pb-[65px]">
-        <div class="flex flex-col-reverse sm:flex-row items-center gap-4 pb-10">
-            <div class="w-full mx-auto space-y-5">
-                <h1 class="text-4xl sm:text-6xl font-bold">Welcome to IVIM <span class="hidden sm:inline">System v1.0.0</span></h1>
-                <p>
-                    Your trusted platform for verifying the authenticity of CTPL insurance
-                </p>
-                <a href="/qr_verifier"
-                    class="block mx-auto sm:inline-flex bg-violet-800 my-5 px-6 py-3.5 text-base text-white hover:text-violet-700 font-bold items-center hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-full text-center">
-                    QR Verifier Tool
-                    <i class="mx-2 text-xxl bi bi-arrow-right"></i>
-                </a>
-            </div>
-            <div class="w-full p-8">
-                <img class="w-11/12" src="{{ asset('images/car-insurance-cartoon.png') }}" alt="">
-            </div>
-        </div>
-        <hr id="about_ivim" class="my-24 border-slate-400 opacity-50 h-1 w-full">
         <div class="w-full py-5">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">About IVIM</h2>
-            <p class="text-justify indent-8">The IVIM (Integrated Vehicle Insurance Management) System is an innovative web-based platform designed to streamline the management of Compulsory Third Party Liability (CTPL) insurance policies. Developed to enhance transparency, efficiency, and compliance within the insurance industry, IVIM serves as a centralized system connecting the Insurance Commission (IC), insurance companies, and policyholders.</p>
-            <h3 class="text-4xl font-bold my-4">Mission</h3>
-            <p class="text-justify indent-8">
-                To modernize the CTPL insurance process by providing a secure, efficient, and transparent platform that benefits all stakeholders.
-            </p>
-            <h3 class="text-4xl font-bold my-4">Vision</h3>
-            <p class="text-justify indent-8">
-                To become the leading system for vehicle insurance management, setting the standard for regulatory compliance and customer trust within the industry.
-                The IVIM System is designed to adapt to the evolving needs of the Insurance Commission and the insurance sector, ensuring continuous improvement and reliable service delivery.
-            </p>
+            <h2 class="text-3xl sm:text-5xl font-bold text-white">Licensed Branches</h2>
+            <hr class="mt-12 border-slate-400 opacity-50 h-1 w-full">
         </div>
-        <hr id="ctpl_rates" class="my-28 border-slate-400 opacity-50 h-1 w-full">
-        <div class="w-full py-5">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white">CTPL Rates</h2>
-        </div>
-        <div class="flex w-full pb-10">
-            <div class="relative overflow-x-auto w-full rounded-lg sm:p-5">
-                <table class="w-full text-sm text-left text-white">
-                    <thead class="text-xs uppercase">
-                        <tr class="bg-violet-900">
-                            <th class="sm:px-6 sm:py-4 px-4 py-2">Type</th>
-                            <th class="sm:px-6 sm:py-4 px-4 py-2 text-end">1 Year</th>
-                            <th class="sm:px-6 sm:py-4 px-4 py-2 text-end">3 Years</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($ctpl_rates as $ctpl_rate)
-                            <tr class="group cursor-pointer even:bg-violet-800">
-                                <td class="sm:px-6 sm:py-4 px-4 py-2">{{ $ctpl_rate->type }}</td>
-                                <td class="sm:px-6 sm:py-4 px-4 py-2 text-end text-nowrap">P {{ number_format($ctpl_rate->one_year, 2) }}</td>
-                                <td class="sm:px-6 sm:py-4 px-4 py-2 text-end text-nowrap">P {{ number_format($ctpl_rate->three_years, 2) }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <hr id="insurance_companies" class="my-28 border-slate-400 opacity-50 h-1 w-full">
-        <div class="w-full py-5">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white">Insurance Companies</h2>
+        <div class="w-full px-5 py-3">
+            <ul class="flex flex-wrap font-medium text-center text-gray-500 dark:text-gray-400 text-lg">
+                <li class="me-2">
+                    <a href="/insurance_companies"  class="text-gray-300 inline-block px-4 py-3 rounded-lg hover:text-violet-900 hover:bg-gray-100">Insurance Companies</a>
+                </li>
+                <li class="me-2">
+                    <a href="/insurance_companies/branches" class="inline-block px-4 py-3 text-white bg-violet-500 rounded-lg active" aria-current="page">Insurance Companies - Branches</a>
+                </li>
+                <li class="me-2">
+                    <a href="/insurance_companies/agents" class="text-gray-300 inline-block px-4 py-3 rounded-lg hover:text-violet-900 hover:bg-gray-100">Insurance Companies - Agents</a>
+                </li>
+            </ul>
         </div>
         <div class="flex flex-col w-full pb-10">
             <div class="relative overflow-x-auto w-full rounded-lg sm:p-5">
                 <table class="w-full text-sm text-left text-white">
                     <thead class="text-xs uppercase">
                         <tr class="bg-violet-900">
+                            <th class="sm:px-6 sm:py-4 px-4 py-2">Branch</th>
                             <th class="sm:px-6 sm:py-4 px-4 py-2">Company</th>
                             <th class="sm:px-6 sm:py-4 px-4 py-2 text-end">Valid Until</th>
                             <th class="sm:px-6 sm:py-4 px-4 py-2 text-end">License</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($companies as $company)
+                        @foreach ($branches as $branch)
                             <tr class="group cursor-pointer even:bg-violet-800">
-                                <td class="sm:px-6 sm:py-4 px-4 py-2">{{ $company->name }}</td>
-                                <td class="sm:px-6 sm:py-4 px-4 py-2 text-end text-nowrap">{{ $company->expiry_date ?? '--' }}</td>
+                                <td class="sm:px-6 sm:py-4 px-4 py-2">{{ $branch->name }}</td>
+                                <td class="sm:px-6 sm:py-4 px-4 py-2">{{ $branch->company->name }}</td>
+                                <td class="sm:px-6 sm:py-4 px-4 py-2 text-end text-nowrap">{{ $branch->expiry_date ?? '--' }}</td>
                                 <td class="sm:px-6 sm:py-4 px-4 py-2 text-end text-nowrap">
                                     @php
                                         $today  = strtotime(date('Y-m-d'));
-                                        $expiry = strtotime($company->expiry_date);
+                                        $expiry = strtotime($branch->expiry_date);
 
                                         $expired = ($today >= $expiry);
                                     @endphp
 
                                     @if($expired)
-                                        @if($company->status=='revoked')
+                                        @if($branch->status=='revoked')
                                             <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-yellow-600">REVOKED</span>
                                         @else
                                             <span class="text-xs inline-block text-white px-2 py-1 rounded-full bg-red-600">EXPIRED</span>
@@ -161,35 +120,6 @@
                     </tbody>
                 </table>
             </div>
-            <a href="/insurance_companies"
-                class="block sm:inline-flex sm:mx-5 w-full sm:w-fit bg-violet-800 my-5 px-6 py-3.5 text-base text-white hover:text-violet-700 font-bold items-center hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-full text-center">
-                View All Companies
-                <i class="mx-2 text-xxl bi bi-arrow-right"></i>
-            </a>
-        </div>
-
-        <hr id="partner_agencies" class="my-24 border-slate-400 opacity-50 h-1 w-full">
-        <div class="w-full py-5">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white">Our Partner Agencies</h2>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-8 justify-between w-full px-20 pb-8 sm:pb-20">
-            <a target="_blank" title="Insurance Commission Official Website" href="https://www.insurance.gov.ph/"
-                class="block">
-                <img style="height: 150px;" class="w-full" src="{{ asset('images/ic-logo.png') }}" alt="">
-            </a>
-            <a target="_blank" title="LTO Official Website" href="https://lto.gov.ph" class="block">
-                <img style="height: 150px;" src="{{ asset('images/lto-logo.png') }}" alt="">
-            </a>
-            <a target="_blank" title="HPG Official Website" href="https://hpg.pnp.gov.ph/" class="block">
-                <img style="height: 150px;" class="w-full" src="{{ asset('images/hpg-logo.png') }}" alt="">
-            </a>
-            <a target="_blank" title="Bureau of Customs Official Website" href="https://www.customs.gov.ph/"
-                class="block">
-                <img style="height: 150px;" class="w-full" src="{{ asset('images/boc-logo.png') }}" alt="">
-            </a>
-            <a target="_blank" title="LTFRB Official Website" href="https://www.ltfrb.gov.ph/" class="block">
-                <img style="height: 150px;" class="w-full" src="{{ asset('images/ltfrb-logo.png') }}" alt="">
-            </a>
         </div>
 
         <hr id="contact_us" class="my-24 border-slate-400 opacity-50 h-1 w-full">
