@@ -23,7 +23,7 @@
                             ],
                             [
                                 'url' => '#',
-                                'title' => 'Create Ticket',
+                                'title' => 'Edit Ticket',
                             ],
                         ];
                     @endphp
@@ -37,47 +37,77 @@
                                     </x-alerts.success>
                                 @endif
                             </div>
-                            @php
-                                $coc_number = request('coc_no') ?? '';
 
-                                if(old('coc_no')) {
-                                    $coc_number = old('coc_no');
-                                }
-                            @endphp
                             <x-card class="max-w-xl">
-                                <x-card-header>Create a Ticket</x-card-header>
-                                <x-forms.form method="POST" action="/ticket">
+                                <x-card-header>Edit Ticket</x-card-header>
+                                <x-forms.form method="POST" action="/ticket/{{ $ticket->id }}" verb="PATCH">
+                                    @php
+                                    if($errors->has('category_id')) {
+                                        $category_id = old('category_id');
+                                    } else {
+                                        $category_id = (old('category_id')) ? old('category_id') : $ticket->id;
+                                    }
+                                    @endphp
 
                                     <x-forms.select-field class="w-full"
                                         name="category_id"
                                         label="Category"
                                         placeholder="--">
                                         @foreach($ticket_categories as $ticket_category)
-                                            <option value="{{ $ticket_category->id }}">{{ strtoupper($ticket_category->name) }}</option>
+                                            <option
+                                                {{ ($ticket_category->id == $category_id) ? 'selected' : '' }}
+                                                value="{{ $ticket_category->id }}">
+                                                {{ strtoupper($ticket_category->name) }}
+                                            </option>
                                         @endforeach
                                     </x-forms.select-field>
 
+                                    @php
+                                    if($errors->has('title')) {
+                                        $title = old('title');
+                                    } else {
+                                        $title = (old('title')) ? old('title') : $ticket->title;
+                                    }
+                                    @endphp
                                     <x-forms.input-field class="w-full"
                                         name="title"
                                         type="text"
                                         label="Title"
                                         placeholder="--"
+                                        value="{{ $title ?? '' }}"
                                         required
                                     />
 
+                                    @php
+                                    if($errors->has('description')) {
+                                        $description = old('description');
+                                    } else {
+                                        $description = (old('description')) ? old('description') : $ticket->description;
+                                    }
+                                    @endphp
                                     <x-forms.textarea-field
                                         name="description"
                                         label="Description"
                                         placeholder="--"
                                         rows="5"
+                                        value="{{ $description ?? '' }}"
                                     />
 
+                                    @php
+                                    if($errors->has('coc_no')) {
+                                        $coc_no = old('coc_no');
+                                    } else {
+                                        $coc_no = (old('coc_no')) ? old('coc_no') : $ticket->coc_no;
+                                    }
+                                    @endphp
                                     <x-forms.input-field class="w-full"
                                         name="coc_no"
                                         label="COC Number (Optional)"
                                         list="coc_numbers"
                                         placeholder="--"
+                                        value="{{ $coc_no ?? '' }}"
                                     />
+
                                     <datalist id="coc_numbers">
                                         @foreach ($policy_details as $policy_detail)
                                             <option value="{{ $policy_detail->coc_no }}">
@@ -89,7 +119,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/ticket"
+                                        <a href="/u/chat_support"
                                             class="flex items-center justify-center w-auto px-10 text-center bg-white border border-gray-500 rounded-lg hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

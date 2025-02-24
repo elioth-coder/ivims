@@ -1,4 +1,4 @@
-@props(['active'=>'Dashboard', 'activeSub'=>'Home', 'count'=>[]])
+@props(['active'=>'Dashboard', 'activeSub'=>'Dashboard', 'count'=>[]])
 
 <div id="sidebar" x-data="menu('{{ $active }}','{{ $activeSub }}')" class="border-r flex min-w-[350px] box-border bg-white"
     style="height: calc(100vh - 56px)">
@@ -6,7 +6,7 @@
         <template x-for="item in items">
             <li role="presentation">
                 <button type="button" role="tab"
-                    class="group w-full px-2 py-3 text-gray-900 text-center items-center justify-center hover:bg-violet-200"
+                    class="group w-full py-3 text-gray-900 text-center items-center justify-center hover:bg-violet-200"
                     x-on:click="activate(item.name)" x-bind:class="(active == item.name) ? activeClass: ''">
                     <i class="font-medium inline-flex text-xl bi" x-bind:class="'bi-' + item.icon"></i>
                     <p style="font-size: 11px;" class="text-center font-bold" x-text="item.name"></p>
@@ -25,7 +25,7 @@
                         <li role="presentation">
                             <a x-bind:href="subItem.url"
                                 class="flex items-center px-5 p-2 text-gray-900 rounded-2xl group hover:bg-violet-200 relative"
-                                x-bind:class="((activeSub == subItem.name) && (active==item.name)) ? activeClass: ''">
+                                x-bind:class="(activeSub == subItem.name) ? activeClass: ''">
                                 <span class="" x-text="subItem.name"></span>
                                 <template x-if="subItem.count">
                                     <span class="text-xs rounded-full bg-red-700 text-white px-1 absolute end-0 me-2" x-text="subItem.count"></span>
@@ -51,6 +51,30 @@ $queryString = "";
             activeSub,
             activeClass: 'text-white bg-violet-500 hover:text-white hover:bg-violet-500',
             items: [
+                @if(str_starts_with(request()->path(), 'search'))
+                    {
+                        name: 'Search',
+                        icon: 'search',
+                        items: [
+                            {
+                                name: 'Insured Vehicles',
+                                url: '/search/insured_vehicles{{ $queryString }}',
+                                count: {{ $count['insured_vehicles'] ?? 0 }},
+                            },
+                            {
+                                name: 'Policy Holders',
+                                url: '/search/policy_holders{{ $queryString }}',
+                                count: {{ $count['policy_holders'] ?? 0 }},
+                            },
+                            {
+                                name: 'Authenticated Policies',
+                                url: '/search/authenticated_policies{{ $queryString }}',
+                                count: {{ $count['authenticated_policies'] ?? 0 }},
+                            },
+                        ]
+                    },
+                @endif
+
                 {
                     name: 'Dashboard',
                     icon: 'bar-chart-line-fill',
@@ -60,7 +84,7 @@ $queryString = "";
                             url: '/dashboard',
                         },
                         {
-                            name: 'Charts & Reports',
+                            name: 'Reports & Analytics',
                             url: '/dashboard/report',
                         },
                         {
@@ -69,71 +93,60 @@ $queryString = "";
                         },
                     ]
                 },
+
                 {
-                    name: 'Insurance Policies',
-                    icon: 'file-earmark-medical-fill',
+                    name: 'Chat Support',
+                    icon: 'headset',
                     items: [
                         {
-                            name: 'Insurance Policies',
-                            url: '/authentication',
+                            name: 'Tickets',
+                            url: '/ticket',
                         },
                         {
-                            name: 'New Insurance Policy',
-                            url: '/authentication/create',
-                        },
-                    ]
-                },
-                {
-                    name: 'Branches',
-                    icon: 'building-fill',
-                    items: [
-                        {
-                            name: 'Branches',
-                            url: '/branch',
+                            name: 'Created',
+                            url: '/ticket/created/status',
+                            count: {{ $count['CREATED'] ?? 0 }},
                         },
                         {
-                            name: 'New Branch',
-                            url: '/branch/create',
+                            name: 'Open',
+                            url: '/ticket/open/status',
+                            count: {{ $count['OPEN'] ?? 0 }},
+                        },
+                        {
+                            name: 'In Progress',
+                            url: '/ticket/in_progress/status',
+                            count: {{ $count['IN PROGRESS'] ?? 0 }},
+                        },
+                        {
+                            name: 'Resolved',
+                            url: '/ticket/resolved/status',
+                            count: {{ $count['RESOLVED'] ?? 0 }},
+                        },
+                        {
+                            name: 'Closed',
+                            url: '/ticket/closed/status',
                         },
                     ]
                 },
 
                 {
-                    name: 'Subagents',
-                    icon: 'people-fill',
+                    name: 'Settings',
+                    icon: 'gear-fill',
                     items: [
                         {
-                            name: 'Subagents',
-                            url: '/agent',
-                        },
-                        {
-                            name: 'New Subagent',
-                            url: '/subagent/create',
+                            name: 'Ticket Categories',
+                            url: '/setting/ticket_category',
                         },
                     ]
                 },
+
                 {
-                    name: 'Search',
-                    icon: 'search',
+                    name: 'Tools',
+                    icon: 'tools',
                     items: [
                         {
-                            name: 'Insured Vehicles',
-                            url: '/search/insured_vehicles{{ $queryString }}',
-                            count: {{ $count['insured_vehicles'] ?? 0 }},
-                        },
-                        {
-                            name: 'Policy Holders',
-                            url: '/search/policy_holders{{ $queryString }}',
-                            count: {{ $count['policy_holders'] ?? 0 }},
-                        },
-                        {
-                            name: 'Authenticated Policies',
-                            url: '/search/authenticated_policies{{ $queryString }}',
-                            count: {{ $count['authenticated_policies'] ?? 0 }},
-                        },
-                        {
-                            name: 'Advance Search',
-                            url: '/search',
+                            name: 'Raw Data',
+                            url: '/tools/raw_data',
                         },
                     ]
                 },

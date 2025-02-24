@@ -127,7 +127,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/company"
+                                        <a href="/branch"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>User</x-slot:title>
+    <x-slot:title>Tech Support</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
@@ -11,14 +11,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Users" activeSub="List of Users" />
+            <x-sidebar active="Users" activeSub="Tech Supports" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '/user',
-                                'title' => 'User',
+                                'title' => 'Users',
+                            ],
+                            [
+                                'url' => '/user/tech_support',
+                                'title' => 'Tech Supports',
                             ],
                             [
                                 'url' => '#',
@@ -38,8 +42,8 @@
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>Edit User</x-card-header>
-                                <x-forms.form method="POST" action="/user/{{ $user->id }}" verb="PATCH">
+                                <x-card-header>Edit Tech Support</x-card-header>
+                                <x-forms.form method="POST" action="/user/tech_support/{{ $user->id }}" verb="PATCH">
                                     <div class="flex space-x-2">
                                         @php
                                         if($errors->has('first_name')) {
@@ -120,22 +124,7 @@
                                         value="{{ $contact_no }}"
                                         required
                                     />
-                                    @php
-                                    if($errors->has('company_id')) {
-                                        $company_id = old('company_id');
-                                    } else {
-                                        $company_id = (old('company_id')) ? old('company_id') : $user->company->id;
-                                    }
-                                    @endphp
-                                    <x-forms.select-field class="w-full"
-                                        name="company_id"
-                                        label="Company"
-                                        placeholder="--"
-                                        required>
-                                        @foreach($companies as $company)
-                                            <option {{ ($company_id==$company->id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </x-forms.select-field>
+
                                     @php
                                     if($errors->has('email')) {
                                         $email = old('email');
@@ -151,27 +140,13 @@
                                         value="{{ $email }}"
                                         required
                                     />
-                                    <div class="flex space-x-2">
-                                        @php
-                                        if($errors->has('role')) {
-                                            $role = old('role');
-                                        } else {
-                                            $role = (old('role')) ? old('role') : $user->role;
-                                        }
-                                        @endphp
-                                        <x-forms.select-field class="w-full" name="role" label="Role" placeholder="--">
-                                            <option {{ ($role=='agent') ? 'selected' : '' }} value="agent">Agent</option>
-                                            <option {{ ($role=='subagent') ? 'selected' : '' }} value="subagent">Subagent</option>
-                                        </x-forms.select-field>
-                                        <div class="w-full"></div>
-                                    </div>
 
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/user/tech_support"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>
@@ -195,4 +170,5 @@
             </div>
         </main>
     </div>
+
 </x-layout>

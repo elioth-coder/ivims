@@ -40,13 +40,10 @@
                         <a href="#contact_us" class="block py-2 px-3 rounded hover:bg-transparent border-0 hover:text-gray-400 p-0">Contacts</a>
                     </li>
                     <li>
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex items-center justify-between w-full py-2 px-3 rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-gray-400 p-0 dark:text-white dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:bg-transparent">
-                            {{-- <span class="me-2 hidden sm:inline">Account</span> --}}
-                            <i class="bi bi-person-circle block sm:text-xl text-3xl"></i>
-                            {{-- <i class="bi bi-chevron-down hidden sm:block"></i> --}}
+                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex items-center justify-between w-full py-2 px-3 rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-gray-400 p-0">
+                            <i class="bi bi-person-circle block text-3xl sm:text-xl sm:-mt-1"></i>
                         </button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
                             <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
                                 <li>
                                 <a href="/login" class="block px-4 py-2 hover:bg-gray-300">Log In</a>

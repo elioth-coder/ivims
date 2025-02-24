@@ -22,7 +22,7 @@
                             ],
                             [
                                 'url' => '/setting/valid_id',
-                                'title' => 'Valid ID',
+                                'title' => 'Valid IDs',
                             ],
                             [
                                 'url' => '#',

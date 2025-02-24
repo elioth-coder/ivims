@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PolicyDetail;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use App\Models\TicketCategory;
 use App\Models\TicketChat;
 use App\Models\User;
 use Exception;
@@ -14,28 +16,57 @@ use PDO;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::all();
+        if($request->input('category_id')) {
+            $tickets = Ticket::where('category_id', $request->input('category_id'))->latest()->get();
+        } else {
+            $tickets = Ticket::latest()->get();
+        }
+
+        $ticket_categories = TicketCategory::all();
+        $tickets = $tickets->map(function (Object $ticket) {
+            if($ticket->category_id) {
+                $ticket->category = TicketCategory::findOrFail($ticket->category_id);
+            }
+
+            return $ticket;
+        });
 
         $count = $tickets->countBy('status');
 
         return view('ticket.index', [
             'tickets' => $tickets,
             'count'   => $count,
+            'ticket_categories' => $ticket_categories,
         ]);
     }
 
-    public function status($status)
+    public function status(Request $request, $status)
     {
         $status = ucwords(str_replace('_', ' ', $status));
 
-        $tickets = Ticket::where('status', $status)->get();
-        $all_tickets = Ticket::all();
+        if($request->input('category_id')) {
+            $tickets = Ticket::where('category_id', $request->input('category_id'))->where('status', $status)->latest()->get();
+            $all_tickets = Ticket::where('category_id', $request->input('category_id'))->latest()->get();
+        } else {
+            $tickets = Ticket::where('status', $status)->latest()->get();
+            $all_tickets = Ticket::latest()->get();
+        }
+
+        $ticket_categories = TicketCategory::all();
+        $tickets = $tickets->map(function (Object $ticket) {
+            if($ticket->category_id) {
+                $ticket->category = TicketCategory::findOrFail($ticket->category_id);
+            }
+
+            return $ticket;
+        });
 
         $count = $all_tickets->countBy('status');
 
         return view('ticket.status', [
+            'ticket_categories' => $ticket_categories,
             'tickets' => $tickets,
             'count'   => $count,
             'status'  => $status,
@@ -44,35 +75,23 @@ class TicketController extends Controller
 
     public function create(Request $request)
     {
-        $pdo = DB::connection()->getPdo();
-        $sql =
-        "SELECT * FROM policy_details";
-
-        $query = $pdo->prepare($sql);
-        $query->execute();
-        $policy_details = $query->fetchAll(PDO::FETCH_CLASS, 'stdClass');
+        $policy_details    = PolicyDetail::all();
+        $ticket_categories = TicketCategory::all();
 
         return view('ticket.create', [
-            'policy_details' => $policy_details,
+            'policy_details'    => $policy_details,
+            'ticket_categories' => $ticket_categories,
         ]);
     }
 
     public function store(Request $request)
     {
         $ticketAttributes = $request->validate([
-            'coc_no'      => ['required', 'exists:policy_details,coc_no'],
+            'category_id' => ['nullable', 'exists:ticket_categories,id'],
             'title'       => ['required'],
             'description' => ['nullable'],
+            'coc_no'      => ['nullable', 'exists:policy_details,coc_no'],
         ]);
-
-        $ticket = Ticket::where('coc_no', $ticketAttributes['coc_no'])
-            ->where('status', '!=', 'CLOSED')->first();
-
-        if($ticket) {
-            throw ValidationException::withMessages([
-                'coc_no' => 'This policy already has an existing unresolved ticket',
-            ]);
-        }
 
         $ticketAttributes['user_id'] = Auth::user()->id;
         $ticketAttributes['status']  = 'CREATED';
@@ -83,9 +102,57 @@ class TicketController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        $ticket_categories = TicketCategory::all();
+        $policy_details    = PolicyDetail::all();
+
+        return view('ticket.edit', [
+            'ticket' => $ticket,
+            'policy_details' => $policy_details,
+            'ticket_categories' => $ticket_categories,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $rules = [
+            'category_id' => ['nullable', 'string', 'exists:ticket_categories,id'],
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'coc_no'      => ['nullable', 'string', 'exists:policy_details,coc_no'],
+        ];
+
+        $ticketAttributes = $request->validate($rules);
+
+        $ticket->update($ticketAttributes);
+
+        return redirect("/ticket")->with([
+            'message' => "Successfully updated the ticket"
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        $ticket->delete();
+
+        return redirect("/ticket")
+            ->with([
+                'message' => 'Successfully deleted the ticket',
+            ]);
+    }
+
     public function ticket($id)
     {
         $ticket = Ticket::findOrFail($id);
+        if($ticket->category_id) {
+            $ticket->category = TicketCategory::findOrFail($ticket->category_id);
+        }
+
         $created_by = User::findOrFail($ticket->user_id);
 
         $pdo = DB::connection()->getPdo();

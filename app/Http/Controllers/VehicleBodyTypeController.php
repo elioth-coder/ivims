@@ -9,7 +9,7 @@ class VehicleBodyTypeController extends Controller
 {
     public function index()
     {
-        $vehicle_body_types = VehicleBodyType::all();
+        $vehicle_body_types = VehicleBodyType::latest()->get();
 
         return view('vehicle_body_type.index', [
             'vehicle_body_types' => $vehicle_body_types,
@@ -37,8 +37,8 @@ class VehicleBodyTypeController extends Controller
 
         $vehicle_body_type = VehicleBodyType::create($vehicleBodyTypeAttributes);
 
-        return redirect('/setting/vehicle_body_type/create')->with([
-            'message' => "Successfully added a vehicle body type"
+        return redirect('/setting/vehicle_type/create')->with([
+            'message' => "Successfully added a vehicle type"
         ]);
     }
 
@@ -61,8 +61,8 @@ class VehicleBodyTypeController extends Controller
 
         $vehicle_body_type->update($vehicleBodyTypeAttributes);
 
-        return redirect("/setting/vehicle_body_type")->with([
-            'message' => "Successfully updated the vehicle body type"
+        return redirect("/setting/vehicle_type")->with([
+            'message' => "Successfully updated the vehicle type"
         ]);
     }
 
@@ -71,9 +71,9 @@ class VehicleBodyTypeController extends Controller
         $vehicle_body_type = VehicleBodyType::findOrFail($id);
         $vehicle_body_type->delete();
 
-        return redirect("/setting/vehicle_body_type")
+        return redirect("/setting/vehicle_type")
             ->with([
-                'message' => 'Successfully deleted the vehicle body type',
+                'message' => 'Successfully deleted the vehicle type',
             ]);
     }
 }

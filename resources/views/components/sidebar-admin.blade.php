@@ -84,7 +84,7 @@ $queryString = "";
                             url: '/dashboard',
                         },
                         {
-                            name: 'Charts & Reports',
+                            name: 'Reports & Analytics',
                             url: '/dashboard/report',
                         },
                         {
@@ -99,15 +99,19 @@ $queryString = "";
                     icon: 'file-text-fill',
                     items: [
                         {
-                            name: '* Companies',
+                            name: 'Licenses',
+                            url: '/license',
+                        },
+                        {
+                            name: 'Companies',
                             url: '/license/company',
                         },
                         {
-                            name: '* Branches',
+                            name: 'Branches',
                             url: '/license/branch',
                         },
                         {
-                            name: '* Agents',
+                            name: 'Agents',
                             url: '/license/agent',
                         },
 
@@ -145,16 +149,20 @@ $queryString = "";
                 },
 
                 {
-                    name: 'Agents',
+                    name: 'Users',
                     icon: 'people-fill',
                     items: [
                         {
-                            name: 'Agents',
-                            url: '/agent',
+                            name: 'Users',
+                            url: '/user',
                         },
                         {
-                            name: 'New Agent',
-                            url: '/agent/create',
+                            name: 'Tech Supports',
+                            url: '/user/tech_support',
+                        },
+                        {
+                            name: 'Insurance Agents',
+                            url: '/user/agent',
                         },
                     ]
                 },
@@ -163,6 +171,14 @@ $queryString = "";
                     name: 'Settings',
                     icon: 'gear-fill',
                     items: [
+                        {
+                            name: 'Settings',
+                            url: '/setting',
+                        },
+                        {
+                            name: 'Ticket Categories',
+                            url: '/setting/ticket_category',
+                        },
                         {
                             name: 'CTPL Rates',
                             url: '/setting/ctpl_rate',
@@ -183,6 +199,10 @@ $queryString = "";
                     name: 'Tools',
                     icon: 'tools',
                     items: [
+                        {
+                            name: 'Tools',
+                            url: '/tools',
+                        },
                         {
                             name: 'Data Import',
                             url: '/tools/data_import',

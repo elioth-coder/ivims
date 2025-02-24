@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Reports & Analytics</x-slot:title>
+    <x-slot:title>Users</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
@@ -11,14 +11,14 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Dashboard" activeSub="Reports & Analytics" />
+            <x-sidebar active="Users" activeSub="Users" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '#',
-                                'title' => 'Reports & Analytics',
+                                'title' => 'Users',
                             ],
                         ];
                     @endphp
@@ -26,33 +26,28 @@
 
                     <div class="py-3 min-h-screen">
                         <div class="flex flex-col">
-                            <h2 class="text-center font-bold text-2xl">Reports & Analytics</h2>
+                            <h2 class="text-center font-bold text-2xl">Users</h2>
                             <br>
                             <div class="grid grid-cols-3 gap-4">
                                 @php
-                                    $reports = [
+                                    $items = [
                                         [
-                                            'title' => 'Upload Count per Company',
-                                            'link'  => '/dashboard/report/upload_count_per_company',
-                                            'icon'  => 'bar-chart',
+                                            'title' => 'Tech Supports',
+                                            'link'  => '/user/tech_support',
+                                            'icon'  => 'headset',
                                         ],
                                         [
-                                            'title' => 'Upload Count per Month',
-                                            'link'  => '/dashboard/report/upload_count_per_month',
-                                            'icon'  => 'graph-up',
-                                        ],
-                                        [
-                                            'title' => 'Upload Count per Province',
-                                            'link'  => '/dashboard/report/upload_count_per_province',
-                                            'icon'  => 'bar-chart',
+                                            'title' => 'Insurance Agents',
+                                            'link'  => '/user/agent',
+                                            'icon'  => 'person',
                                         ],
                                     ];
                                 @endphp
-                                @foreach($reports as $report)
-                                    <a href="{{ $report['link'] }}" class="block border p-5 rounded text-center hover:bg-gray-100">
-                                        <i class="text-7xl bi bi-{{ $report['icon'] }} text-violet-700"></i>
+                                @foreach($items as $item)
+                                    <a href="{{ $item['link'] }}" class="block border p-5 rounded text-center hover:bg-gray-100">
+                                        <i class="text-7xl bi bi-{{ $item['icon'] }} text-violet-700"></i>
                                         <hr class="my-3">
-                                        <h3 class="text-lg">{{ $report['title'] }}</h3>
+                                        <h3 class="text-lg">{{ $item['title'] }}</h3>
                                     </a>
                                 @endforeach
                             </div>

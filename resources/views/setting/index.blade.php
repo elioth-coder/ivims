@@ -11,7 +11,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Settings" />
+            <x-sidebar active="Settings" activeSub="Settings" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -30,7 +30,12 @@
                             <br>
                             <div class="grid grid-cols-3 gap-4">
                                 @php
-                                    $settings = [
+                                    $items = [
+                                        [
+                                            'title' => 'Ticket Categories',
+                                            'link'  => '/setting/ticket_category',
+                                            'icon'  => 'ticket-perforated',
+                                        ],
                                         [
                                             'title' => 'CTPL Rates',
                                             'link'  => '/setting/ctpl_rate',
@@ -48,11 +53,11 @@
                                         ],
                                     ];
                                 @endphp
-                                @foreach($settings as $setting)
-                                    <a href="{{ $setting['link'] }}" class="block border p-5 rounded text-center hover:bg-gray-100">
-                                        <i class="text-7xl bi bi-{{ $setting['icon'] }} text-violet-700"></i>
+                                @foreach($items as $item)
+                                    <a href="{{ $item['link'] }}" class="block border p-5 rounded text-center hover:bg-gray-100">
+                                        <i class="text-7xl bi bi-{{ $item['icon'] }} text-violet-700"></i>
                                         <hr class="my-3">
-                                        <h3 class="text-lg">{{ $setting['title'] }}</h3>
+                                        <h3 class="text-lg">{{ $item['title'] }}</h3>
                                     </a>
                                 @endforeach
                             </div>

@@ -21,11 +21,11 @@
                         <div class="w-full">
                             <div class="flex gap-4">
                                 <section class="border rounded p-5 w-1/2">
-                                    <h3 class="text-xl">Total Uploads</h3>
+                                    <h3 class="text-xl">Total Policies</h3>
                                     <h1 class="text-3xl text-center font-extrabold">{{ $total_uploads }}</h1>
                                 </section>
                                 <section class="border rounded p-5 w-1/2">
-                                    <h3 class="text-xl">Today's Uploads</h3>
+                                    <h3 class="text-xl">Transactions Today</h3>
                                     <h1 class="text-3xl text-center font-extrabold">{{ $todays_uploads }}</h1>
                                 </section>
                             </div>
@@ -91,7 +91,7 @@
                                                 Company Name
                                             </th>
                                             <th scope="col" class="px-6 py-3 font-bold rounded-e-lg">
-                                                Uploads
+                                                Policies
                                             </th>
                                         </tr>
                                     </thead>
@@ -117,7 +117,7 @@
                     </div>
                     <hr class="my-5">
                     <div class="flex flex-col">
-                        <h3 id="recent" class="pt-1 text-2xl font-bold mb-2 text-center">Recent Transaction Uploads</h3>
+                        <h3 id="recent" class="pt-1 text-2xl font-bold mb-2 text-center">Recent Transactions</h3>
                         <table class="w-full text-sm text-left rtl:text-right">
                             <thead
                                 class="text-xs uppercase bg-gray-100">
@@ -203,10 +203,10 @@
                     animationEnabled: true,
                     colorSet: 'bootstrap5',
                     title: {
-                        text: "Upload Count per Company"
+                        text: "Policy Count per Company"
                     },
                     axisY: {
-                        title: "Upload Count"
+                        title: "Policy Count"
                     },
                     data: [{
                         type: "column",
@@ -220,7 +220,7 @@
 
                 var linechart = new CanvasJS.Chart("linechart", {
                     title: {
-                        text: `Upload Count last 12 Months`
+                        text: `Policy Count last 12 Months`
                     },
                     data: [{
                         type: "line",
@@ -233,10 +233,10 @@
                     animationEnabled: true,
                     colorSet: 'bootstrap5',
                     title: {
-                        text: "Upload Count per Province"
+                        text: "Policy Count per Province"
                     },
                     axisY: {
-                        title: "Upload Count"
+                        title: "Policy Count"
                     },
                     data: [{
                         type: "column",

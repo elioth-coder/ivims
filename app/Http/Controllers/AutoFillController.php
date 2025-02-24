@@ -44,19 +44,19 @@ class AutoFillController extends Controller
         }
     }
 
-    public function vehicle_detail(Request $request, $mv_file_no)
+    public function vehicle_detail(Request $request, $plate_no)
     {
         try {
             $sql =
             "SELECT * FROM `vehicle_details`
-            WHERE `mv_file_no`=:mv_file_no
+            WHERE `plate_no`=:plate_no
             ORDER BY created_at DESC
             LIMIT 1
             ";
             $pdo = DB::connection()->getPdo();
             $query = $pdo->prepare($sql);
             $query->execute([
-                'mv_file_no' => $mv_file_no,
+                'plate_no' => $plate_no,
             ]);
 
             $vehicle_detail = $query->fetchObject('stdClass');

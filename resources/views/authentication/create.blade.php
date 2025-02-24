@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Authentication</x-slot:title>
+    <x-slot:title>Insurance Policy</x-slot:title>
     <x-slot:head>
         <style>
             html,
@@ -11,14 +11,14 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Authentication" activeSub="New Authentication" />
+            <x-sidebar active="Insurance Policies" activeSub="New Insurance Policy" />
             <div class="scrollable w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section x-data="authentication" class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '/authentication',
-                                'title' => 'Authentications',
+                                'title' => 'Insurance Policies',
                             ],
                             [
                                 'url' => '#',
@@ -67,7 +67,7 @@
                     }
                 });
 
-                document.querySelector('#mv_file_no').addEventListener('keydown', function(event) {
+                document.querySelector('#plate_no').addEventListener('keydown', function(event) {
                     if(event.key == 'Enter') {
                         autofillVehicleDetail();
                     }
@@ -171,9 +171,9 @@
             }
 
             async function autofillVehicleDetail() {
-                let mv_file_no = document.querySelector('#mv_file_no').value;
+                let plate_no = document.querySelector('#plate_no').value;
                 let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                let response = await fetch(`/autofill/vehicle_detail/${mv_file_no}`, {
+                let response = await fetch(`/autofill/vehicle_detail/${plate_no}`, {
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
@@ -182,14 +182,14 @@
                 let { status, message, vehicle_detail } = await response.json();
                 if(status == 'success') {
                     Swal.fire({
-                        title: `Found a data for MV File No. ${mv_file_no}!`,
+                        title: `Found a data for Plate No. ${plate_no}!`,
                         icon: 'info',
                         showDenyButton: true,
                         confirmButtonText: 'Autofill form?',
                         denyButtonText: "No, thanks!",
                     }).then(result => {
                         if(result.isConfirmed) {
-                            document.querySelector('#plate_no').value       = (vehicle_detail.plate_no=='NULL')       ? '' : vehicle_detail.plate_no;
+                            document.querySelector('#mv_file_no').value     = (vehicle_detail.mv_file_no=='NULL')     ? '' : vehicle_detail.mv_file_no;
                             document.querySelector('#serial_no').value      = (vehicle_detail.serial_no=='NULL')      ? '' : vehicle_detail.serial_no;
                             document.querySelector('#motor_no').value       = (vehicle_detail.motor_no=='NULL')       ? '' : vehicle_detail.motor_no;
                             document.querySelector('#make').value           = (vehicle_detail.make=='NULL')           ? '' : vehicle_detail.make;
@@ -207,7 +207,7 @@
                 $scrollable = document.querySelector('.scrollable');
 
                 Alpine.data('authentication', () => ({
-                    step: 1,
+                    step: 2,
                     previous() {
                         this.step--;
                         $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
@@ -226,7 +226,7 @@
                             timer: 1500,
                         }).then(() => {
                             $scrollable.scrollTo({ top: 0, behavior: 'smooth' });
-                            document.querySelector('[name="mv_file_no"]').focus();
+                            document.querySelector('[name="plate_no"]').focus();
                         });
                     },
                     submitVehicleDetails() {

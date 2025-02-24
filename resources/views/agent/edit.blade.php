@@ -1,7 +1,6 @@
 <x-layout>
-    <x-slot:title>Agent</x-slot:title>
+    <x-slot:title>Agents</x-slot:title>
     <x-slot:head>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
             html, body {
                 overflow: hidden;
@@ -11,14 +10,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Agents" activeSub="List of Agents" />
+            <x-sidebar active="Users" activeSub="Insurance Agents" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/agent',
-                                'title' => 'Agent',
+                                'url' => '/user',
+                                'title' => 'Users',
+                            ],
+                            [
+                                'url' => '/user/agent',
+                                'title' => 'Insurance Agents',
                             ],
                             [
                                 'url' => '#',
@@ -37,9 +40,9 @@
                                     </x-alerts.success>
                                 @endif
                             </div>
-                            <x-card class="max-w-xl">
+                            <x-card class="max-w-xl" x-data="license">
                                 <x-card-header>Edit Agent</x-card-header>
-                                <x-forms.form method="POST" action="/agent/{{ $user->id }}" verb="PATCH">
+                                <x-forms.form method="POST" action="/user/agent/{{ $user->id }}" verb="PATCH">
                                     <div class="flex space-x-2">
                                         @php
                                         if($errors->has('first_name')) {
@@ -127,15 +130,50 @@
                                         $company_id = (old('company_id')) ? old('company_id') : $user->company->id;
                                     }
                                     @endphp
-                                    <x-forms.select-field class="w-full"
-                                        name="company_id"
-                                        label="Company"
-                                        placeholder="--"
-                                        required>
-                                        @foreach($companies as $company)
-                                            <option {{ ($company_id==$company->id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </x-forms.select-field>
+                                    <div class="w-full">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                            for="license_duration">
+                                            Company
+                                        </label>
+                                        <select x-on:change="onChangeCompany" id="company_id"
+                                            name="company_id"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                            <option value="">--</option>
+                                            @foreach ($companies as $company)
+                                                <option {{ ($company->id==$company_id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <div class="w-full">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                for="branch_id">
+                                                Branch
+                                            </label>
+                                            <select id="branch_id"
+                                                name="branch_id"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                                <option value="">--</option>
+                                                <template x-for="branch in branches">
+                                                    <option x-bind:value="branch.id" x-text="branch.name"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+
+                                        @php
+                                        if($errors->has('role')) {
+                                            $role = old('role');
+                                        } else {
+                                            $role = (old('role')) ? old('role') : $user->role;
+                                        }
+                                        @endphp
+                                        <x-forms.select-field class="w-full" name="role" label="Role"
+                                            placeholder="--" required>
+                                            <option {{ ($role=='AGENT') ? 'selected' : '' }} value="AGENT">AGENT</option>
+                                            <option {{ ($role=='SUBAGENT') ? 'selected' : '' }} value="SUBAGENT">SUBAGENT</option>
+                                        </x-forms.select-field>
+                                    </div>
+
                                     @php
                                     if($errors->has('email')) {
                                         $email = old('email');
@@ -157,7 +195,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/user/agent"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>
@@ -181,4 +219,20 @@
             </div>
         </main>
     </div>
+
+
+    <x-slot:scripts>
+        <script>
+            const branches = @json($branches);
+
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('license', () => ({
+                    branches: [],
+                    onChangeCompany(e) {
+                        this.branches = branches.filter(b => b.company_id == e.target.value);
+                    },
+                }));
+            });
+        </script>
+    </x-slot:scripts>
 </x-layout>

@@ -11,7 +11,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Licenses" activeSub="* Agents" />
+            <x-sidebar active="Licenses" activeSub="Agents" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -92,24 +92,12 @@
                                                     @if($expired)
                                                         <a href="/license/agent/{{ $agent->id }}/renew" title="Renew License"
                                                             class="text-green-600 mx-auto border border-green-600 hover:bg-green-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                            <i class="bi bi-plus-square w-5 h-5 inline-block"></i>
+                                                            <i class="bi bi-arrow-clockwise w-5 h-5 inline-block"></i>
                                                         </a>
-                                                        <button title="Revoke License"
-                                                            type="button"
-                                                            disabled
-                                                            class="bg-gray-200 cursor-not-allowed text-gray-600 mx-auto border border-gray-600 hover:bg-gray-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                            <i class="bi bi-file-x w-5 h-5 inline-block"></i>
-                                                        </button>
                                                     @else
-                                                        <button title="Renew License"
-                                                            type="button"
-                                                            disabled
-                                                            class="bg-gray-200 cursor-not-allowed text-gray-600 mx-auto border border-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                            <i class="bi bi-plus-square w-5 h-5 inline-block"></i>
-                                                        </button>
                                                         <a href="/license/agent/{{ $agent->id }}/revoke" title="Revoke License"
                                                             class="text-yellow-600 mx-auto border border-yellow-600 hover:bg-yellow-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
-                                                            <i class="bi bi-file-x w-5 h-5 inline-block"></i>
+                                                            <i class="bi bi-x-circle w-5 h-5 inline-block"></i>
                                                         </a>
                                                     @endif
                                                 </td>

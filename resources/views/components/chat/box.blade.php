@@ -7,41 +7,36 @@ use Illuminate\Support\Facades\Storage;
 <div style="height: calc(100vh - 160px); {{ ($ticket->status!='CLOSED') ? 'padding-bottom: 70px;' : ''}}"
     class="relative mt-2 border rounded-lg w-full">
     <section class="hidden sm:flex absolute top-0 left-0 right-0 p-3 bg-white border-b rounded-t-lg font-bold h-[80px]">
-        <div class="font-normal items-center hidden">
-            <img class="w-9 h-9 me-1 rounded-full hidden sm:inline-block" src="{{ asset('images/profile.png') }}" alt="user photo">
-            {{ $created_by->name }}
-            <span class="bg-slate-200 px-2 rounded-xl mx-3">
-                <b class="font-bold">COC #:</b>
-                <a class="text-violet-900 hover:text-violet-800 hover:underline"
-                    href="/search/authenticated_policies?query={{ $ticket->coc_no }}">
-                    {{ $ticket->coc_no }}
-                </a>
-            </span>
-        </div>
         <div class="text-lg sm:flex items-center hidden">
-            <h3 class="">{{ $ticket->title }}</h3> &nbsp;
-            @php
-                $color = '';
-                if ($ticket->status == 'CREATED') {
-                    $color = 'bg-blue-600';
-                }
-                if ($ticket->status == 'OPEN') {
-                    $color = 'bg-orange-600';
-                }
-                if ($ticket->status == 'IN PROGRESS') {
-                    $color = 'bg-yellow-600';
-                }
-                if ($ticket->status == 'RESOLVED') {
-                    $color = 'bg-green-600';
-                }
-                if ($ticket->status == 'CLOSED') {
-                    $color = 'bg-violet-600';
-                }
-            @endphp
-            <span
-                class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg {{ $color }}">
-                {{ $ticket->status }}
-            </span>
+            <section>
+                <h3 class="">{{ $ticket->title }}</h3>
+                @php
+                    $color = '';
+                    if ($ticket->status == 'CREATED') {
+                        $color = 'bg-blue-600';
+                    }
+                    if ($ticket->status == 'OPEN') {
+                        $color = 'bg-orange-600';
+                    }
+                    if ($ticket->status == 'IN PROGRESS') {
+                        $color = 'bg-yellow-600';
+                    }
+                    if ($ticket->status == 'RESOLVED') {
+                        $color = 'bg-green-600';
+                    }
+                    if ($ticket->status == 'CLOSED') {
+                        $color = 'bg-violet-600';
+                    }
+                @endphp
+                <span
+                    class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg {{ $color }}">
+                    {{ $ticket->status }}
+                </span>
+                <span
+                    class="text-xs text-white font-bold inline-block px-2 py-1 rounded-lg bg-violet-600">
+                    {{ $ticket->category->name  ?? 'NO CATEGORY' }}
+                </span>
+            </section>
         </div>
 
         <div class="border-l absolute right-0 top-0 w-32 h-full flex items-center justify-center">
@@ -59,31 +54,27 @@ use Illuminate\Support\Facades\Storage;
 
                 <!-- Dropdown menu -->
                 <div id="dropdown-status"
-                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-32 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                         aria-labelledby="dropdownDefaultButton">
-                        @if (in_array(Auth::user()->role, ['AGENT', 'SUBAGENT']))
-                            <li>
-                                <span onclick="setTicketStatus({{ $ticket->id }}, 'IN PROGRESS')"
-                                    class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    In Progress
-                                </span>
-                            </li>
-                            <li>
-                                <span onclick="setTicketStatus({{ $ticket->id }}, 'RESOLVED')"
-                                    class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Resolved
-                                </span>
-                            </li>
-                        @endif
-                        @if (in_array(Auth::user()->role, ['ADMIN']))
-                            <li>
-                                <span onclick="setTicketStatus({{ $ticket->id }}, 'CLOSED')"
-                                    class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Closed
-                                </span>
-                            </li>
-                        @endif
+                        <li>
+                            <span onclick="setTicketStatus({{ $ticket->id }}, 'IN PROGRESS')"
+                                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                In Progress
+                            </span>
+                        </li>
+                        <li>
+                            <span onclick="setTicketStatus({{ $ticket->id }}, 'RESOLVED')"
+                                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Resolved
+                            </span>
+                        </li>
+                        <li>
+                            <span onclick="setTicketStatus({{ $ticket->id }}, 'CLOSED')"
+                                class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Closed
+                            </span>
+                        </li>
                     </ul>
                 </div>
             @endif

@@ -35,39 +35,30 @@
                         </div>
 
                         <div class="flex flex-col">
-                            <div class="flex items-center py-5">
+                            <div class="flex items-end">
                                 <div class="w-full">
-                                    @foreach($count as $key => $value)
-                                        @php
-                                            $color_classes = "bg-green-700 hover:bg-green-800 focus:ring-green-300";
-
-                                            if ($key == 'CREATED') {
-                                                $color_classes = 'bg-blue-700 hover:bg-blue-800 focus:ring-blue-300';
-                                            }
-                                            if ($key == 'OPEN') {
-                                                $color_classes = 'bg-orange-700 hover:bg-orange-800 focus:ring-orange-300';
-                                            }
-                                            if ($key == 'IN PROGRESS') {
-                                                $color_classes = 'bg-yellow-700 hover:bg-yellow-800 focus:ring-yellow-300';
-                                            }
-                                            if ($key == 'RESOLVED') {
-                                                $color_classes = 'bg-green-700 hover:bg-green-800 focus:ring-green-300';
-                                            }
-                                            if ($key == 'CLOSED') {
-                                                $color_classes = 'bg-violet-700 hover:bg-violet-800 focus:ring-violet-300';
-                                            }
-                                        @endphp
-                                        <a href="/ticket/{{ str_replace(' ', '_', strtolower($key)) }}/status" class="{{ $color_classes }} focus:outline-none relative focus:ring-4 text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-                                            {{ $key }}
-                                            <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2">
-                                                {{ $value }}
-                                            </div>
-                                        </a>
-                                    @endforeach
+                                    <x-forms.form method="GET" action="/ticket" verb="GET">
+                                        <div class="flex items-end">
+                                            <x-forms.select-field class="w-1/2"
+                                                name="category_id"
+                                                label=""
+                                                placeholder="SHOW ALL TICKETS">
+                                                @foreach($ticket_categories as $ticket_category)
+                                                    <option {{ (request('category_id')==$ticket_category->id) ? 'selected' : '' }}
+                                                        value="{{ $ticket_category->id }}">
+                                                        {{ strtoupper($ticket_category->name) }}
+                                                    </option>
+                                                @endforeach
+                                            </x-forms.select-field>
+                                            <span class="inline-block w-32 mx-2 mb-[2px]">
+                                                <x-forms.button type="submit" color="violet">Filter</x-forms.button>
+                                            </span>
+                                        </div>
+                                    </x-forms.form>
                                 </div>
                                 <div class="w-[180px] text-end">
                                     <a href="/ticket/create"
-                                        class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
+                                        class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-end">
                                         New Ticket
                                         <svg class="w-4 h-4 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -76,16 +67,16 @@
                                         </svg>
                                     </a>
                                 </div>
-
                             </div>
 
-                            <hr class="mb-5">
+                            <hr class="my-5">
+
 
                             <div class="relative overflow-x-auto w-full">
                                 <table id="tickets-table" class="bg-white w-full text-sm text-left rtl:text-right">
                                     <thead class="text-xs uppercase bg-gray-50">
                                         <tr>
-                                            <th class="px-6 py-4">COC Number</th>
+                                            <th class="px-6 py-4">Category</th>
                                             <th class="px-6 py-4">Reported Issue</th>
                                             <th class="px-6 py-4 text-center">Status</th>
                                             <th class="px-6 py-4 text-center">Action</th>
@@ -94,7 +85,7 @@
                                     <tbody>
                                         @foreach ($tickets as $ticket)
                                             <tr class="cursor-pointer align-top">
-                                                <td class="px-6 py-4 border-b">{{ $ticket->coc_no }}</td>
+                                                <td class="px-6 py-4 border-b">{{ $ticket->category->name ?? '--' }}</td>
                                                 <td class="px-6 py-4 border-b">{{ $ticket->title }}</td>
                                                 <td class="px-6 py-4 border-b">
                                                     @php

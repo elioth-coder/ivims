@@ -11,14 +11,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Agents" activeSub="Agents" />
+            <x-sidebar active="Users" activeSub="Insurance Agents" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
+                                'url' => '/user',
+                                'title' => 'Users',
+                            ],
+                            [
                                 'url' => '#',
-                                'title' => 'Agents',
+                                'title' => 'Insurance Agents',
                             ],
                         ];
                     @endphp
@@ -35,9 +39,9 @@
 
                         <div class="flex flex-col">
                             <div class="w-full pb-5">
-                                <a href="/agent/create"
+                                <a href="/user/agent/create"
                                     class="ps-5 text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm p-3 text-center inline-flex items-center">
-                                    New Agent
+                                    New Insurance Agent
                                     <svg class="w-4 h-4 ms-2" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                         viewBox="0 0 24 24">
@@ -62,8 +66,8 @@
                                         @foreach ($users as $user)
                                             <tr class="group cursor-pointer">
                                                 <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->first_name }} {{ $user->last_name }} {{ $user->suffix }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ ($user->branch) ? $user->branch->name : '--' }}</td>
-                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->company->name }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->branch->name ?? '--' }}</td>
+                                                <td class="group-hover:bg-violet-200 px-8 py-6">{{ $user->company->name ?? '--' }}</td>
                                                 <td class="min-w-[120px] group-hover:bg-violet-200 px-8 py-6">{{ $user->expiry_date ?? '--' }}</td>
                                                 <td class="group-hover:bg-violet-200 px-8 py-6 font-bold">
                                                     @php
@@ -85,14 +89,14 @@
                                                 </td>
                                                 <td class="min-w-[150px] group-hover:bg-violet-200 px-8 py-6">
                                                     <x-forms.form class="hidden" method="POST" verb="DELETE"
-                                                        action="/agent/{{ $user->id }}"
+                                                        action="/user/agent/{{ $user->id }}"
                                                         id="delete-agent-{{ $user->id }}-form">
                                                         <button type="submit">
                                                             Delete
                                                         </button>
                                                     </x-forms.form>
 
-                                                    <a href="/agent/{{ $user->id }}/edit" title="Edit"
+                                                    <a href="/user/agent/{{ $user->id }}/edit" title="Edit"
                                                         class="text-violet-600 mx-auto border border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded text-sm p-2 text-center inline-flex items-center">
                                                         <i class="bi bi-pencil-square w-5 h-5 inline-block"></i>
                                                     </a>

@@ -60,44 +60,66 @@
                                     <x-forms.textarea-field name="address" label="Address" placeholder="--" rows="5"
                                         required />
 
-                                    <x-forms.select-field class="w-full" name="company_id" label="Company"
-                                        placeholder="--" required>
-                                        @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </x-forms.select-field>
+                                    @php
+                                    $company_id = null;
+                                    if(Auth::user()->role=='AGENT') {
+                                        $company_id = Auth::user()->company_id;
+                                    }
+                                    @endphp
 
-                                    <div class="flex space-x-2">
-                                        <x-forms.input-field class="w-full" name="start_date" x-model="date_started"
-                                            type="date" label="Start Date" placeholder="--" required />
-                                        <x-forms.input-field class="w-full" name="expiry_date" type="date"
-                                            label="Expiry Date" placeholder="--" required />
-                                    </div>
+                                    @if($company_id != null)
+                                        <input type="hidden" name="company_id" value="{{ $company_id }}" />
+                                        <x-forms.select-field class="w-full" name="company_id" label="Company"
+                                            placeholder="--"
+                                            disabled
+                                            required>
+                                            @foreach ($companies as $company)
+                                            <option {{($company_id==$company->id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </x-forms.select-field>
+                                    @else
+                                        <x-forms.select-field class="w-full" name="company_id" label="Company"
+                                            placeholder="--"
+                                            required>
+                                            @foreach ($companies as $company)
+                                            <option {{($company_id==$company->id) ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </x-forms.select-field>
+                                    @endif
 
-                                    <div class="w-full">
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                            for="license_duration">
-                                            License Duration
-                                        </label>
-                                        <select x-on:change="onChangeDuration" id="license_duration"
-                                            name="license_duration"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            required="required">
-                                            <option value="">--</option>
-                                            <option value="1">1 YEAR LICENSE</option>
-                                            <option value="2">2 YEARS LICENSE</option>
-                                            <option value="3">3 YEARS LICENSE</option>
-                                            <option value="4">4 YEARS LICENSE</option>
-                                            <option value="5">5 YEARS LICENSE</option>
-                                        </select>
-                                    </div>
+                                    @if(Auth::user()->role=='ADMIN')
+                                        <div class="flex space-x-2">
+                                            <x-forms.input-field class="w-full" name="start_date" x-model="date_started"
+                                                type="date" label="Start Date" placeholder="--" required />
+                                            <x-forms.input-field class="w-full" name="expiry_date" type="date"
+                                                label="Expiry Date" placeholder="--" required />
+                                        </div>
 
+                                        <div class="w-full">
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                for="license_duration">
+                                                License Duration
+                                            </label>
+                                            <select x-on:change="onChangeDuration" id="license_duration"
+                                                name="license_duration"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                required="required">
+                                                <option value="">--</option>
+                                                <option value="1">1 YEAR LICENSE</option>
+                                                <option value="2">2 YEARS LICENSE</option>
+                                                <option value="3">3 YEARS LICENSE</option>
+                                                <option value="4">4 YEARS LICENSE</option>
+                                                <option value="5">5 YEARS LICENSE</option>
+                                            </select>
+                                        </div>
+
+                                    @endif
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/branch"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

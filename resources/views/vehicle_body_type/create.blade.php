@@ -11,7 +11,7 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Settings" activeSub="Vehicle Body Type"  />
+            <x-sidebar active="Settings" activeSub="Vehicle Types"  />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
@@ -21,8 +21,8 @@
                                 'title' => 'Settings',
                             ],
                             [
-                                'url' => '/setting/vehicle_body_type',
-                                'title' => 'Vehicle Body Type',
+                                'url' => '/setting/vehicle_type',
+                                'title' => 'Vehicle Types',
                             ],
                             [
                                 'url' => '#',
@@ -42,8 +42,8 @@
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>New Vehicle Body Type</x-card-header>
-                                <x-forms.form method="POST" action="/setting/vehicle_body_type">
+                                <x-card-header>New Vehicle Type</x-card-header>
+                                <x-forms.form method="POST" action="/setting/vehicle_type">
                                     <x-forms.input-field class="w-full"
                                         name="type"
                                         type="text"
@@ -56,7 +56,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/setting/vehicle_body_type"
+                                        <a href="/setting/vehicle_type"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

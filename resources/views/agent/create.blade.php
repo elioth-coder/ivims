@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Agent</x-slot:title>
+    <x-slot:title>Agents</x-slot:title>
     <x-slot:head>
         <style>
             html,
@@ -11,14 +11,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Agents" activeSub="New Agent" />
+            <x-sidebar active="Users" activeSub="Insurance Agents" />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/agent',
-                                'title' => 'Agents',
+                                'url' => '/user',
+                                'title' => 'Users',
+                            ],
+                            [
+                                'url' => '/user/agent',
+                                'title' => 'Insurance Agents',
                             ],
                             [
                                 'url' => '#',
@@ -39,7 +43,7 @@
                             </div>
                             <x-card class="max-w-xl" x-data="license">
                                 <x-card-header>New Agent</x-card-header>
-                                <x-forms.form method="POST" action="/agent">
+                                <x-forms.form method="POST" action="/user/agent">
                                     <div class="flex space-x-2">
                                         <x-forms.input-field autofocus="on"
                                             class="w-full" name="first_name" type="text"
@@ -71,15 +75,13 @@
                                         </label>
                                         <select x-on:change="onChangeCompany" id="company_id"
                                             name="company_id"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                            required="required">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                             <option value="">--</option>
                                             @foreach ($companies as $company)
                                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-
 
                                     <div class="flex space-x-2">
                                         <div class="w-full">
@@ -89,8 +91,7 @@
                                             </label>
                                             <select id="branch_id"
                                                 name="branch_id"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                                required="required">
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                                 <option value="">--</option>
                                                 <template x-for="branch in branches">
                                                     <option x-bind:value="branch.id" x-text="branch.name"></option>
@@ -113,10 +114,13 @@
                                             label="Start Date"
                                             placeholder="--"
                                             value="{{ date('Y-m-d') }}"
-                                            required
                                         />
-                                        <x-forms.input-field class="w-full" name="expiry_date" type="date"
-                                            label="Expiry Date" placeholder="--" required />
+                                        <x-forms.input-field class="w-full"
+                                            name="expiry_date"
+                                            type="date"
+                                            label="Expiry Date"
+                                            placeholder="--"
+                                        />
                                     </div>
 
                                     <div class="w-full">
@@ -124,10 +128,10 @@
                                             for="license_duration">
                                             License Duration
                                         </label>
-                                        <select x-on:change="onChangeDuration" id="license_duration"
+                                        <select x-on:change="onChangeDuration"
+                                            id="license_duration"
                                             name="license_duration"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                            required="required">
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                             <option value="">--</option>
                                             <option value="1">1 YEAR LICENSE</option>
                                             <option value="2">2 YEARS LICENSE</option>
@@ -142,7 +146,7 @@
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/user/agent"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

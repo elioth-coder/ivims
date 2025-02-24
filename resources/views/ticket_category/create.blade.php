@@ -1,10 +1,9 @@
 <x-layout>
-    <x-slot:title>Subagent</x-slot:title>
+    <x-slot:title>Ticket Category</x-slot:title>
     <x-slot:head>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <style>
-            html,
-            body {
+            html, body {
                 overflow: hidden;
             }
         </style>
@@ -12,14 +11,18 @@
     <x-navbar />
     <div class="w-full">
         <main class="max-w-screen-2xl mx-auto flex">
-            <x-sidebar active="Subagents" activeSub="New Subagent" />
+            <x-sidebar active="Settings" activeSub="Ticket Categories"  />
             <div class="w-full pt-2 overflow-hidden overflow-y-scroll h-screen" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
-                                'url' => '/subagent',
-                                'title' => 'Subagent',
+                                'url' => '/setting',
+                                'title' => 'Settings',
+                            ],
+                            [
+                                'url' => '/setting/ticket_category',
+                                'title' => 'Ticket Categories',
                             ],
                             [
                                 'url' => '#',
@@ -33,49 +36,39 @@
                         <div class="w-3/5 pb-6 pt-2">
                             <div class="max-w-xl">
                                 @if (session('message'))
-                                    <x-alerts.success id="alert-announcements">
+                                    <x-alerts.success id="alert-ticket_categories">
                                         {{ session('message') }}
                                     </x-alerts.success>
                                 @endif
                             </div>
                             <x-card class="max-w-xl">
-                                <x-card-header>New Subagent</x-card-header>
-                                <x-forms.form method="POST" action="/subagent">
+                                <x-card-header>New Ticket Category</x-card-header>
+                                <x-forms.form method="POST" action="/setting/ticket_category">
                                     <div class="flex space-x-2">
-                                        <x-forms.input-field class="w-full" name="first_name" type="text"
-                                            label="First name" placeholder="--" required />
-                                        <x-forms.input-field class="w-full" name="last_name" type="text"
-                                            label="Last name" placeholder="--" />
+                                        <x-forms.input-field class="w-full"
+                                            name="code"
+                                            type="text"
+                                            label="Code"
+                                            placeholder="--"
+                                            required
+                                        />
+                                        <div class="w-full"></div>
                                     </div>
 
-                                    <div class="flex space-x-2">
-                                        <x-forms.select-field class="w-full" name="gender" label="Gender"
-                                            placeholder="--" required>
-                                            <option value="MALE">MALE</option>
-                                            <option value="FEMALE">FEMALE</option>
-                                        </x-forms.select-field>
-                                        <x-forms.input-field class="w-full" name="birthday" type="date"
-                                            label="Birthday" placeholder="--" required />
-                                    </div>
-
-                                    <x-forms.input-field class="w-full" name="contact_no" type="text"
-                                        label="Contact No." placeholder="--" required />
-                                    <x-forms.select-field class="w-full" name="branch_id" label="Branch"
-                                        placeholder="--" required>
-                                        @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                        @endforeach
-                                    </x-forms.select-field>
-
-                                    <x-forms.input-field class="w-full" name="email" type="email" label="Email"
-                                        placeholder="--" required />
+                                    <x-forms.input-field class="w-full"
+                                        name="name"
+                                        type="text"
+                                        label="Name"
+                                        placeholder="--"
+                                        required
+                                    />
 
                                     <hr class="my-1">
                                     <div class="flex space-x-2 justify-end">
                                         <span class="inline-block w-32">
                                             <x-forms.button type="submit" color="violet">Submit</x-forms.button>
                                         </span>
-                                        <a href="/dashboard/announcement"
+                                        <a href="/setting/ticket_category"
                                             class="text-center flex items-center justify-center w-auto px-10 border border-gray-500 rounded-lg bg-white hover:bg-gray-500 hover:text-white">
                                             Back
                                         </a>

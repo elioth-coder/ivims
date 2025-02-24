@@ -7,17 +7,17 @@
     <form id="form-vehicle-details" x-on:submit.prevent="submitVehicleDetails" method="POST" class="space-y-4 md:space-y-6">
         <div class="flex space-x-2">
             <x-forms.input-field class="w-full"
-                name="mv_file_no"
+                name="plate_no"
                 type="text"
-                autofocus="on"
-                label="MV File No."
+                label="Plate No."
                 placeholder="--"
                 required
             />
             <x-forms.input-field class="w-full"
-                name="plate_no"
+                name="mv_file_no"
                 type="text"
-                label="Plate No."
+                autofocus="on"
+                label="MV File No."
                 placeholder="--"
                 required
             />

@@ -15,7 +15,8 @@ use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\PolicyHolderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\SubagentController;
+use App\Http\Controllers\TechSupportController;
+use App\Http\Controllers\TicketCategoryController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
@@ -73,7 +74,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-
     Route::prefix('customer')->group(function () {
         Route::controller(CustomerController::class)->group(function () {
             Route::get('/', 'index');
@@ -110,6 +110,8 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', 'index');
                 Route::get('/create', 'create');
                 Route::get('/{id}', 'ticket');
+                Route::get('/{id}/edit', 'edit');
+                Route::patch('/{id}', 'update');
                 Route::get('/{status}/status', 'status');
                 Route::post('/', 'store');
                 Route::delete('/{id}', 'destroy');
@@ -121,12 +123,13 @@ Route::middleware('auth')->group(function () {
         Route::prefix('autofill')->group(function () {
             Route::controller(AutoFillController::class)->group(function () {
                 Route::get('/policy_holder/{id_number}', 'policy_holder');
-                Route::get('/vehicle_detail/{mv_file_no}', 'vehicle_detail');
+                Route::get('/vehicle_detail/{plate_no}', 'vehicle_detail');
             });
         });
 
         Route::prefix('license')->group(function () {
             Route::controller(LicenseController::class)->group(function () {
+                Route::get('/', 'index');
                 Route::get('/company', 'company');
                 Route::get('/company/{id}/renew', 'company_renew');
                 Route::post('/company/{id}/renewal', 'company_renewal');
@@ -236,6 +239,18 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/{id}', 'destroy');
                 });
             });
+
+            Route::prefix('ticket_category')->group(function () {
+                Route::controller(TicketCategoryController::class)->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/create', 'create');
+                    Route::post('/', 'store');
+                    Route::get('/{id}/edit', 'edit');
+                    Route::patch('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
         });
 
         Route::prefix('company')->group(function () {
@@ -262,27 +277,33 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::prefix('agent')->group(function () {
-            Route::controller(AgentController::class)->group(function () {
-                Route::get('/', 'index');
-                Route::get('/create', 'create');
-                Route::post('/', 'store');
-                Route::get('/{id}/edit', 'edit');
-                Route::get('/{id}/renew', 'renew');
-                Route::post('/{id}/renewal', 'renewal');
-                Route::patch('/{id}', 'update');
-                Route::delete('/{id}', 'destroy');
+        Route::prefix('user')->group(function () {
+            Route::get('/', function() {
+                return view('user.index');
             });
-        });
 
-        Route::prefix('subagent')->group(function () {
-            Route::controller(SubagentController::class)->group(function () {
-                Route::get('/', 'index');
-                Route::get('/create', 'create');
-                Route::post('/', 'store');
-                Route::get('/{id}/edit', 'edit');
-                Route::patch('/{id}', 'update');
-                Route::delete('/{id}', 'destroy');
+            Route::prefix('tech_support')->group(function () {
+                Route::controller(TechSupportController::class)->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/create', 'create');
+                    Route::post('/', 'store');
+                    Route::get('/{id}/edit', 'edit');
+                    Route::patch('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            Route::prefix('agent')->group(function () {
+                Route::controller(AgentController::class)->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/create', 'create');
+                    Route::post('/', 'store');
+                    Route::get('/{id}/edit', 'edit');
+                    Route::get('/{id}/renew', 'renew');
+                    Route::post('/{id}/renewal', 'renewal');
+                    Route::patch('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
             });
         });
 

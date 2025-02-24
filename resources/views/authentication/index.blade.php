@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>Authentication</x-slot:title>
+    <x-slot:title>Insurance Policy</x-slot:title>
     <x-slot:head>
         <link rel="stylesheet" href="{{ asset('css/data-table.css') }}">
         <style>
@@ -11,14 +11,14 @@
     <x-navbar />
     <div class="w-full">
         <main class="flex mx-auto max-w-screen-2xl">
-            <x-sidebar active="Authentication" activeSub="Authentications" />
+            <x-sidebar active="Insurance Policies" activeSub="Insurance Policies" />
             <div class="w-full h-screen pt-2 overflow-hidden overflow-y-scroll" style="height: calc(100vh - 80px)">
                 <section class="px-8">
                     @php
                         $breadcrumbs = [
                             [
                                 'url' => '#',
-                                'title' => 'Authentications',
+                                'title' => 'Insurance Policies',
                             ],
                         ];
                     @endphp
